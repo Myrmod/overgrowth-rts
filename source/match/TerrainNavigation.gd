@@ -1,6 +1,6 @@
 extends Node3D
 
-const DOMAIN = Constants.Match.Navigation.Domain.TERRAIN
+const DOMAIN = NavigationConstants.Domain.TERRAIN
 
 var _earliest_frame_to_perform_next_rebake = null
 var _is_baking = false
@@ -14,10 +14,10 @@ var _map_geometry = NavigationMeshSourceGeometryData3D.new()
 func _ready():
 	assert(_safety_checks())
 	NavigationServer3D.map_set_cell_size(
-		navigation_map_rid, Constants.Match.Terrain.Navmesh.CELL_SIZE
+		navigation_map_rid, Terrain.CELL_SIZE
 	)
 	NavigationServer3D.map_set_cell_height(
-		navigation_map_rid, Constants.Match.Terrain.Navmesh.CELL_HEIGHT
+		navigation_map_rid, Terrain.CELL_HEIGHT
 	)
 	NavigationServer3D.map_force_update(navigation_map_rid)
 	MatchSignals.schedule_navigation_rebake.connect(_on_schedule_navigation_rebake)
@@ -79,20 +79,20 @@ func _safety_checks():
 	assert(
 		is_equal_approx(
 			_navigation_region.navigation_mesh.agent_radius,
-			Constants.Match.Terrain.Navmesh.MAX_AGENT_RADIUS
+			Terrain.MAX_AGENT_RADIUS
 		),
 		"Navmesh 'agent_radius' must match established constant"
 	)
 	assert(
 		is_equal_approx(
-			_navigation_region.navigation_mesh.cell_size, Constants.Match.Terrain.Navmesh.CELL_SIZE
+			_navigation_region.navigation_mesh.cell_size, Terrain.CELL_SIZE
 		),
 		"Navmesh 'cell_size' must match established constant"
 	)
 	assert(
 		is_equal_approx(
 			_navigation_region.navigation_mesh.cell_height,
-			Constants.Match.Terrain.Navmesh.CELL_HEIGHT
+			Terrain.CELL_HEIGHT
 		),
 		"Navmesh 'cell_height' must match established constant"
 	)

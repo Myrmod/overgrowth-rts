@@ -1,6 +1,6 @@
 extends NavigationObstacle3D
 
-@export var domain = Constants.Match.Navigation.Domain.TERRAIN
+@export var domain = NavigationConstants.Domain.TERRAIN
 @export var path_height_offset = 0.0
 
 @onready var _match = find_parent("Match")
@@ -8,7 +8,7 @@ extends NavigationObstacle3D
 
 
 func _ready():
-	await get_tree().process_frame  # wait for navigation to be operational
+	await get_tree().process_frame # wait for navigation to be operational
 	set_navigation_map(_match.navigation.get_navigation_map_rid_by_domain(domain))
 	_align_unit_position_to_navigation()
 	_affect_navigation_if_needed()
@@ -16,7 +16,7 @@ func _ready():
 
 func _exit_tree():
 	if affect_navigation_mesh:
-		remove_from_group(Constants.Match.Navigation.DOMAIN_TO_GROUP_MAPPING[domain])
+		remove_from_group(NavigationConstants.DOMAIN_TO_GROUP_MAPPING[domain])
 		MatchSignals.schedule_navigation_rebake.emit(domain)
 
 
@@ -31,5 +31,5 @@ func _align_unit_position_to_navigation():
 
 func _affect_navigation_if_needed():
 	if affect_navigation_mesh:
-		add_to_group(Constants.Match.Navigation.DOMAIN_TO_GROUP_MAPPING[domain])
+		add_to_group(NavigationConstants.DOMAIN_TO_GROUP_MAPPING[domain])
 		MatchSignals.schedule_navigation_rebake.emit(domain)

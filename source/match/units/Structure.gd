@@ -14,7 +14,7 @@ var _construction_progress = 1.0
 
 
 func is_revealing():
-	return super() and is_constructed()
+	return super () and is_constructed()
 
 
 func mark_as_under_construction():
@@ -40,7 +40,7 @@ func construct(progress):
 
 func cancel_construction():
 	var scene_path = get_script().resource_path.replace(".gd", ".tscn")
-	var construction_cost = Constants.Match.Units.CONSTRUCTION_COSTS[scene_path]
+	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[scene_path]
 	player.add_resources(construction_cost)
 	queue_free()
 
@@ -57,7 +57,7 @@ func _finish_construction():
 	_change_geometry_material(null)
 	if is_inside_tree():
 		constructed.emit()
-		MatchSignals.unit_construction_finished.emit(self)
+		MatchSignals.unit_construction_finished.emit(self )
 
 
 func _change_geometry_material(material):

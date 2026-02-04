@@ -82,7 +82,7 @@ func _setup_refresh_timer():
 
 func _provision_structure(structure_scene, resources, metadata):
 	assert(
-		resources == Constants.Match.Units.CONSTRUCTION_COSTS[structure_scene.resource_path],
+		resources == UnitConstants.CONSTRUCTION_COSTS[structure_scene.resource_path],
 		"unexpected amount of resources"
 	)
 	var workers = get_tree().get_nodes_in_group("units").filter(
@@ -96,7 +96,7 @@ func _provision_structure(structure_scene, resources, metadata):
 
 func _provision_unit(unit_scene, structure_producing_unit, resources, metadata):
 	assert(
-		resources == Constants.Match.Units.PRODUCTION_COSTS[unit_scene.resource_path],
+		resources == UnitConstants.PRODUCTION_COSTS[unit_scene.resource_path],
 		"unexpected amount of resources"
 	)
 	if structure_producing_unit == null:
@@ -137,7 +137,7 @@ func _attach_current_battle_units():
 
 
 func _construct_structure(structure_scene):
-	var construction_cost = Constants.Match.Units.CONSTRUCTION_COSTS[structure_scene.resource_path]
+	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[structure_scene.resource_path]
 	assert(
 		_player.has_resources(construction_cost),
 		"player should have enough resources at this point"
@@ -153,9 +153,9 @@ func _construct_structure(structure_scene):
 	var reference_position_for_placement = (
 		ccs[0].global_position if not ccs.is_empty() else workers[0].global_position
 	)
-	var placement_position = Utils.Match.Placement.find_valid_position_radially(
+	var placement_position = Utils.MatchUtils.Placement.find_valid_position_radially(
 		reference_position_for_placement,
-		unit_to_spawn.radius + Constants.Match.Units.EMPTY_SPACE_RADIUS_SURROUNDING_STRUCTURE_M,
+		unit_to_spawn.radius + UnitConstants.EMPTY_SPACE_RADIUS_SURROUNDING_STRUCTURE_M,
 		find_parent("Match").navigation.get_navigation_map_rid_by_domain(
 			unit_to_spawn.movement_domain
 		),
@@ -187,7 +187,7 @@ func _enforce_structure_existence(structure, structure_scene, type):
 			_number_of_pending_structure_resource_requests.get(type, 0) + 1
 		)
 		resources_required.emit(
-			Constants.Match.Units.CONSTRUCTION_COSTS[structure_scene.resource_path], type
+			UnitConstants.CONSTRUCTION_COSTS[structure_scene.resource_path], type
 		)
 
 
@@ -208,7 +208,7 @@ func _enforce_units_production(structure, unit_scene, type):
 			_number_of_pending_unit_resource_requests.get(type, 0) + 1
 		)
 		resources_required.emit(
-			Constants.Match.Units.PRODUCTION_COSTS[unit_scene.resource_path], type
+			UnitConstants.PRODUCTION_COSTS[unit_scene.resource_path], type
 		)
 
 
@@ -248,7 +248,7 @@ func _is_units_production_allowed():
 	return (
 		_number_of_additional_units_required()
 		> (
-			Utils.Arr.sum(_number_of_pending_unit_resource_requests.values())
+			Utils.sum(_number_of_pending_unit_resource_requests.values())
 			+ (
 				primary_structure.production_queue.size()
 				if primary_structure != null and primary_structure.is_constructed()

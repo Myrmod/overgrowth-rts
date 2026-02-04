@@ -19,7 +19,7 @@ func _handle_double_click(unit_type):
 			continue
 		if unit.type == unit_type:
 			units_to_select.add(unit)
-	Utils.Match.select_units(units_to_select)
+	Utils.MatchUtils.select_units(units_to_select)
 
 
 func _on_unit_selected(unit):

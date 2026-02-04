@@ -3,8 +3,8 @@ extends Node
 const Options = preload("res://source/data-model/Options.gd")
 
 var options = (
-	load(Constants.OPTIONS_FILE_PATH)
-	if ResourceLoader.exists(Constants.OPTIONS_FILE_PATH)
+	load(Constants.get_options_file_path())
+	if ResourceLoader.exists(Constants.get_options_file_path())
 	else Options.new()
 )
 var god_mode = false

@@ -36,7 +36,7 @@ func provision(resources, metadata):
 	)
 	if metadata == "ag_turret":
 		assert(
-			resources == Constants.Match.Units.CONSTRUCTION_COSTS[AGTurretScene.resource_path],
+			resources == UnitConstants.CONSTRUCTION_COSTS[AGTurretScene.resource_path],
 			"unexpected amount of resources"
 		)
 		_number_of_pending_ag_turret_resource_requests -= 1
@@ -45,7 +45,7 @@ func provision(resources, metadata):
 		_construct_turret(AGTurretScene)
 	elif metadata == "aa_turret":
 		assert(
-			resources == Constants.Match.Units.CONSTRUCTION_COSTS[AATurretScene.resource_path],
+			resources == UnitConstants.CONSTRUCTION_COSTS[AATurretScene.resource_path],
 			"unexpected amount of resources"
 		)
 		_number_of_pending_aa_turret_resource_requests -= 1
@@ -90,7 +90,7 @@ func _enforce_number_of_ag_turrets():
 	)
 	for _i in range(number_of_extra_ag_turrets_required):
 		resources_required.emit(
-			Constants.Match.Units.CONSTRUCTION_COSTS[AGTurretScene.resource_path], "ag_turret"
+			UnitConstants.CONSTRUCTION_COSTS[AGTurretScene.resource_path], "ag_turret"
 		)
 		_number_of_pending_ag_turret_resource_requests += 1
 
@@ -110,13 +110,13 @@ func _enforce_number_of_aa_turrets():
 	)
 	for _i in range(number_of_extra_aa_turrets_required):
 		resources_required.emit(
-			Constants.Match.Units.CONSTRUCTION_COSTS[AATurretScene.resource_path], "aa_turret"
+			UnitConstants.CONSTRUCTION_COSTS[AATurretScene.resource_path], "aa_turret"
 		)
 		_number_of_pending_aa_turret_resource_requests += 1
 
 
 func _construct_turret(turret_scene):
-	var construction_cost = Constants.Match.Units.CONSTRUCTION_COSTS[turret_scene.resource_path]
+	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[turret_scene.resource_path]
 	assert(
 		_player.has_resources(construction_cost),
 		"player should have enough resources at this point"
@@ -126,9 +126,9 @@ func _construct_turret(turret_scene):
 	)
 	var unit_to_spawn = turret_scene.instantiate()
 	# TODO: introduce actual algorithm which takes enemy positions into account
-	var placement_position = Utils.Match.Placement.find_valid_position_radially(
+	var placement_position = Utils.MatchUtils.Placement.find_valid_position_radially(
 		ccs[0].global_position,
-		unit_to_spawn.radius + Constants.Match.Units.EMPTY_SPACE_RADIUS_SURROUNDING_STRUCTURE_M,
+		unit_to_spawn.radius + UnitConstants.EMPTY_SPACE_RADIUS_SURROUNDING_STRUCTURE_M,
 		find_parent("Match").navigation.get_navigation_map_rid_by_domain(
 			unit_to_spawn.movement_domain
 		),

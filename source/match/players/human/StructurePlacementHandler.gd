@@ -96,21 +96,21 @@ func _calculate_blueprint_position_validity():
 		return BlueprintPositionValidity.OUT_OF_MAP
 	if not _player_has_enough_resources():
 		return BlueprintPositionValidity.NOT_ENOUGH_RESOURCES
-	var placement_validity = Utils.Match.Placement.validate_agent_placement_position(
+	var placement_validity = Utils.MatchUtils.Placement.validate_agent_placement_position(
 		_active_blueprint_node.global_position,
 		_pending_structure_radius,
 		get_tree().get_nodes_in_group("units") + get_tree().get_nodes_in_group("resource_units"),
 		_pending_structure_navmap_rid
 	)
-	if placement_validity == Utils.Match.Placement.COLLIDES_WITH_AGENT:
+	if placement_validity == Utils.MatchUtils.Placement.COLLIDES_WITH_AGENT:
 		return BlueprintPositionValidity.COLLIDES_WITH_OBJECT
-	if placement_validity == Utils.Match.Placement.NOT_NAVIGABLE:
+	if placement_validity == Utils.MatchUtils.Placement.NOT_NAVIGABLE:
 		return BlueprintPositionValidity.NOT_NAVIGABLE
 	return BlueprintPositionValidity.VALID
 
 
 func _player_has_enough_resources():
-	var construction_cost = Constants.Match.Units.CONSTRUCTION_COSTS[
+	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[
 		_pending_structure_prototype.resource_path
 	]
 	return _player.has_resources(construction_cost)
@@ -144,13 +144,13 @@ func _start_structure_placement(structure_prototype):
 		return
 	_pending_structure_prototype = structure_prototype
 	_active_blueprint_node = (
-		load(Constants.Match.Units.STRUCTURE_BLUEPRINTS[structure_prototype.resource_path])
-		. instantiate()
+		load(UnitConstants.STRUCTURE_BLUEPRINTS[structure_prototype.resource_path])
+		.instantiate()
 	)
 	var blueprint_origin = Vector3(-999, 0, -999)
 	var camera_direction_yless = (
 		(get_viewport().get_camera_3d().project_ray_normal(Vector2(0, 0)) * Vector3(1, 0, 1))
-		. normalized()
+		.normalized()
 	)
 	var rotate_towards = blueprint_origin + camera_direction_yless.rotated(Vector3.UP, PI * 0.75)
 	_active_blueprint_node.global_transform = Transform3D(Basis(), blueprint_origin).looking_at(
@@ -161,8 +161,8 @@ func _start_structure_placement(structure_prototype):
 	_pending_structure_radius = temporary_structure_instance.radius
 	_pending_structure_navmap_rid = (
 		find_parent("Match")
-		. navigation
-		. get_navigation_map_rid_by_domain(temporary_structure_instance.movement_domain)
+		.navigation
+		.get_navigation_map_rid_by_domain(temporary_structure_instance.movement_domain)
 	)
 	temporary_structure_instance.free()
 
@@ -196,7 +196,7 @@ func _cancel_structure_placement():
 
 func _finish_structure_placement():
 	if _player_has_enough_resources():
-		var construction_cost = Constants.Match.Units.CONSTRUCTION_COSTS[
+		var construction_cost = UnitConstants.CONSTRUCTION_COSTS[
 			_pending_structure_prototype.resource_path
 		]
 		_player.subtract_resources(construction_cost)

@@ -45,13 +45,13 @@ func _update_circle_params():
 
 func _update_circle_color():
 	if _unit.is_in_group("controlled_units"):
-		_circle.color = Constants.Match.OWNED_PLAYER_CIRCLE_COLOR
+		_circle.color = MatchConstants.OWNED_PLAYER_CIRCLE_COLOR
 	elif _unit.is_in_group("adversary_units"):
-		_circle.color = Constants.Match.ADVERSARY_PLAYER_CIRCLE_COLOR
+		_circle.color = MatchConstants.ADVERSARY_PLAYER_CIRCLE_COLOR
 	elif _unit.is_in_group("resource_units"):
-		_circle.color = Constants.Match.RESOURCE_CIRCLE_COLOR
+		_circle.color = MatchConstants.RESOURCE_CIRCLE_COLOR
 	else:
-		_circle.color = Constants.Match.DEFAULT_CIRCLE_COLOR
+		_circle.color = MatchConstants.DEFAULT_CIRCLE_COLOR
 
 
 func _set_radius(a_radius):

@@ -1,6 +1,6 @@
 extends "res://source/match/units/actions/Action.gd"
 
-enum State { NULL, MOVING_TO_RESOURCE, COLLECTING, MOVING_TO_CC }
+enum State {NULL, MOVING_TO_RESOURCE, COLLECTING, MOVING_TO_CC}
 
 const CommandCenter = preload("res://source/match/units/CommandCenter.gd")
 const CollectingResourcesWhileInRange = preload(
@@ -16,7 +16,7 @@ var _resource_unit = null
 var _cc_unit = null
 var _sub_action = null
 
-@onready var _unit = Utils.NodeEx.find_parent_with_group(self, "units")
+@onready var _unit = Utils.NodeEx.find_parent_with_group(self , "units")
 
 
 static func is_applicable(source_unit, target_unit):
@@ -41,7 +41,7 @@ func _ready():
 
 
 func _to_string():
-	return "{0}({1})".format([super(), str(_sub_action) if _sub_action != null else ""])
+	return "{0}({1})".format([ super (), str(_sub_action) if _sub_action != null else ""])
 
 
 func get_resource_unit():
@@ -119,8 +119,8 @@ func _transfer_collected_resources_to_player():
 
 
 func _find_closest_resource_unit_in_nearby_area():
-	return Utils.Match.Resources.find_resource_unit_closest_to_unit_yet_no_further_than(
-		_unit, Constants.Match.Units.NEW_RESOURCE_SEARCH_RADIUS_M
+	return ResourceUtils.find_resource_unit_closest_to_unit_yet_no_further_than(
+		_unit, UnitConstants.NEW_RESOURCE_SEARCH_RADIUS_M
 	)
 
 
@@ -165,7 +165,7 @@ func _handle_sub_action_finished_while_collecting():
 	if (
 		_resource_unit != null
 		and not _unit.is_full()
-		and not Utils.Match.Movement.units_adhere(_unit, _resource_unit)
+		and not Utils.MatchUtils.Movement.units_adhere(_unit, _resource_unit)
 	):
 		_change_state_to(State.MOVING_TO_RESOURCE)
 		return

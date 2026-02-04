@@ -33,7 +33,7 @@ func setup(player):
 func provision(resources, metadata):
 	if metadata == "worker":
 		assert(
-			resources == Constants.Match.Units.PRODUCTION_COSTS[WorkerScene.resource_path],
+			resources == UnitConstants.PRODUCTION_COSTS[WorkerScene.resource_path],
 			"unexpected amount of resources"
 		)
 		_number_of_pending_worker_resource_requests -= 1
@@ -43,7 +43,7 @@ func provision(resources, metadata):
 			_number_of_pending_workers += 1
 	elif metadata == "cc":
 		assert(
-			resources == Constants.Match.Units.CONSTRUCTION_COSTS[CommandCenterScene.resource_path],
+			resources == UnitConstants.CONSTRUCTION_COSTS[CommandCenterScene.resource_path],
 			"unexpected amount of resources"
 		)
 		_number_of_pending_cc_resource_requests -= 1
@@ -100,7 +100,7 @@ func _enforce_number_of_ccs():
 	)
 	for _i in range(number_of_extra_ccs_required):
 		resources_required.emit(
-			Constants.Match.Units.CONSTRUCTION_COSTS[CommandCenterScene.resource_path], "cc"
+			UnitConstants.CONSTRUCTION_COSTS[CommandCenterScene.resource_path], "cc"
 		)
 		_number_of_pending_cc_resource_requests += 1
 
@@ -117,13 +117,13 @@ func _enforce_number_of_workers():
 	)
 	for _i in range(number_of_extra_workers_required):
 		resources_required.emit(
-			Constants.Match.Units.PRODUCTION_COSTS[WorkerScene.resource_path], "worker"
+			UnitConstants.PRODUCTION_COSTS[WorkerScene.resource_path], "worker"
 		)
 		_number_of_pending_worker_resource_requests += 1
 
 
 func _construct_cc():
-	var construction_cost = Constants.Match.Units.CONSTRUCTION_COSTS[
+	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[
 		CommandCenterScene.resource_path
 	]
 	assert(
@@ -131,9 +131,9 @@ func _construct_cc():
 		"player should have enough resources at this point"
 	)
 	var unit_to_spawn = CommandCenterScene.instantiate()
-	var placement_position = Utils.Match.Placement.find_valid_position_radially(
+	var placement_position = Utils.MatchUtils.Placement.find_valid_position_radially(
 		_cc_base_position if _cc_base_position != null else _workers[0].global_position,
-		unit_to_spawn.radius + Constants.Match.Units.EMPTY_SPACE_RADIUS_SURROUNDING_STRUCTURE_M,
+		unit_to_spawn.radius + UnitConstants.EMPTY_SPACE_RADIUS_SURROUNDING_STRUCTURE_M,
 		find_parent("Match").navigation.get_navigation_map_rid_by_domain(
 			unit_to_spawn.movement_domain
 		),
@@ -180,11 +180,9 @@ func _make_worker_collecting_resources(worker):
 		else:
 			resource_filter = func(resource_unit): return "resource_b" in resource_unit
 	var closest_resource_unit = (
-		Utils
-		. Match
-		. Resources
-		. find_resource_unit_closest_to_unit_yet_no_further_than(
-			worker, Constants.Match.Units.NEW_RESOURCE_SEARCH_RADIUS_M, resource_filter
+		ResourceUtils
+		.find_resource_unit_closest_to_unit_yet_no_further_than(
+			worker, UnitConstants.NEW_RESOURCE_SEARCH_RADIUS_M, resource_filter
 		)
 	)
 	if closest_resource_unit != null:

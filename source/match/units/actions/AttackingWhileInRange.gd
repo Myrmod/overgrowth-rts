@@ -6,7 +6,7 @@ var _target_unit = null
 var _one_shot_timer = null
 var _range_check_timer = null
 
-@onready var _unit = Utils.NodeEx.find_parent_with_group(self, "units")
+@onready var _unit = Utils.NodeEx.find_parent_with_group(self , "units")
 @onready var _unit_movement_trait = _unit.find_child("Movement")
 
 
@@ -29,7 +29,7 @@ func _ready():
 
 func _physics_process(_delta):
 	if _unit_movement_trait == null:
-		_rotate_unit_towards_target()  # stationary units can rotate every frame
+		_rotate_unit_towards_target() # stationary units can rotate every frame
 
 
 func _setup_one_shot_timer():
@@ -73,11 +73,11 @@ func _hit_target():
 	)
 	var projectile = (
 		load(
-			Constants.Match.Units.PROJECTILES[_unit.get_script().resource_path.replace(
+			UnitConstants.PROJECTILES[_unit.get_script().resource_path.replace(
 				".gd", ".tscn"
 			)]
 		)
-		. instantiate()
+		.instantiate()
 	)
 	projectile.target_unit = _target_unit
 	_unit.add_child(projectile)

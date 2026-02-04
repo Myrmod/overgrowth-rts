@@ -12,11 +12,11 @@ func _ready():
 		[
 			tr("WORKER"),
 			tr("WORKER_DESCRIPTION"),
-			Constants.Match.Units.DEFAULT_PROPERTIES[WorkerUnit.resource_path]["hp_max"],
+			UnitConstants.DEFAULT_PROPERTIES[WorkerUnit.resource_path]["hp_max"],
 			tr("RESOURCE_A"),
-			Constants.Match.Units.PRODUCTION_COSTS[WorkerUnit.resource_path]["resource_a"],
+			UnitConstants.PRODUCTION_COSTS[WorkerUnit.resource_path]["resource_a"],
 			tr("RESOURCE_B"),
-			Constants.Match.Units.PRODUCTION_COSTS[WorkerUnit.resource_path]["resource_b"]
+			UnitConstants.PRODUCTION_COSTS[WorkerUnit.resource_path]["resource_b"]
 		]
 	))
 

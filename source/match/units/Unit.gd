@@ -53,7 +53,7 @@ func _ready():
 	_setup_color()
 	_setup_default_properties_from_constants()
 	assert(_safety_checks())
-	id = UnitRegistry.register(self)
+	id = EntityRegistry.register(self )
 
 
 func is_revealing():
@@ -102,7 +102,7 @@ func _is_movable():
 
 func _setup_color():
 	var material = player.get_color_material()
-	Utils.Match.traverse_node_tree_and_replace_materials_matching_albedo(
+	Utils.MatchUtils.traverse_node_tree_and_replace_materials_matching_albedo(
 		find_child("Geometry"),
 		MATERIAL_ALBEDO_TO_REPLACE,
 		MATERIAL_ALBEDO_TO_REPLACE_EPSILON,
@@ -119,7 +119,7 @@ func _set_action(action_node):
 	_teardown_current_action()
 	action = action_node
 	if action != null:
-		var action_copy = action  # bind() performs copy itself, but lets force copy just in case
+		var action_copy = action # bind() performs copy itself, but lets force copy just in case
 		action.tree_exited.connect(_on_action_node_tree_exited.bind(action_copy))
 		add_child(action_node)
 	_action_locked = false
@@ -136,25 +136,25 @@ func _get_type():
 func _teardown_current_action():
 	if action != null and action.is_inside_tree():
 		action.queue_free()
-		remove_child(action)  # triggers _on_action_node_tree_exited immediately
+		remove_child(action) # triggers _on_action_node_tree_exited immediately
 
 
 func _safety_checks():
-	if movement_domain == Constants.Match.Navigation.Domain.AIR:
+	if movement_domain == NavigationConstants.Domain.AIR:
 		assert(
 			(
-				radius < Constants.Match.Air.Navmesh.MAX_AGENT_RADIUS
-				or is_equal_approx(radius, Constants.Match.Air.Navmesh.MAX_AGENT_RADIUS)
+				radius < Air.MAX_AGENT_RADIUS
+				or is_equal_approx(radius, Air.MAX_AGENT_RADIUS)
 			),
 			"Unit radius exceeds the established limit"
 		)
-	elif movement_domain == Constants.Match.Navigation.Domain.TERRAIN:
+	elif movement_domain == NavigationConstants.Domain.TERRAIN:
 		assert(
 			(
 				not _is_movable()
 				or (
-					radius < Constants.Match.Terrain.Navmesh.MAX_AGENT_RADIUS
-					or is_equal_approx(radius, Constants.Match.Terrain.Navmesh.MAX_AGENT_RADIUS)
+					radius < Terrain.MAX_AGENT_RADIUS
+					or is_equal_approx(radius, Terrain.MAX_AGENT_RADIUS)
 				)
 			),
 			"Unit radius exceeds the established limit"
@@ -163,12 +163,12 @@ func _safety_checks():
 
 
 func _handle_unit_death():
-	tree_exited.connect(func(): MatchSignals.unit_died.emit(self))
+	tree_exited.connect(func(): MatchSignals.unit_died.emit(self ))
 	queue_free()
 
 
 func _setup_default_properties_from_constants():
-	var default_properties = Constants.Match.Units.DEFAULT_PROPERTIES[
+	var default_properties = UnitConstants.DEFAULT_PROPERTIES[
 		get_script().resource_path.replace(".gd", ".tscn")
 	]
 	for property in default_properties:

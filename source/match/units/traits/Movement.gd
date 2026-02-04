@@ -7,17 +7,17 @@ signal passive_movement_finished
 const INITIAL_DISPERSION_FACTOR = 0.1
 
 const STUCK_PREVENTION_ENABLED = true
-const STUCK_PREVENTION_WINDOW_SIZE = 10  # number of frames for accumulating distance traveled
-const STUCK_PREVENTION_THRESHOLD = 0.3  # fraction of expected distance traveled at full speed
-const STUCK_PREVENTION_SIDE_MOVES = 15  # number of forced moves to the side if stuck
+const STUCK_PREVENTION_WINDOW_SIZE = 10 # number of frames for accumulating distance traveled
+const STUCK_PREVENTION_THRESHOLD = 0.3 # fraction of expected distance traveled at full speed
+const STUCK_PREVENTION_SIDE_MOVES = 15 # number of forced moves to the side if stuck
 
 const ROTATION_LOW_PASS_FILTER_ENABLED = true
-const ROTATION_LOW_PASS_FILTER_WINDOW_SIZE = 10  # number of frames for accumulating directions
-const ROTATION_LOW_PASS_FILTER_VELOCITY_THRESHOLD = 0.01  # velocities below will be dropped
+const ROTATION_LOW_PASS_FILTER_WINDOW_SIZE = 10 # number of frames for accumulating directions
+const ROTATION_LOW_PASS_FILTER_VELOCITY_THRESHOLD = 0.01 # velocities below will be dropped
 
 const PASSIVE_MOVEMENT_TRACKING_ENABLED = true
 
-@export var domain = Constants.Match.Navigation.Domain.TERRAIN
+@export var domain = NavigationConstants.Domain.TERRAIN
 @export var speed: float = 4.0
 
 var _interim_speed: float = 0.0
@@ -74,7 +74,7 @@ func stop():
 
 
 func _align_unit_position_to_navigation():
-	await get_tree().process_frame  # wait for navigation to be operational
+	await get_tree().process_frame # wait for navigation to be operational
 	_unit.global_transform.origin = (
 		NavigationServer3D.map_get_closest_point(
 			get_navigation_map(), get_parent().global_transform.origin

@@ -6,7 +6,7 @@ const ResourceUnit = preload("res://source/match/units/non-player/ResourceUnit.g
 var _resource_unit = null
 var _timer = null
 
-@onready var _unit = Utils.NodeEx.find_parent_with_group(self, "units")
+@onready var _unit = Utils.NodeEx.find_parent_with_group(self , "units")
 @onready var _unit_movement_trait = _unit.find_child("Movement")
 
 
@@ -15,7 +15,7 @@ static func is_applicable(source_unit, target_unit):
 		source_unit is Worker
 		and target_unit is ResourceUnit
 		and not source_unit.is_full()
-		and Utils.Match.Movement.units_adhere(source_unit, target_unit)
+		and Utils.MatchUtils.Movement.units_adhere(source_unit, target_unit)
 	)
 
 
@@ -40,13 +40,13 @@ func _setup_timer():
 	_timer.timeout.connect(_transfer_single_resource_unit_from_resource_to_worker)
 	add_child(_timer)
 	if "resource_a" in _resource_unit:
-		_timer.start(Constants.Match.Resources.A.COLLECTING_TIME_S)
+		_timer.start(Resources.A.COLLECTING_TIME_S)
 	elif "resource_b" in _resource_unit:
-		_timer.start(Constants.Match.Resources.B.COLLECTING_TIME_S)
+		_timer.start(Resources.B.COLLECTING_TIME_S)
 
 
 func _transfer_single_resource_unit_from_resource_to_worker():
-	if not Utils.Match.Movement.units_adhere(_unit, _resource_unit):
+	if not Utils.MatchUtils.Movement.units_adhere(_unit, _resource_unit):
 		queue_free()
 		return
 	if "resource_a" in _resource_unit:

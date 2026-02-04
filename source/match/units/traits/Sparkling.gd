@@ -12,7 +12,7 @@ func enable():
 		return
 	_animation = SparklingAnimation.instantiate()
 	_animation.transform.origin = Vector3(
-		0, 0, -_unit.radius - Constants.Match.Units.ADHERENCE_MARGIN_M
+		0, 0, -_unit.radius - UnitConstants.ADHERENCE_MARGIN_M
 	)
 	add_child(_animation, true)
 

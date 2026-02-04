@@ -1,4 +1,6 @@
-const Resources = preload("res://source/match/utils/ResourceUtils.gd")
+class_name MatchUtils
+
+const ResourceUtils = preload("res://source/match/utils/ResourceUtils.gd")
 const Movement = preload("res://source/match/utils/UnitMovementUtils.gd")
 const Placement = preload("res://source/match/utils/UnitPlacementUtils.gd")
 

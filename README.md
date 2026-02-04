@@ -50,3 +50,23 @@ Everyone is free to fix bugs or perform refactoring just by opening PR. As for f
 ### Core contributors
  - Myrmod
 
+## FAQ
+
+### How do replays work with the commands?
+┌─────────────┐
+│ Input / AI  │
+└──────┬──────┘
+       │  (create command)
+       ▼
+┌──────────────────┐
+│   CommandBus     │  ← stores commands by tick
+│ tick → [cmds]    │
+└──────┬───────────┘
+       │  (each tick)
+       ▼
+┌──────────────────┐
+│      Match       │
+│ _execute_command │
+└──────┬───────────┘
+       ▼
+ Units / Buildings

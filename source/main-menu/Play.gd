@@ -20,12 +20,12 @@ func _ready():
 
 
 func _setup_map_list():
-	var maps = Utils.Dict.items(Constants.Match.MAPS)
+	var maps = Utils.Dict.items(MatchConstants.MAPS)
 	maps.sort_custom(func(map_a, map_b): return map_a[1]["players"] < map_b[1]["players"])
 	_map_paths = maps.map(func(map): return map[0])
 	_map_list.clear()
 	for map_path in _map_paths:
-		_map_list.add_item(Constants.Match.MAPS[map_path]["name"])
+		_map_list.add_item(MatchConstants.MAPS[map_path]["name"])
 	_map_list.select(0)
 
 
@@ -104,7 +104,7 @@ func _on_player_selected(selected_option_id, selected_player_id):
 
 
 func _on_map_list_item_selected(index):
-	var map = Constants.Match.MAPS[_map_paths[index]]
+	var map = MatchConstants.MAPS[_map_paths[index]]
 	_map_details.text = "[u]Players:[/u] {0}\n[u]Size:[/u] {1}x{2}".format(
 		[map["players"], map["size"].x, map["size"].y]
 	)

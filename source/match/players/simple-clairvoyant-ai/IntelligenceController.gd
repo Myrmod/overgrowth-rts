@@ -3,10 +3,7 @@ extends Node
 const TARGET_SWITICHING_TIME_MIN_S = 0.5
 const TARGET_SWITICHING_TIME_MAX_S = 1.0
 
-
-class Actions:
-	const MovingToUnit = preload("res://source/match/units/actions/MovingToUnit.gd")
-
+const MovingToUnitAction = preload("res://source/match/units/actions/MovingToUnit.gd")
 
 const Drone = preload("res://source/match/units/Drone.gd")
 
@@ -57,7 +54,7 @@ func _navigate_to_random_unit(drone):
 	if not random_player_units_in_random_order.is_empty():
 		var target_unit = random_player_units_in_random_order.front()
 		_blacklisted_drone_target_paths[drone] = target_unit.get_path()
-		drone.action = Actions.MovingToUnit.new(target_unit)
+		drone.action = MovingToUnitAction.new(target_unit)
 	else:
 		var units_in_random_order = get_tree().get_nodes_in_group("units").filter(
 			func(unit): return unit.player != _player
@@ -69,15 +66,15 @@ func _navigate_to_random_unit(drone):
 		if not units_in_random_order.is_empty():
 			var target_unit = units_in_random_order.front()
 			_blacklisted_drone_target_paths[drone] = target_unit.get_path()
-			drone.action = Actions.MovingToUnit.new(target_unit)
+			drone.action = MovingToUnitAction.new(target_unit)
 
 
 func _on_drone_action_changed(new_action, drone):
 	if new_action == null:
 		await (
 			get_tree()
-			. create_timer(randf_range(TARGET_SWITICHING_TIME_MIN_S, TARGET_SWITICHING_TIME_MAX_S))
-			. timeout
+			.create_timer(randf_range(TARGET_SWITICHING_TIME_MIN_S, TARGET_SWITICHING_TIME_MAX_S))
+			.timeout
 		)
 		var drone_was_freed = not is_instance_valid(drone)
 		if drone_was_freed:

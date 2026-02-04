@@ -9,8 +9,8 @@ var player = null
 
 
 func _ready():
-	_resource_a_color_rect.color = Constants.Match.Resources.A.COLOR
-	_resource_b_color_rect.color = Constants.Match.Resources.B.COLOR
+	_resource_a_color_rect.color = Resources.A.COLOR
+	_resource_b_color_rect.color = Resources.B.COLOR
 
 
 func setup(a_player):

@@ -1,0 +1,9 @@
+[gd_scene format=3 uid="uid://5c5d67kwx6d7"]
+
+[ext_resource type="Script" uid="uid://76lr3or1kba0" path="res://source/Globals.gd" id="1_6qmd1"]
+[ext_resource type="PackedScene" uid="uid://d2c3nu0oqhxhu" path="res://source/Constants.tscn" id="2_nitnu"]
+
+[node name="Globals" type="Node" unique_id=1964405104]
+script = ExtResource("1_6qmd1")
+
+[node name="Constants" parent="." unique_id=1218487868 instance=ExtResource("2_nitnu")]

@@ -1,5 +1,7 @@
 extends Node3D
 
+class_name Match
+
 const Structure = preload("res://source/match/units/Structure.gd")
 const Player = preload("res://source/match/players/Player.gd")
 const Human = preload("res://source/match/players/human/Human.gd")
@@ -27,7 +29,8 @@ var visible_players = null:
 @onready var _terrain = $Terrain
 
 # required for replays
-var tick := 0
+static var tick := 0
+
 const TICK_RATE := 10 # RTS logic ticks per second
 
 func _enter_tree():
@@ -70,15 +73,19 @@ func _process_commands_for_tick(local_tick: int):
 
 func _execute_command(cmd: Dictionary):
 	match cmd.type:
-		"move":
-			for id in cmd.units:
-				UnitRegistry.get(id).move_to(cmd.target)
-
-		"build":
-			PlayerManager.get(cmd.player).build(
-				cmd.building,
-				cmd.position
-			)
+		CommandType.MOVE:
+			for entry in cmd.data.targets:
+				var unit: Unit = EntityRegistry.get(entry.unit)
+				print(unit)
+				if unit == null:
+					continue
+				unit.action = Actions.Moving.new(entry.pos)
+ 
+		# "build":
+		# 	PlayerManager.get(cmd.player).build(
+		# 		cmd.building,
+		# 		cmd.position
+		# 	)
 
 
 func _unhandled_input(event):
@@ -141,7 +148,7 @@ func _setup_players():
 
 func _create_players_from_settings():
 	for player_settings in settings.players:
-		var player_scene = Constants.Match.Player.CONTROLLER_SCENES[player_settings.controller]
+		var player_scene = Constants.CONTROLLER_SCENES[player_settings.controller]
 		var player = player_scene.instantiate()
 		player.color = player_settings.color
 		if player_settings.spawn_index_offset > 0:
@@ -219,7 +226,7 @@ func _move_camera_to_player_units_crowd_pivot(player):
 		func(unit): return unit.player == player
 	)
 	assert(not player_units.is_empty(), "player must have at least one initial unit")
-	var crowd_pivot = Utils.Match.Movement.calculate_aabb_crowd_pivot_yless(player_units)
+	var crowd_pivot = Utils.MatchUtils.Movement.calculate_aabb_crowd_pivot_yless(player_units)
 	_camera.set_position_safely(crowd_pivot)
 
 

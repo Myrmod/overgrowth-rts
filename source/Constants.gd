@@ -1,21 +1,18 @@
 extends Node
 
+class_name Constants
+
 enum PlayerType {
 	NONE = 0,
 	HUMAN = 1,
 	SIMPLE_CLAIRVOYANT_AI = 2,
 }
 
-
-class Match:
-	extends "res://source/match/MatchConstants.gd"
-
-	class Player:
-		const CONTROLLER_SCENES = {
-			PlayerType.HUMAN: preload("res://source/match/players/human/Human.tscn"),
-			PlayerType.SIMPLE_CLAIRVOYANT_AI:
-			preload("res://source/match/players/simple-clairvoyant-ai/SimpleClairvoyantAI.tscn"),
-		}
+const CONTROLLER_SCENES = {
+	PlayerType.HUMAN: preload("res://source/match/players/human/Human.tscn"),
+	PlayerType.SIMPLE_CLAIRVOYANT_AI:
+	preload("res://source/match/players/simple-clairvoyant-ai/SimpleClairvoyantAI.tscn"),
+}
 
 
 class Player:
@@ -43,14 +40,14 @@ class Player:
 		Color("2f4f4f"),
 	]
 
+static func get_options_file_path() -> String:
+	return (
+		"user://options.tres"
+		if not FeatureFlags.save_user_files_in_tmp
+		else "res://tmp/options.tres"
+	)
 
 # gdlint: ignore=class-variable-name
-var OPTIONS_FILE_PATH:
+var OPTIONS_FILE_PATH: String:
 	set(_value):
 		pass
-	get:
-		return (
-			"user://options.tres"
-			if not FeatureFlags.save_user_files_in_tmp
-			else "res://tmp/options.tres"
-		)

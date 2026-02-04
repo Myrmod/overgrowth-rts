@@ -9,7 +9,7 @@ const MATERIAL_ALBEDO_TO_REPLACE_EPSILON = 0.05
 		if resource_b == 0:
 			queue_free()
 
-var color = Constants.Match.Resources.B.COLOR:
+var color = Resources.B.COLOR:
 	set(_value):
 		pass
 
@@ -20,7 +20,7 @@ func _ready():
 
 func _setup_mesh_colors():
 	# gdlint: ignore = function-preload-variable-name
-	var material = preload(Constants.Match.Resources.B.MATERIAL_PATH)
-	Utils.Match.traverse_node_tree_and_replace_materials_matching_albedo(
-		self, MATERIAL_ALBEDO_TO_REPLACE, MATERIAL_ALBEDO_TO_REPLACE_EPSILON, material
+	var material = preload(Resources.B.MATERIAL_PATH)
+	Utils.MatchUtils.traverse_node_tree_and_replace_materials_matching_albedo(
+		self , MATERIAL_ALBEDO_TO_REPLACE, MATERIAL_ALBEDO_TO_REPLACE_EPSILON, material
 	)

@@ -1,15 +1,9 @@
 # TODO: monitor attached units and fix their actions if necessary
 extends Node
 
-enum State { FORMING, ATTACKING }
+enum State {FORMING, ATTACKING}
 
 const PLAYER_TO_ATTACK_SWITCHING_DELAY_S = 0.5
-
-
-class Actions:
-	const MovingToUnit = preload("res://source/match/units/actions/MovingToUnit.gd")
-	const AutoAttacking = preload("res://source/match/units/actions/AutoAttacking.gd")
-
 
 var _expected_number_of_units = null
 var _players_to_attack = null

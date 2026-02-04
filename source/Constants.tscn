@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://d2c3nu0oqhxhu"]
+
+[ext_resource type="Script" uid="uid://bboh8yislvk66" path="res://source/Constants.gd" id="1_rpith"]
+
+[node name="Constants" type="Node" unique_id=1218487868]
+script = ExtResource("1_rpith")

@@ -1,6 +1,6 @@
 extends Node
 
-var commands := {}  # tick -> Array[Command]
+var commands := {} # tick -> Array[Command]
 
 func push_command(cmd: Dictionary):
 	var t: int = cmd.tick

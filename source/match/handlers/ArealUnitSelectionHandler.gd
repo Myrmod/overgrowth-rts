@@ -51,7 +51,7 @@ func _rebase_topdown_polygon_2d_to_different_plane(topdown_polygon_2d, plane):
 	var camera = get_viewport().get_camera_3d()
 	for polygon_point_2d in topdown_polygon_2d:
 		var screen_point_2d = camera.unproject_position(
-			Vector3(polygon_point_2d.x, Constants.Match.Terrain.PLANE.d, polygon_point_2d.y)
+			Vector3(polygon_point_2d.x, Terrain.PLANE.d, polygon_point_2d.y)
 		)
 		var rebased_point_3d = camera.get_ray_intersection_with_plane(screen_point_2d, plane)
 		rebased_topdown_polygon_2d.append(Vector2(rebased_point_3d.x, rebased_point_3d.z))
@@ -64,13 +64,13 @@ func _on_selection_started():
 
 func _on_selection_changed(topdown_polygon_2d):
 	var units_to_highlight = _get_controlled_units_from_navigation_domain_within_topdown_polygon_2d(
-		Constants.Match.Navigation.Domain.TERRAIN, topdown_polygon_2d
+		NavigationConstants.Domain.TERRAIN, topdown_polygon_2d
 	)
 	units_to_highlight.merge(
 		_get_controlled_units_from_navigation_domain_within_topdown_polygon_2d(
-			Constants.Match.Navigation.Domain.AIR,
+			NavigationConstants.Domain.AIR,
 			_rebase_topdown_polygon_2d_to_different_plane(
-				topdown_polygon_2d, Constants.Match.Air.PLANE
+				topdown_polygon_2d, Air.PLANE
 			)
 		)
 	)
@@ -93,14 +93,14 @@ func _on_selection_finished(topdown_polygon_2d):
 	_unforce_highlight(_highlighted_units)
 	_highlighted_units = Utils.Set.new()
 	var units_to_select = _get_controlled_units_from_navigation_domain_within_topdown_polygon_2d(
-		Constants.Match.Navigation.Domain.TERRAIN, topdown_polygon_2d
+		NavigationConstants.Domain.TERRAIN, topdown_polygon_2d
 	)
 	units_to_select.merge(
 		_get_controlled_units_from_navigation_domain_within_topdown_polygon_2d(
-			Constants.Match.Navigation.Domain.AIR,
+			NavigationConstants.Domain.AIR,
 			_rebase_topdown_polygon_2d_to_different_plane(
-				topdown_polygon_2d, Constants.Match.Air.PLANE
+				topdown_polygon_2d, Air.PLANE
 			)
 		)
 	)
-	Utils.Match.select_units(units_to_select)
+	MatchUtils.select_units(units_to_select)

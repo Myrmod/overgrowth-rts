@@ -13,16 +13,16 @@ var _last_under_attack_notification_timestamp = 0
 
 func _ready():
 	MatchSignals.match_started.connect(
-		_handle_event.bind(Constants.Match.VoiceNarrator.Events.MATCH_STARTED)
+		_handle_event.bind(MatchConstants.VoiceNarrator.Events.MATCH_STARTED)
 	)
 	MatchSignals.match_aborted.connect(
-		_handle_event.bind(Constants.Match.VoiceNarrator.Events.MATCH_ABORTED)
+		_handle_event.bind(MatchConstants.VoiceNarrator.Events.MATCH_ABORTED)
 	)
 	MatchSignals.match_finished_with_victory.connect(
-		_handle_event.bind(Constants.Match.VoiceNarrator.Events.MATCH_FINISHED_WITH_VICTORY)
+		_handle_event.bind(MatchConstants.VoiceNarrator.Events.MATCH_FINISHED_WITH_VICTORY)
 	)
 	MatchSignals.match_finished_with_defeat.connect(
-		_handle_event.bind(Constants.Match.VoiceNarrator.Events.MATCH_FINISHED_WITH_DEFEAT)
+		_handle_event.bind(MatchConstants.VoiceNarrator.Events.MATCH_FINISHED_WITH_DEFEAT)
 	)
 	MatchSignals.unit_damaged.connect(_on_unit_damaged)
 	MatchSignals.unit_died.connect(_on_unit_died)
@@ -39,14 +39,14 @@ func _handle_event(event):
 		and (
 			_last_event_handled
 			in [
-				Constants.Match.VoiceNarrator.Events.MATCH_FINISHED_WITH_VICTORY,
-				Constants.Match.VoiceNarrator.Events.MATCH_FINISHED_WITH_DEFEAT
+				MatchConstants.VoiceNarrator.Events.MATCH_FINISHED_WITH_VICTORY,
+				MatchConstants.VoiceNarrator.Events.MATCH_FINISHED_WITH_DEFEAT
 			]
 		)
 	):
 		return
 	_last_event_handled = event
-	_audio_player.stream = Constants.Match.VoiceNarrator.EVENT_TO_ASSET_MAPPING[event]
+	_audio_player.stream = MatchConstants.VoiceNarrator.EVENT_TO_ASSET_MAPPING[event]
 	_audio_player.play()
 
 
@@ -60,9 +60,9 @@ func _on_unit_damaged(unit):
 	):
 		_handle_event(
 			(
-				Constants.Match.VoiceNarrator.Events.BASE_UNDER_ATTACK
+				MatchConstants.VoiceNarrator.Events.BASE_UNDER_ATTACK
 				if unit is Structure
-				else Constants.Match.VoiceNarrator.Events.UNIT_UNDER_ATTACK
+				else MatchConstants.VoiceNarrator.Events.UNIT_UNDER_ATTACK
 			)
 		)
 	_last_under_attack_notification_timestamp = current_timestamp
@@ -70,24 +70,24 @@ func _on_unit_damaged(unit):
 
 func _on_unit_died(unit):
 	if unit.is_in_group("controlled_units"):
-		_handle_event(Constants.Match.VoiceNarrator.Events.UNIT_LOST)
+		_handle_event(MatchConstants.VoiceNarrator.Events.UNIT_LOST)
 
 
 func _on_production_started(_unit_prototype, producer_unit):
 	if producer_unit.player == _player:
-		_handle_event(Constants.Match.VoiceNarrator.Events.UNIT_PRODUCTION_STARTED)
+		_handle_event(MatchConstants.VoiceNarrator.Events.UNIT_PRODUCTION_STARTED)
 
 
 func _on_production_finished(_unit, producer_unit):
 	if producer_unit.player == _player:
-		_handle_event(Constants.Match.VoiceNarrator.Events.UNIT_PRODUCTION_FINISHED)
+		_handle_event(MatchConstants.VoiceNarrator.Events.UNIT_PRODUCTION_FINISHED)
 
 
 func _on_construction_finished(unit):
 	if unit.player == _player:
-		_handle_event(Constants.Match.VoiceNarrator.Events.UNIT_CONSTRUCTION_FINISHED)
+		_handle_event(MatchConstants.VoiceNarrator.Events.UNIT_CONSTRUCTION_FINISHED)
 
 
 func _on_not_enough_resources(player):
 	if player == get_parent():
-		_handle_event(Constants.Match.VoiceNarrator.Events.NOT_ENOUGH_RESOURCES)
+		_handle_event(MatchConstants.VoiceNarrator.Events.NOT_ENOUGH_RESOURCES)

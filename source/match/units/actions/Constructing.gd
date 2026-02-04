@@ -10,7 +10,7 @@ const ConstructingWhileInRange = preload(
 var _target_unit = null
 var _sub_action = null
 
-@onready var _unit = Utils.NodeEx.find_parent_with_group(self, "units")
+@onready var _unit = Utils.NodeEx.find_parent_with_group(self , "units")
 
 
 static func is_applicable(source_unit, target_unit):
@@ -34,7 +34,7 @@ func _ready():
 func _construct_or_move_closer():
 	_sub_action = (
 		MovingToUnit.new(_target_unit)
-		if not Utils.Match.Movement.units_adhere(_unit, _target_unit)
+		if not Utils.MatchUtils.Movement.units_adhere(_unit, _target_unit)
 		else ConstructingWhileInRange.new(_target_unit)
 	)
 	_sub_action.tree_exited.connect(_on_sub_action_finished)
@@ -43,7 +43,7 @@ func _construct_or_move_closer():
 
 
 func _to_string():
-	return "{0}({1})".format([super(), str(_sub_action) if _sub_action != null else ""])
+	return "{0}({1})".format([ super (), str(_sub_action) if _sub_action != null else ""])
 
 
 func _on_sub_action_finished():

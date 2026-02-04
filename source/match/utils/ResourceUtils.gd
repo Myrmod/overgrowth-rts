@@ -1,3 +1,5 @@
+class_name ResourceUtils
+
 static func find_resource_unit_closest_to_unit_yet_no_further_than(
 	unit, distance_max, filter_predicate = null
 ):

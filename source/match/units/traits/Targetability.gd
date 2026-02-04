@@ -34,24 +34,24 @@ func animate():
 	_tween = get_tree().create_tween()
 	(
 		_tween
-		. tween_property(
+		.tween_property(
 			_circle, "radius", _circle.radius * RADIUS_DEVIATION_FACTOR, ANIMATION_DURATION_S
 		)
-		. set_ease(Tween.EASE_IN)
-		. set_trans(Tween.TRANS_LINEAR)
+		.set_ease(Tween.EASE_IN)
+		.set_trans(Tween.TRANS_LINEAR)
 	)
 	_tween.tween_callback(_circle.hide).set_delay(ANIMATION_DURATION_S)
 
 
 func _update_circle_color():
 	if _unit.is_in_group("controlled_units"):
-		_circle.color = Constants.Match.OWNED_PLAYER_CIRCLE_COLOR
+		_circle.color = MatchConstants.OWNED_PLAYER_CIRCLE_COLOR
 	elif _unit.is_in_group("adversary_units"):
-		_circle.color = Constants.Match.ADVERSARY_PLAYER_CIRCLE_COLOR
+		_circle.color = MatchConstants.ADVERSARY_PLAYER_CIRCLE_COLOR
 	elif _unit.is_in_group("resource_units"):
-		_circle.color = Constants.Match.RESOURCE_CIRCLE_COLOR
+		_circle.color = MatchConstants.RESOURCE_CIRCLE_COLOR
 	else:
-		_circle.color = Constants.Match.DEFAULT_CIRCLE_COLOR
+		_circle.color = MatchConstants.DEFAULT_CIRCLE_COLOR
 
 
 func _update_circle_params():

@@ -18,13 +18,13 @@ func _ready() -> void:
 func _handle_event(event):
 	if _audio_player.playing:
 		return
-	_audio_player.stream = Constants.Match.VoiceNarrator.EVENT_TO_ASSET_MAPPING[event]
+	_audio_player.stream = MatchConstants.VoiceNarrator.EVENT_TO_ASSET_MAPPING[event]
 	_audio_player.play()
 
 
 func _on_unit_selected(unit):
 	if not unit is Structure and not unit is ResourceUnit and unit.player == _player:
-		_handle_event(Constants.Match.VoiceNarrator.Events.UNIT_HELLO)
+		_handle_event(MatchConstants.VoiceNarrator.Events.UNIT_HELLO)
 	# TODO: handle building - perhaps with some sound instead of voice
 
 
@@ -34,9 +34,9 @@ func _on_unit_action_requsted(_ignore):
 	):
 		_handle_event(
 			(
-				Constants.Match.VoiceNarrator.Events.UNIT_ACK_1
+				MatchConstants.VoiceNarrator.Events.UNIT_ACK_1
 				if _last_ack_event == 0
-				else Constants.Match.VoiceNarrator.Events.UNIT_ACK_2
+				else MatchConstants.VoiceNarrator.Events.UNIT_ACK_2
 			)
 		)
 		_last_ack_event = (_last_ack_event + 1) % 2

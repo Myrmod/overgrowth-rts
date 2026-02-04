@@ -8,7 +8,7 @@ func _init(target_unit):
 
 
 func _process(_delta):
-	if Utils.Match.Movement.units_adhere(_unit, _target_unit):
+	if Utils.MatchUtils.Movement.units_adhere(_unit, _target_unit):
 		queue_free()
 
 
@@ -21,11 +21,11 @@ func _ready():
 			* _target_unit.radius
 		)
 	)
-	super()
+	super ()
 
 
 func _on_movement_finished():
-	if Utils.Match.Movement.units_adhere(_unit, _target_unit):
+	if Utils.MatchUtils.Movement.units_adhere(_unit, _target_unit):
 		queue_free()
 	else:
 		_target_position = _target_unit.global_position

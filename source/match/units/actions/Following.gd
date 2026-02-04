@@ -9,7 +9,7 @@ var _timer = null
 var _last_known_target_unit_position = null
 var _sub_action = null
 
-@onready var _unit = Utils.NodeEx.find_parent_with_group(self, "units")
+@onready var _unit = Utils.NodeEx.find_parent_with_group(self , "units")
 
 
 static func is_applicable(source_unit):
@@ -27,7 +27,7 @@ func _ready():
 
 
 func _to_string():
-	return "{0}({1})".format([super(), str(_sub_action) if _sub_action != null else ""])
+	return "{0}({1})".format([ super (), str(_sub_action) if _sub_action != null else ""])
 
 
 func _setup_refresh_timer():

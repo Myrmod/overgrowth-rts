@@ -1,19 +1,9 @@
 extends Node
 
+class_name UnitActionsController
+
 const Structure = preload("res://source/match/units/Structure.gd")
 const ResourceUnit = preload("res://source/match/units/non-player/ResourceUnit.gd")
-
-
-class Actions:
-	const Moving = preload("res://source/match/units/actions/Moving.gd")
-	const MovingToUnit = preload("res://source/match/units/actions/MovingToUnit.gd")
-	const Following = preload("res://source/match/units/actions/Following.gd")
-	const CollectingResourcesSequentially = preload(
-		"res://source/match/units/actions/CollectingResourcesSequentially.gd"
-	)
-	const AutoAttacking = preload("res://source/match/units/actions/AutoAttacking.gd")
-	const Constructing = preload("res://source/match/units/actions/Constructing.gd")
-
 
 func _ready():
 	MatchSignals.terrain_targeted.connect(_on_terrain_targeted)
@@ -27,7 +17,7 @@ func _try_navigating_selected_units_towards_position(target_point):
 		func(unit):
 			return (
 				unit.is_in_group("controlled_units")
-				and unit.movement_domain == Constants.Match.Navigation.Domain.TERRAIN
+				and unit.movement_domain == NavigationConstants.Domain.TERRAIN
 				and Actions.Moving.is_applicable(unit)
 			)
 	)
@@ -35,20 +25,33 @@ func _try_navigating_selected_units_towards_position(target_point):
 		func(unit):
 			return (
 				unit.is_in_group("controlled_units")
-				and unit.movement_domain == Constants.Match.Navigation.Domain.AIR
+				and unit.movement_domain == NavigationConstants.Domain.AIR
 				and Actions.Moving.is_applicable(unit)
 			)
 	)
-	var new_unit_targets = Utils.Match.Movement.crowd_moved_to_new_pivot(
+	var new_unit_targets = Utils.MatchUtils.Movement.crowd_moved_to_new_pivot(
 		terrain_units_to_move, target_point
 	)
-	new_unit_targets += Utils.Match.Movement.crowd_moved_to_new_pivot(
+	new_unit_targets += Utils.MatchUtils.Movement.crowd_moved_to_new_pivot(
 		air_units_to_move, target_point
 	)
-	for tuple in new_unit_targets:
-		var unit = tuple[0]
-		var new_target = tuple[1]
-		unit.action = Actions.Moving.new(new_target)
+	# for tuple in new_unit_targets:
+	# 	var unit = tuple[0]
+	# 	var new_target = tuple[1]
+	# 	unit.action = Actions.Moving.new(new_target)
+
+	var cmd := {
+		"tick": Match.tick + 1,
+		"player": PlayerManager.local_player_id,
+		"type": CommandType.MOVE,
+		"data": {
+			"targets": new_unit_targets.map(
+				func(t): return {"unit": t[0].id, "pos": t[1]}
+			)
+		}
+	}
+
+	CommandBus.push_command(cmd)
 
 
 func _try_setting_rally_points(target_point: Vector3):
@@ -109,7 +112,7 @@ func _navigate_unit_towards_unit(unit, target_unit):
 		return true
 	if _try_setting_rally_point_to_unit(unit, target_unit):
 		return true
-	return false  # gdlint: ignore = max-returns
+	return false # gdlint: ignore = max-returns
 
 
 func _try_setting_rally_point_to_unit(unit, target_unit):

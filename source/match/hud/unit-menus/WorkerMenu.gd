@@ -14,7 +14,7 @@ const AntiAirTurretUnit = preload("res://source/match/units/AntiAirTurret.tscn")
 
 
 func _ready():
-	var ag_turret_properties = Constants.Match.Units.DEFAULT_PROPERTIES[
+	var ag_turret_properties = UnitConstants.DEFAULT_PROPERTIES[
 		AntiGroundTurretUnit.resource_path
 	]
 	_ag_turret_button.tooltip_text = ("{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}, {6}: {7}".format(
@@ -25,21 +25,17 @@ func _ready():
 			ag_turret_properties["attack_damage"] * ag_turret_properties["attack_interval"],
 			tr("RESOURCE_A"),
 			(
-				Constants
-				. Match
-				. Units
-				. CONSTRUCTION_COSTS[AntiGroundTurretUnit.resource_path]["resource_a"]
+				UnitConstants
+				.CONSTRUCTION_COSTS[AntiGroundTurretUnit.resource_path]["resource_a"]
 			),
 			tr("RESOURCE_B"),
 			(
-				Constants
-				. Match
-				. Units
-				. CONSTRUCTION_COSTS[AntiGroundTurretUnit.resource_path]["resource_b"]
+				UnitConstants
+				.CONSTRUCTION_COSTS[AntiGroundTurretUnit.resource_path]["resource_b"]
 			)
 		]
 	))
-	var aa_turret_properties = Constants.Match.Units.DEFAULT_PROPERTIES[
+	var aa_turret_properties = UnitConstants.DEFAULT_PROPERTIES[
 		AntiAirTurretUnit.resource_path
 	]
 	_aa_turret_button.tooltip_text = ("{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}, {6}: {7}".format(
@@ -49,56 +45,50 @@ func _ready():
 			aa_turret_properties["hp_max"],
 			aa_turret_properties["attack_damage"] * aa_turret_properties["attack_interval"],
 			tr("RESOURCE_A"),
-			Constants.Match.Units.CONSTRUCTION_COSTS[AntiAirTurretUnit.resource_path]["resource_a"],
+			UnitConstants.CONSTRUCTION_COSTS[AntiAirTurretUnit.resource_path]["resource_a"],
 			tr("RESOURCE_B"),
-			Constants.Match.Units.CONSTRUCTION_COSTS[AntiAirTurretUnit.resource_path]["resource_b"]
+			UnitConstants.CONSTRUCTION_COSTS[AntiAirTurretUnit.resource_path]["resource_b"]
 		]
 	))
 	_cc_button.tooltip_text = ("{0} - {1}\n{2} HP\n{3}: {4}, {5}: {6}".format(
 		[
 			tr("CC"),
 			tr("CC_DESCRIPTION"),
-			Constants.Match.Units.DEFAULT_PROPERTIES[CommandCenterUnit.resource_path]["hp_max"],
+			UnitConstants.DEFAULT_PROPERTIES[CommandCenterUnit.resource_path]["hp_max"],
 			tr("RESOURCE_A"),
-			Constants.Match.Units.CONSTRUCTION_COSTS[CommandCenterUnit.resource_path]["resource_a"],
+			UnitConstants.CONSTRUCTION_COSTS[CommandCenterUnit.resource_path]["resource_a"],
 			tr("RESOURCE_B"),
-			Constants.Match.Units.CONSTRUCTION_COSTS[CommandCenterUnit.resource_path]["resource_b"]
+			UnitConstants.CONSTRUCTION_COSTS[CommandCenterUnit.resource_path]["resource_b"]
 		]
 	))
 	_vehicle_factory_button.tooltip_text = ("{0} - {1}\n{2} HP\n{3}: {4}, {5}: {6}".format(
 		[
 			tr("VEHICLE_FACTORY"),
 			tr("VEHICLE_FACTORY_DESCRIPTION"),
-			Constants.Match.Units.DEFAULT_PROPERTIES[VehicleFactoryUnit.resource_path]["hp_max"],
+			UnitConstants.DEFAULT_PROPERTIES[VehicleFactoryUnit.resource_path]["hp_max"],
 			tr("RESOURCE_A"),
 			(
-				Constants
-				. Match
-				. Units
-				. CONSTRUCTION_COSTS[VehicleFactoryUnit.resource_path]["resource_a"]
+				UnitConstants
+				.CONSTRUCTION_COSTS[VehicleFactoryUnit.resource_path]["resource_a"]
 			),
 			tr("RESOURCE_B"),
-			Constants.Match.Units.CONSTRUCTION_COSTS[VehicleFactoryUnit.resource_path]["resource_b"]
+			UnitConstants.CONSTRUCTION_COSTS[VehicleFactoryUnit.resource_path]["resource_b"]
 		]
 	))
 	_aircraft_factory_button.tooltip_text = ("{0} - {1}\n{2} HP\n{3}: {4}, {5}: {6}".format(
 		[
 			tr("AIRCRAFT_FACTORY"),
 			tr("AIRCRAFT_FACTORY_DESCRIPTION"),
-			Constants.Match.Units.DEFAULT_PROPERTIES[AircraftFactoryUnit.resource_path]["hp_max"],
+			UnitConstants.DEFAULT_PROPERTIES[AircraftFactoryUnit.resource_path]["hp_max"],
 			tr("RESOURCE_A"),
 			(
-				Constants
-				. Match
-				. Units
-				. CONSTRUCTION_COSTS[AircraftFactoryUnit.resource_path]["resource_a"]
+				UnitConstants
+				.CONSTRUCTION_COSTS[AircraftFactoryUnit.resource_path]["resource_a"]
 			),
 			tr("RESOURCE_B"),
 			(
-				Constants
-				. Match
-				. Units
-				. CONSTRUCTION_COSTS[AircraftFactoryUnit.resource_path]["resource_b"]
+				UnitConstants
+				.CONSTRUCTION_COSTS[AircraftFactoryUnit.resource_path]["resource_b"]
 			)
 		]
 	))

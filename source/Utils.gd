@@ -1,6 +1,6 @@
 extends Node
 
-const Match = preload("res://source/match/MatchUtils.gd")
+const MatchUtils = preload("res://source/match/MatchUtils.gd")
 
 
 class Set:
@@ -52,19 +52,18 @@ class NodeEx:
 		return null
 
 
-class Arr:
-	static func sum(array):
-		var total = 0
-		for item in array:
-			total += item
-		return total
+static func sum(array):
+	var total = 0
+	for item in array:
+		total += item
+	return total
 
 
 class RouletteWheel:
 	var _values_w_sorted_normalized_shares = []
 
 	func _init(value_to_share_mapping):
-		var total_share = Arr.sum(value_to_share_mapping.values())
+		var total_share = Utils.sum(value_to_share_mapping.values())
 		for value in value_to_share_mapping:
 			var share = value_to_share_mapping[value]
 			var normalized_share = share / total_share
