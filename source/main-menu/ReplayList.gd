@@ -1,4 +1,6 @@
-extends ItemList
+extends VBoxContainer
+
+const ReplayItemScene = preload("res://source/main-menu/ReplayItem.tscn")
 
 func _ready():
 	# Create directory if it doesn't exist
@@ -16,8 +18,20 @@ func _ready():
 		while file_name != "":
 			# Skip directories and unwanted files
 			if not dir.current_is_dir() and not file_name.begins_with(".") and not file_name.ends_with(".import"):
-				print("TODO: create new item per file_name: ", file_name)
+				var full_path = dir_path + file_name
+				var item = ReplayItemScene.instantiate()
+				self.add_child(item)
+				item.setup(full_path)
+				item.watch_requested.connect(_on_watch_replay)
 			file_name = dir.get_next()
 		dir.list_dir_end()
 	else:
-		print("Error: Could not open directory.")    
+		print("Error: Could not open directory.")
+
+func _on_watch_replay(path: String):
+	print("Load replay:", path)
+
+	ReplayRecorder.load_from_file(path)
+	ReplayRecorder.start_replay()
+
+	get_tree().change_scene_to_file("res://match/Match.tscn")
