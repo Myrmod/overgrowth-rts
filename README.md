@@ -53,6 +53,7 @@ Everyone is free to fix bugs or perform refactoring just by opening PR. As for f
 ## FAQ
 
 ### How do replays work with the commands?
+```
 ┌─────────────┐
 │ Input / AI  │
 └──────┬──────┘
@@ -70,3 +71,4 @@ Everyone is free to fix bugs or perform refactoring just by opening PR. As for f
 └──────┬───────────┘
        ▼
  Units / Buildings
+```
