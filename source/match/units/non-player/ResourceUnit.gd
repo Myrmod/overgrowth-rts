@@ -8,7 +8,10 @@ var radius:
 var global_position_yless:
 	get:
 		return global_position * Vector3(1, 0, 1)
+var id: int
 
+func _ready():
+	id = EntityRegistry.register(self )
 
 func _enter_tree():
 	tree_exiting.connect(_animate_decay)

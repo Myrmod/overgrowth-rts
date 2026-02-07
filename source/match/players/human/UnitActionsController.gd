@@ -35,12 +35,8 @@ func _try_navigating_selected_units_towards_position(target_point):
 	new_unit_targets += Utils.MatchUtils.Movement.crowd_moved_to_new_pivot(
 		air_units_to_move, target_point
 	)
-	# for tuple in new_unit_targets:
-	# 	var unit = tuple[0]
-	# 	var new_target = tuple[1]
-	# 	unit.action = Actions.Moving.new(new_target)
 
-	var cmd := {
+	CommandBus.push_command({
 		"tick": Match.tick + 1,
 		"type": Enums.CommandType.MOVE,
 		"data": {
@@ -48,9 +44,7 @@ func _try_navigating_selected_units_towards_position(target_point):
 				func(t): return {"unit": t[0].id, "pos": t[1]}
 			)
 		}
-	}
-
-	CommandBus.push_command(cmd)
+	})
 
 
 func _try_setting_rally_points(target_point: Vector3):
@@ -76,8 +70,15 @@ func _try_ordering_selected_workers_to_construct_structure(potential_structure):
 				and Actions.Constructing.is_applicable(unit, structure)
 			)
 	)
-	for unit in selected_constructors:
-		unit.action = Actions.Constructing.new(structure)
+
+	CommandBus.push_command({
+		"tick": Match.tick + 1,
+		"type": Enums.CommandType.CONSTRUCTING,
+		"data": {
+			"selected_constructors": selected_constructors.map(func(unit): return unit.id),
+			"structure": structure,
+		}
+	})
 
 
 func _navigate_selected_units_towards_unit(target_unit):
@@ -92,22 +93,63 @@ func _navigate_selected_units_towards_unit(target_unit):
 
 func _navigate_unit_towards_unit(unit, target_unit):
 	if Actions.CollectingResourcesSequentially.is_applicable(unit, target_unit):
-		unit.action = Actions.CollectingResourcesSequentially.new(target_unit)
+		# unit.action = Actions.CollectingResourcesSequentially.new(target_unit)
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.COLLECTING_RESOURCES_SEQUENTIALLY,
+			"data": {
+				"targets": [unit.id],
+				"target_unit": target_unit.id,
+			}
+		})
+
 		return true
 	if Actions.AutoAttacking.is_applicable(unit, target_unit):
-		unit.action = Actions.AutoAttacking.new(target_unit)
+		# unit.action = Actions.AutoAttacking.new(target_unit)
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.AUTO_ATTACKING,
+			"data": {
+				"targets": [unit.id],
+				"target_unit": target_unit.id,
+			}
+		})
 		return true
 	if Actions.Constructing.is_applicable(unit, target_unit):
 		unit.action = Actions.Constructing.new(target_unit)
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.CONSTRUCTING,
+			"data": {
+				"selected_constructors": [unit.id],
+				"structure": target_unit,
+			}
+		})
 		return true
 	if (
 		(target_unit.is_in_group("adversary_units") or target_unit.is_in_group("controlled_units"))
 		and Actions.Following.is_applicable(unit)
 	):
-		unit.action = Actions.Following.new(target_unit)
+		# unit.action = Actions.Following.new(target_unit)
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.FOLLOWING,
+			"data": {
+				"targets": [unit.id],
+				"target_unit": target_unit.id,
+			}
+		})
 		return true
 	if Actions.MovingToUnit.is_applicable(unit):
-		unit.action = Actions.MovingToUnit.new(target_unit)
+		# unit.action = Actions.MovingToUnit.new(target_unit)
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.MOVING_TO_UNIT,
+			"data": {
+				"targets": [unit.id],
+				"target_unit": target_unit.id,
+			}
+		})
 		return true
 	if _try_setting_rally_point_to_unit(unit, target_unit):
 		return true
@@ -148,4 +190,12 @@ func _on_navigate_unit_to_rally_point(unit, rally_point):
 	if rally_point.target_unit != null:
 		_navigate_unit_towards_unit(unit, rally_point.target_unit)
 	elif rally_point.global_position != rally_point.get_parent().global_position:
-		unit.action = Actions.Moving.new(rally_point.global_position)
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.MOVE,
+			"data": {
+				"targets": [unit].map(
+					func(t): return {"unit": t.id, "pos": rally_point.global_position}
+				)
+			}
+		})

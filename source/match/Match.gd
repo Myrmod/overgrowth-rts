@@ -68,6 +68,7 @@ func _ready():
 # required for replays
 func _on_tick():
 	tick += 1
+	print('tick:', tick)
 	_process_commands_for_tick()
 
 # required for replays
@@ -87,12 +88,38 @@ func _execute_command(cmd: Dictionary):
 				if unit == null:
 					continue
 				unit.action = Actions.Moving.new(entry.pos)
- 
-		# "build":
-		# 	PlayerManager.get(cmd.player).build(
-		# 		cmd.building,
-		# 		cmd.position
-		# 	)
+		Enums.CommandType.MOVING_TO_UNIT:
+			for entry in cmd.data.targets:
+				var unit: Unit = EntityRegistry.get_unit(entry)
+				if unit == null:
+					continue
+				unit.action = Actions.MovingToUnit.new(EntityRegistry.get_unit(cmd.data.target_unit))
+		Enums.CommandType.FOLLOWING:
+			for entry in cmd.data.targets:
+				var unit: Unit = EntityRegistry.get_unit(entry)
+				if unit == null:
+					continue
+				unit.action = Actions.Following.new(EntityRegistry.get_unit(cmd.data.target_unit))
+		Enums.CommandType.COLLECTING_RESOURCES_SEQUENTIALLY:
+			for entry in cmd.data.targets:
+				var unit: Unit = EntityRegistry.get_unit(entry)
+				if unit == null:
+					continue
+				unit.action = Actions.CollectingResourcesSequentially.new(EntityRegistry.get_unit(cmd.data.target_unit))
+		Enums.CommandType.AUTO_ATTACKING:
+			for entry in cmd.data.targets:
+				var unit: Unit = EntityRegistry.get_unit(entry)
+				if unit == null:
+					continue
+				unit.action = Actions.AutoAttacking.new(EntityRegistry.get_unit(cmd.data.target_unit))
+		Enums.CommandType.CONSTRUCTING:
+			for entry in cmd.data.selected_constructors:
+				var unit: Unit = EntityRegistry.get_unit(entry)
+				if unit == null:
+					continue
+				unit.action = Actions.Constructing.new(cmd.data.structure)
+		_:
+			print('Cannot execute command: ', cmd)
 
 
 func _unhandled_input(event):
