@@ -3,6 +3,7 @@ extends VBoxContainer
 const ReplayItemScene = preload("res://source/main-menu/ReplayItem.tscn")
 
 func _ready():
+	print('ReplayList Scene')
 	# Create directory if it doesn't exist
 	var dir_path = "user://replays/"
 	if not DirAccess.dir_exists_absolute(dir_path):
@@ -29,7 +30,17 @@ func _ready():
 		print("Error: Could not open directory.")
 
 func _on_watch_replay(path: String):
-	ReplayRecorder.load_from_file(path)
-	ReplayRecorder.start_replay()
+	var replay = ReplayRecorder.load_from_file(path)
 
-	get_tree().change_scene_to_file("res://source/match/Match.tscn")
+	# adding commands to the CommandBus
+	CommandBus.load_from_replay_array(replay.commands)
+
+	var play_scene = preload("res://source/main-menu/Play.tscn")
+	var play = play_scene.instantiate()
+
+	play.replay_resource = replay
+
+	get_tree().root.add_child(play)
+	get_tree().current_scene.queue_free()
+	get_tree().change_scene_to_node(play)
+	print(get_tree().current_scene)

@@ -1,10 +1,17 @@
 extends Control
 
+# Mode A — normal:
+# Main → Play → Loading → Match
+
+# Mode B — replay:
+# ReplayMenu → Play (replay mode) → Loading → Match
+
 const MatchSettings = preload("res://source/data-model/MatchSettings.gd")
 const PlayerSettings = preload("res://source/data-model/PlayerSettings.gd")
 const LoadingScene = preload("res://source/main-menu/Loading.tscn")
 
 var _map_paths = []
+var replay_resource = null
 
 @onready var _start_button = find_child("StartButton")
 @onready var _map_list = find_child("MapList")
@@ -12,6 +19,11 @@ var _map_paths = []
 
 
 func _ready():
+	print('Play Scene')
+	if replay_resource != null:
+		_start_from_replay()
+		return
+
 	_setup_map_list()
 	_on_map_list_item_selected(0)
 	var option_nodes = find_child("GridContainer").find_children("OptionButton*")
@@ -108,3 +120,14 @@ func _on_map_list_item_selected(index):
 		[map["players"], map["size"].x, map["size"].y]
 	)
 	_align_player_controls_visibility_to_map(map)
+
+func _start_from_replay():
+	hide()
+	var loading = LoadingScene.instantiate()
+	loading.match_settings = replay_resource.settings
+	loading.map_path = replay_resource.map
+	loading.replay_resource = replay_resource
+
+	get_parent().add_child(loading)
+	get_tree().change_scene_to_node(loading)
+	queue_free()

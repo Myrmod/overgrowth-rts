@@ -20,6 +20,8 @@ var visible_players = null:
 	set = _ignore,
 	get = _get_visible_players
 
+var is_replay_mode = false
+
 @onready var navigation = $Navigation
 @onready var fog_of_war = $FogOfWar
 
@@ -38,6 +40,10 @@ func _enter_tree():
 
 
 func _ready():
+	print('Match Scene')
+	if is_replay_mode:
+		ReplayRecorder.start_replay()
+
 	MatchSignals.setup_and_spawn_unit.connect(_setup_and_spawn_unit)
 	_setup_subsystems_dependent_on_map()
 	_setup_players()
@@ -56,7 +62,7 @@ func _ready():
 		fog_of_war.reveal()
 	MatchSignals.match_started.emit()
 
-	if ReplayRecorder.mode == ReplayRecorder.Mode.OFF:
+	if !is_replay_mode:
 		ReplayRecorder.start_recording(self )
 
 # required for replays
@@ -73,6 +79,7 @@ func _process_commands_for_tick():
 		_execute_command(cmd)
 
 func _execute_command(cmd: Dictionary):
+	print('_execute_command', cmd)
 	match cmd.type:
 		Enums.CommandType.MOVE:
 			for entry in cmd.data.targets:

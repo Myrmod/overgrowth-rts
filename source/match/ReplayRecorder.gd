@@ -32,7 +32,6 @@ func record_command(cmd: Dictionary):
 	replay.commands.append(cmd.duplicate())
 
 func stop_recording():
-	print('stop_recording')
 	mode = Mode.OFF
 
 ## replay_2026-02-05T19-00-22.save
@@ -53,8 +52,7 @@ func save_to_file():
 		printerr("Replay save failed:", err)
 
 func load_from_file(path: String) -> ReplayResource:
-	replay = ResourceLoader.load(path) as ReplayResource
-	print("Loaded replay:", replay)
+	replay = ResourceLoader.load(path)
 
 	return replay
 
@@ -66,5 +64,7 @@ func get_replay_path():
 	return "user://replays/replay_" + timestamp + ".tres"
 
 func _on_match_ended():
+	# don't save if a replay was played
+	if mode == Mode.RECORD:
+		save_to_file()
 	stop_recording()
-	save_to_file()

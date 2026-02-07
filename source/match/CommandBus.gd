@@ -24,3 +24,15 @@ func _replay_commands_for_tick(tick: int) -> Array:
 
 func _live_commands_for_tick(tick: int) -> Array:
 	return commands[tick]
+
+func load_from_replay_array(arr: Array):
+	commands.clear()
+
+	for entry in arr:
+		var tick = entry.tick
+		var cmd = entry
+
+		if not commands.has(tick):
+			commands[tick] = []
+
+		commands[tick].append(cmd)
