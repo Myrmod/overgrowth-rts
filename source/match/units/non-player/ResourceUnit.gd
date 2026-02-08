@@ -1,5 +1,7 @@
 extends Area3D
 
+class_name ResourceUnit
+
 const ResourceDecayAnimation = preload("res://source/match/utils/ResourceDecayAnimation.tscn")
 
 var radius:
