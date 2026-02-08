@@ -40,7 +40,6 @@ func _enter_tree():
 
 
 func _ready():
-	print('Match Scene')
 	if is_replay_mode:
 		ReplayRecorder.start_replay()
 
