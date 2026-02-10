@@ -80,38 +80,45 @@ class RouletteWheel:
 		assert(false, "unexpected flow")
 		return -1
 
-func _detect_potential_recursion(value, visited: Dictionary, path: String) -> bool:
-	# Detect circular references
-	if typeof(value) == TYPE_OBJECT or typeof(value) == TYPE_ARRAY or typeof(value) == TYPE_DICTIONARY:
-		var id = value.get_instance_id() if value is Object else hash(value)
+func _detect_potential_recursion(value, visited: Dictionary, path: String, command_context: Dictionary = {}) -> bool:
+	# Only track actual objects (Nodes, Resources) for circular reference detection
+	# Arrays and dictionaries are data structures, not circular references
+	if typeof(value) == TYPE_OBJECT:
+		var id = value.get_instance_id()
 		if visited.has(id):
-			push_error("Replay recursion detected at: " + path)
+			var context_str = _format_command_context(command_context)
+			push_error("Replay recursion detected at: " + path + context_str)
 			return false
 		visited[id] = true
 
 	match typeof(value):
-		TYPE_NIL, TYPE_BOOL, TYPE_INT, TYPE_FLOAT, TYPE_STRING:
-			return true
-
-		TYPE_VECTOR2, TYPE_VECTOR3, TYPE_VECTOR4, TYPE_COLOR:
+		TYPE_NIL, TYPE_BOOL, TYPE_INT, TYPE_FLOAT, TYPE_STRING, TYPE_VECTOR2, TYPE_VECTOR3, TYPE_VECTOR4, TYPE_COLOR, TYPE_TRANSFORM3D:
 			return true
 
 		TYPE_ARRAY:
 			for i in value.size():
-				if not _detect_potential_recursion(value[i], visited, path + "[" + str(i) + "]"):
+				if not _detect_potential_recursion(value[i], visited, path + "[" + str(i) + "]", command_context):
 					return false
 			return true
 
 		TYPE_DICTIONARY:
+			var new_context = command_context.duplicate()
+			
+			# If this is a command dict, extract tick and type
+			if "tick" in value and "type" in value:
+				new_context["tick"] = value.get("tick")
+				new_context["type"] = value.get("type")
+			
 			for k in value.keys():
-				if not _detect_potential_recursion(value[k], visited, path + "." + str(k)):
+				if not _detect_potential_recursion(value[k], visited, path + "." + str(k), new_context):
 					return false
 			return true
 
 		TYPE_OBJECT:
 			# ❌ Nodes are forbidden
 			if value is Node:
-				push_error("Replay contains Node at: " + path)
+				var context_str = _format_command_context(command_context)
+				push_error("Replay contains Node at: " + path + context_str)
 				return false
 
 			# ⚠️ Resources — validate their properties
@@ -120,14 +127,32 @@ func _detect_potential_recursion(value, visited: Dictionary, path: String) -> bo
 					if prop.usage & PROPERTY_USAGE_STORAGE == 0:
 						continue
 					var prop_value = value.get(prop.name)
-					if not _detect_potential_recursion(prop_value, visited, path + "." + prop.name):
+					if not _detect_potential_recursion(prop_value, visited, path + "." + prop.name, command_context):
 						return false
 				return true
 
 			# ❌ Other objects forbidden
-			push_error("Replay contains unsupported Object type at: " + path + " -> " + str(value))
+			var context_str = _format_command_context(command_context)
+			push_error("Replay contains unsupported Object type at: " + path + context_str + " -> " + str(value))
 			return false
 
 		_:
-			push_error("Replay contains unsupported type at: " + path)
+			var context_str = _format_command_context(command_context)
+			print("unsupported type:", value, typeof(value))
+			push_error("Replay contains unsupported type at: " + path + context_str + " -> " + value)
 			return false
+
+func _format_command_context(context: Dictionary) -> String:
+	if context.is_empty():
+		return ""
+	
+	var parts = []
+	if "tick" in context:
+		parts.append("tick=" + str(context["tick"]))
+	if "type" in context:
+		parts.append("type=" + str(context["type"]))
+	
+	if parts.is_empty():
+		return ""
+	
+	return " (Command: " + ", ".join(parts) + ")"

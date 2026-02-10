@@ -76,7 +76,7 @@ func _try_ordering_selected_workers_to_construct_structure(potential_structure):
 		"type": Enums.CommandType.CONSTRUCTING,
 		"data": {
 			"selected_constructors": selected_constructors.map(func(unit): return unit.id),
-			"structure": structure,
+			"structure": structure.id,
 			"rotation": structure.global_rotation,
 			"position": structure.global_transform.origin,
 		}
@@ -124,7 +124,7 @@ func _navigate_unit_towards_unit(unit, target_unit):
 			"type": Enums.CommandType.CONSTRUCTING,
 			"data": {
 				"selected_constructors": [unit.id],
-				"structure": target_unit,
+				"structure": target_unit.id,
 				"rotation": target_unit.global_rotation,
 				"position": target_unit.global_transform.origin,
 			}

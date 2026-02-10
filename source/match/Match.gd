@@ -112,11 +112,14 @@ func _execute_command(cmd: Dictionary):
 					continue
 				unit.action = Actions.AutoAttacking.new(EntityRegistry.get_unit(cmd.data.target_unit))
 		Enums.CommandType.CONSTRUCTING:
+			var structure = EntityRegistry.get_unit(cmd.data.structure)
+			if structure == null:
+				return
 			for entry in cmd.data.selected_constructors:
 				var unit: Unit = EntityRegistry.get_unit(entry)
 				if unit == null:
 					continue
-				unit.action = Actions.Constructing.new(cmd.data.structure)
+				unit.action = Actions.Constructing.new(structure)
 		Enums.CommandType.ENTITY_IS_QUEUED:
 			var structure = EntityRegistry.get_unit(cmd.data.entity_id)
 			print('structure for production command: ', structure, cmd.data.entity_id)
@@ -135,7 +138,7 @@ func _execute_command(cmd: Dictionary):
 			if player == null:
 				return
 			MatchSignals.setup_and_spawn_unit.emit(
-				cmd.data.structure_prototype.instantiate(),
+				load(cmd.data.structure_prototype).instantiate(),
 				cmd.data.transform,
 				player
 			)

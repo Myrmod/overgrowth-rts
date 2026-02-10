@@ -29,6 +29,9 @@ func _ready():
 	_label.text = tr("LOADING_STEP_INSTANTIATING_MATCH")
 	await get_tree().physics_frame
 	var a_match = match_prototype.instantiate()
+	# Restore settings from replay if needed (convert serialized players back to Resource objects)
+	if replay_resource != null and not replay_resource.players_data.is_empty():
+		match_settings.players = ReplayRecorder._restore_players(replay_resource.players_data)
 	a_match.settings = match_settings
 	a_match.map = map
 	a_match.is_replay_mode = !!replay_resource

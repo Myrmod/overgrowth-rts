@@ -204,7 +204,7 @@ func _finish_structure_placement():
 			"tick": Match.tick + 1,
 			"type": Enums.CommandType.STRUCTURE_PLACED,
 			"data": {
-				"structure_prototype": _pending_structure_prototype,
+				"structure_prototype": _pending_structure_prototype.resource_path,
 				"transform": _active_blueprint_node.global_transform,
 				"player_id": _player.id,
 			}
