@@ -78,10 +78,11 @@ func _on_tick():
 
 # required for replays
 func _process_commands_for_tick():
-	if not CommandBus.commands.has(tick):
+	var commands_for_tick = CommandBus.get_commands_for_tick(tick)
+	if commands_for_tick.is_empty():
 		return
 
-	for cmd in CommandBus.commands[tick]:
+	for cmd in commands_for_tick:
 		_execute_command(cmd)
 
 func _execute_command(cmd: Dictionary):
@@ -92,12 +93,16 @@ func _execute_command(cmd: Dictionary):
 				var unit: Unit = EntityRegistry.get_unit(entry.unit)
 				if unit == null or not is_instance_valid(unit):
 					continue
+				if unit.is_queued_for_deletion():
+					continue
 				unit.action = Actions.Moving.new(entry.pos)
 		Enums.CommandType.MOVING_TO_UNIT:
 			for entry in cmd.data.targets:
 				var unit: Unit = EntityRegistry.get_unit(entry)
 				var target_unit = EntityRegistry.get_unit(cmd.data.target_unit)
 				if unit == null or not is_instance_valid(unit) or target_unit == null or not is_instance_valid(target_unit):
+					continue
+				if unit.is_queued_for_deletion() or target_unit.is_queued_for_deletion():
 					continue
 				unit.action = Actions.MovingToUnit.new(target_unit)
 		Enums.CommandType.FOLLOWING:
@@ -106,12 +111,16 @@ func _execute_command(cmd: Dictionary):
 				var target_unit = EntityRegistry.get_unit(cmd.data.target_unit)
 				if unit == null or not is_instance_valid(unit) or target_unit == null or not is_instance_valid(target_unit):
 					continue
+				if unit.is_queued_for_deletion() or target_unit.is_queued_for_deletion():
+					continue
 				unit.action = Actions.Following.new(target_unit)
 		Enums.CommandType.COLLECTING_RESOURCES_SEQUENTIALLY:
 			for entry in cmd.data.targets:
 				var unit: Unit = EntityRegistry.get_unit(entry)
 				var target_unit = EntityRegistry.get_unit(cmd.data.target_unit)
 				if unit == null or not is_instance_valid(unit) or target_unit == null or not is_instance_valid(target_unit):
+					continue
+				if unit.is_queued_for_deletion() or target_unit.is_queued_for_deletion():
 					continue
 				unit.action = Actions.CollectingResourcesSequentially.new(target_unit)
 		Enums.CommandType.AUTO_ATTACKING:
@@ -120,20 +129,28 @@ func _execute_command(cmd: Dictionary):
 				var target_unit = EntityRegistry.get_unit(cmd.data.target_unit)
 				if unit == null or not is_instance_valid(unit) or target_unit == null or not is_instance_valid(target_unit):
 					continue
+				if unit.is_queued_for_deletion() or target_unit.is_queued_for_deletion():
+					continue
 				unit.action = Actions.AutoAttacking.new(target_unit)
 		Enums.CommandType.CONSTRUCTING:
 			var structure = EntityRegistry.get_unit(cmd.data.structure)
 			if structure == null or not is_instance_valid(structure):
 				return
+			if structure.is_queued_for_deletion():
+				return
 			for entry in cmd.data.selected_constructors:
 				var unit: Unit = EntityRegistry.get_unit(entry)
 				if unit == null or not is_instance_valid(unit):
+					continue
+				if unit.is_queued_for_deletion():
 					continue
 				unit.action = Actions.Constructing.new(structure)
 		Enums.CommandType.ENTITY_IS_QUEUED:
 			var structure = EntityRegistry.get_unit(cmd.data.entity_id)
 			print('structure for production command: ', structure, cmd.data.entity_id)
 			if structure == null or not is_instance_valid(structure):
+				return
+			if structure.is_queued_for_deletion():
 				return
 			# Load the unit prototype and queue it for production
 			var unit_prototype = load(cmd.data.unit_type)
@@ -147,6 +164,8 @@ func _execute_command(cmd: Dictionary):
 					break
 			if player == null or not is_instance_valid(player):
 				return
+			if player.is_queued_for_deletion():
+				return
 			MatchSignals.setup_and_spawn_unit.emit(
 				load(cmd.data.structure_prototype).instantiate(),
 				cmd.data.transform,
@@ -155,6 +174,8 @@ func _execute_command(cmd: Dictionary):
 		Enums.CommandType.ENTITY_PRODUCTION_CANCELED:
 			var structure = EntityRegistry.get_unit(cmd.data.entity_id)
 			if structure == null or not is_instance_valid(structure):
+				return
+			if structure.is_queued_for_deletion():
 				return
 			# Find and cancel the queued element by unit type
 			var unit_prototype = load(cmd.data.unit_type)

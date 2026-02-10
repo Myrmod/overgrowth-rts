@@ -27,6 +27,8 @@ func _replay_commands_for_tick(tick: int) -> Array:
 	return result
 
 func _live_commands_for_tick(tick: int) -> Array:
+	if not commands.has(tick):
+		return []
 	return commands[tick]
 
 func load_from_replay_array(arr: Array):
