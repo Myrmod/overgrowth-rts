@@ -115,13 +115,13 @@ func _detect_potential_recursion(value, visited: Dictionary, path: String, comma
 			return true
 
 		TYPE_OBJECT:
-			# ❌ Nodes are forbidden
+			# Nodes are forbidden
 			if value is Node:
 				var context_str = _format_command_context(command_context)
 				push_error("Replay contains Node at: " + path + context_str)
 				return false
 
-			# ⚠️ Resources — validate their properties
+			# Resources — validate their properties
 			if value is Resource:
 				for prop in value.get_property_list():
 					if prop.usage & PROPERTY_USAGE_STORAGE == 0:

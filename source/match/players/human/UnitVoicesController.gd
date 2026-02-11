@@ -30,7 +30,7 @@ func _on_unit_selected(unit):
 
 func _on_unit_action_requsted(_ignore):
 	if get_tree().get_nodes_in_group("selected_units").any(
-		func(unit): return not unit is Structure and unit.player == _player
+		func(unit): return not unit is Structure and not unit is ResourceUnit and unit.player == _player
 	):
 		_handle_event(
 			(

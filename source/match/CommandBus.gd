@@ -2,6 +2,10 @@ extends Node
 
 var commands := {} # tick -> Array[Command]
 
+func clear():
+	# Clear all stored commands
+	commands.clear()
+
 func push_command(cmd: Dictionary):
 	var t: int = cmd.tick
 	if not commands.has(t):
@@ -23,6 +27,8 @@ func _replay_commands_for_tick(tick: int) -> Array:
 	return result
 
 func _live_commands_for_tick(tick: int) -> Array:
+	if not commands.has(tick):
+		return []
 	return commands[tick]
 
 func load_from_replay_array(arr: Array):

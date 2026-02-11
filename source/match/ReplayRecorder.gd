@@ -6,12 +6,13 @@ enum Mode {OFF, RECORD, PLAY}
 @export var replay := ReplayResource.new()
 
 func _ready():
-	MatchSignals.connect("match_finished_with_defeat", _on_match_ended)
-	MatchSignals.connect("match_finished_with_victory", _on_match_ended)
-	MatchSignals.connect("match_aborted", _on_match_ended)
+	MatchSignals.connect("match_finished_with_defeat", _on_match_finished_with_defeat)
+	MatchSignals.connect("match_finished_with_victory", _on_match_finished_with_victory)
+	MatchSignals.connect("match_aborted", _on_match_aborted)
 
 func start_recording(match: Match):
 	mode = Mode.RECORD
+	replay = ReplayResource.new()  # Reset to a fresh replay
 	replay.tick_rate = match.TICK_RATE
 	replay.settings = match.settings
 	replay.map = match.map.scene_file_path
@@ -20,14 +21,7 @@ func start_recording(match: Match):
 	# Store serialized player data separately to avoid Resource reference issues
 	replay.players_data = _serialize_players(match.settings.players)
 
-## Example command
-## {
-##     "tick": 120,
-##     "player": 0,
-##     "type": "move",
-##     "units": [1, 3, 7],
-##     "target": Vector3(10, 0, 25)
-## }
+## Record command for replay playback
 func record_command(cmd: Dictionary):
 	if mode != Mode.RECORD:
 		return
@@ -71,11 +65,34 @@ func get_replay_path():
 	var timestamp = Time.get_datetime_string_from_system().replace(":", "-") # Replace : with - for valid filename
 	return "user://replays/replay_" + timestamp + ".tres"
 
-func _on_match_ended():
-	# don't save if a replay was played
+func _on_match_finished_with_defeat():
 	if mode == Mode.RECORD:
+		var match = find_parent("Match")
+		if match:
+			replay.final_time = float(match.tick) / match.TICK_RATE
+		replay.final_state = "defeat"
 		save_to_file()
-	stop_recording()
+	mode = Mode.OFF
+
+
+func _on_match_finished_with_victory():
+	if mode == Mode.RECORD:
+		var match = find_parent("Match")
+		if match:
+			replay.final_time = float(match.tick) / match.TICK_RATE
+		replay.final_state = "victory"
+		save_to_file()
+	mode = Mode.OFF
+
+
+func _on_match_aborted():
+	if mode == Mode.RECORD:
+		var match = find_parent("Match")
+		if match:
+			replay.final_time = float(match.tick) / match.TICK_RATE
+		replay.final_state = "aborted"
+		save_to_file()
+	mode = Mode.OFF
 
 
 func _serialize_players(players: Array[Resource]) -> Array:
