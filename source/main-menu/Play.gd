@@ -175,7 +175,5 @@ func _start_from_replay():
 	loading.match_settings = replay_resource.settings
 	loading.map_path = replay_resource.map
 	loading.replay_resource = replay_resource
-
-	get_parent().add_child(loading)
+	# change_scene_to_node() expects a fresh node that is NOT inside the tree yet.
 	get_tree().change_scene_to_node(loading)
-	queue_free()

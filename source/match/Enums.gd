@@ -14,4 +14,5 @@ enum CommandType {
 	ENTITY_IS_QUEUED,                   # Queue unit production at structure
 	STRUCTURE_PLACED,                   # Place new structure at position (human/AI decision)
 	ENTITY_PRODUCTION_CANCELED,         # Cancel queued unit production
+	ACTION_CANCEL,                      # Cancel current unit action
 }

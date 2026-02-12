@@ -79,15 +79,23 @@ func _attack_next_adversary_unit():
 			func(attached_unit):
 				return Actions.AutoAttacking.is_applicable(attached_unit, target_unit)
 		):
-			# Found a valid target! Assign attack or move-to-attack actions to all units in battlegroup
+			# Found a valid target! Push a single deterministic command for the whole battlegroup
 			target_unit.tree_exited.connect(_on_target_unit_died)
+			var targets = []
 			for attached_unit in _attached_units:
-				if Actions.AutoAttacking.is_applicable(attached_unit, target_unit):
-					# Unit is in range and can attack
-					attached_unit.action = Actions.AutoAttacking.new(target_unit)
-				else:
-					# Unit is out of range, move closer to target
-					attached_unit.action = Actions.MovingToUnit.new(target_unit)
+				targets.append({
+					"unit": attached_unit.id,
+					"pos": attached_unit.global_position,
+					"rot": attached_unit.global_rotation,
+				})
+			CommandBus.push_command({
+				"tick": Match.tick + 1,
+				"type": Enums.CommandType.AUTO_ATTACKING,
+				"data": {
+					"targets": targets,
+					"target_unit": target_unit.id,
+				}
+			})
 			return
 	# No valid targets found on this player, try next enemy
 	_attack_next_player()

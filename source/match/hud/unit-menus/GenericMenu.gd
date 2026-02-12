@@ -12,4 +12,10 @@ func _on_cancel_action_button_pressed():
 		units[0].cancel_construction()
 		return
 	for unit in units:
-		unit.action = null
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.ACTION_CANCEL,
+			"data": {
+				"targets": [{"unit": unit.id, "pos": unit.global_position, "rot": unit.global_rotation}],
+			}
+		})

@@ -186,7 +186,14 @@ func _make_worker_collecting_resources(worker):
 		)
 	)
 	if closest_resource_unit != null:
-		worker.action = CollectingResourcesSequentially.new(closest_resource_unit)
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.COLLECTING_RESOURCES_SEQUENTIALLY,
+			"data": {
+				"targets": [{"unit": worker.id, "pos": worker.global_position, "rot": worker.global_rotation}],
+				"target_unit": closest_resource_unit.id,
+			}
+		})
 
 
 func _retarget_workers_if_necessary():

@@ -3,6 +3,7 @@ extends Node3D
 class_name Match
 
 const Structure = preload("res://source/match/units/Structure.gd")
+const WorkerScript = preload("res://source/match/units/Worker.gd")
 const Human = preload("res://source/match/players/human/Human.gd")
 
 const CommandCenter = preload("res://source/match/units/CommandCenter.tscn")
@@ -70,6 +71,35 @@ func _ready():
 	if !is_replay_mode:
 		ReplayRecorder.start_recording(self )
 
+
+func _script_inherits_from(script, base_script):
+	var current = script
+	while current != null:
+		if current == base_script:
+			return true
+		if not current.has_method("get_base_script"):
+			break
+		current = current.get_base_script()
+	return false
+
+
+# Deterministic command schema for action targets:
+# { "unit": int, "pos": Vector3 (optional except MOVE), "rot": Vector3 (optional) }
+# No object references are accepted here.
+func _parse_target_entry(entry: Variant, command_name: String) -> Dictionary:
+	if typeof(entry) != TYPE_DICTIONARY:
+		push_error("%s command: target entry must be Dictionary, got %s" % [command_name, typeof(entry)])
+		return {}
+	var unit_id = entry.get("unit", null)
+	if unit_id == null:
+		push_error("%s command: target entry missing 'unit' id (%s)" % [command_name, str(entry)])
+		return {}
+	return {
+		"unit_id": unit_id,
+		"pos": entry.get("pos", null),
+		"rot": entry.get("rot", null),
+	}
+
 # Called every frame by the main game loop timer. This is where all game state updates happen.
 # The tick counter drives deterministic execution: commands reference specific ticks, and we execute
 # them exactly when those ticks arrive. This is how replays work - same ticks, same commands = identical game.
@@ -112,15 +142,25 @@ func _execute_command(cmd: Dictionary):
 	match cmd.type:
 		Enums.CommandType.MOVE:
 			for entry in cmd.data.targets:
-				var unit = EntityRegistry.get_unit(entry.unit)
+				var parsed = _parse_target_entry(entry, "MOVE")
+				if parsed.is_empty():
+					continue
+				var unit = EntityRegistry.get_unit(parsed["unit_id"])
 				if unit == null or not is_instance_valid(unit):
 					continue
 				if unit.is_queued_for_deletion():
 					continue
-				unit.action = Actions.Moving.new(entry.pos)
+				if parsed["pos"] == null:
+					push_error("MOVE command: target entry missing destination 'pos' (%s)" % str(entry))
+					continue
+				# Do not snap transform in replay; command order itself is the source of truth.
+				unit.action = Actions.Moving.new(parsed["pos"])
 		Enums.CommandType.MOVING_TO_UNIT:
 			for entry in cmd.data.targets:
-				var unit = EntityRegistry.get_unit(entry)
+				var parsed = _parse_target_entry(entry, "MOVING_TO_UNIT")
+				if parsed.is_empty():
+					continue
+				var unit = EntityRegistry.get_unit(parsed["unit_id"])
 				var target_unit = EntityRegistry.get_unit(cmd.data.target_unit)
 				if unit == null or not is_instance_valid(unit) or target_unit == null or not is_instance_valid(target_unit):
 					continue
@@ -129,7 +169,10 @@ func _execute_command(cmd: Dictionary):
 				unit.action = Actions.MovingToUnit.new(target_unit)
 		Enums.CommandType.FOLLOWING:
 			for entry in cmd.data.targets:
-				var unit = EntityRegistry.get_unit(entry)
+				var parsed = _parse_target_entry(entry, "FOLLOWING")
+				if parsed.is_empty():
+					continue
+				var unit = EntityRegistry.get_unit(parsed["unit_id"])
 				var target_unit = EntityRegistry.get_unit(cmd.data.target_unit)
 				if unit == null or not is_instance_valid(unit) or target_unit == null or not is_instance_valid(target_unit):
 					continue
@@ -138,7 +181,10 @@ func _execute_command(cmd: Dictionary):
 				unit.action = Actions.Following.new(target_unit)
 		Enums.CommandType.COLLECTING_RESOURCES_SEQUENTIALLY:
 			for entry in cmd.data.targets:
-				var unit = EntityRegistry.get_unit(entry)
+				var parsed = _parse_target_entry(entry, "COLLECTING_RESOURCES_SEQUENTIALLY")
+				if parsed.is_empty():
+					continue
+				var unit = EntityRegistry.get_unit(parsed["unit_id"])
 				var target_unit = EntityRegistry.get_unit(cmd.data.target_unit)
 				if unit == null or not is_instance_valid(unit) or target_unit == null or not is_instance_valid(target_unit):
 					continue
@@ -148,7 +194,10 @@ func _execute_command(cmd: Dictionary):
 		Enums.CommandType.AUTO_ATTACKING:
 			# Assign attack actions to multiple units targeting the same enemy
 			for entry in cmd.data.targets:
-				var unit = EntityRegistry.get_unit(entry)
+				var parsed = _parse_target_entry(entry, "AUTO_ATTACKING")
+				if parsed.is_empty():
+					continue
+				var unit = EntityRegistry.get_unit(parsed["unit_id"])
 				var target_unit = EntityRegistry.get_unit(cmd.data.target_unit)
 				if unit == null or not is_instance_valid(unit) or target_unit == null or not is_instance_valid(target_unit):
 					continue
@@ -165,23 +214,28 @@ func _execute_command(cmd: Dictionary):
 			if structure.is_queued_for_deletion():
 				push_error("Constructing command: structure entity_id %s is queued for deletion" % cmd.data.structure)
 				return
-			# Check that structure is actually a Structure type (not a Worker or other unit that got" " corrupted)
-			if not structure.is_in_group("Structures"):
-				push_error("Constructing command: entity_id %s is not a Structure, it's a %s" % [cmd.data.structure, structure.get_class()])
+			var structure_script = structure.get_script()
+			if not _script_inherits_from(structure_script, Structure):
+				push_error("Constructing command: entity_id %s is not a Structure (script=%s)" % [cmd.data.structure, str(structure_script)])
 				return
 			
 			# Validate each constructor unit exists and is valid
 			for entry in cmd.data.selected_constructors:
-				var unit = EntityRegistry.get_unit(entry)
+				var parsed = _parse_target_entry(entry, "CONSTRUCTING")
+				if parsed.is_empty():
+					continue
+				var constructor_id = parsed["unit_id"]
+				var unit = EntityRegistry.get_unit(constructor_id)
 				if unit == null or not is_instance_valid(unit):
-					push_error("Constructing command: constructor entity_id %s is null or invalid" % entry)
+					push_error("Constructing command: constructor entity_id %s is null or invalid" % constructor_id)
 					continue
 				if unit.is_queued_for_deletion():
-					push_error("Constructing command: constructor entity_id %s is queued for deletion" % entry)
+					push_error("Constructing command: constructor entity_id %s is queued for deletion" % constructor_id)
 					continue
 				# Check that unit is actually a Worker type capable of construction
-				if not unit.is_in_group("Workers"):
-					push_error("Constructing command: entity_id %s is not a Worker, it's a %s" % [entry, unit.get_class()])
+				var unit_script = unit.get_script()
+				if not _script_inherits_from(unit_script, WorkerScript):
+					push_error("Constructing command: entity_id %s is not a Worker (class=%s, script=%s)" % [constructor_id, unit.get_class(), str(unit_script)])
 					continue
 				unit.action = Actions.Constructing.new(structure)
 		Enums.CommandType.ENTITY_IS_QUEUED:
@@ -223,6 +277,17 @@ func _execute_command(cmd: Dictionary):
 					if element.unit_prototype.resource_path == cmd.data.unit_type:
 						structure.production_queue.cancel(element)
 						break
+		Enums.CommandType.ACTION_CANCEL:
+			for entry in cmd.data.targets:
+				var parsed = _parse_target_entry(entry, "ACTION_CANCEL")
+				if parsed.is_empty():
+					continue
+				var unit = EntityRegistry.get_unit(parsed["unit_id"])
+				if unit == null or not is_instance_valid(unit):
+					continue
+				if unit.is_queued_for_deletion():
+					continue
+				unit.action = null
 		_:
 			print('Cannot execute command: ', cmd)
 

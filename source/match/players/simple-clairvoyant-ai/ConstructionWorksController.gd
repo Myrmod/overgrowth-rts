@@ -35,4 +35,15 @@ func _on_refresh_timer_timeout():
 		# TODO: introduce some algortihm based on distances
 		workers.shuffle()
 		structures_to_construct.shuffle()
-		workers[0].action = Constructing.new(structures_to_construct[0])
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.CONSTRUCTING,
+			"data": {
+				"structure": structures_to_construct[0].id,
+				"selected_constructors": [{
+					"unit": workers[0].id,
+					"pos": workers[0].global_position,
+					"rot": workers[0].global_rotation,
+				}],
+			}
+		})

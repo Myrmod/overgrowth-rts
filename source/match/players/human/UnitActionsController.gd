@@ -95,7 +95,12 @@ func _try_ordering_selected_workers_to_construct_structure(potential_structure):
 		"tick": Match.tick + 1,
 		"type": Enums.CommandType.CONSTRUCTING,
 		"data": {
-			"selected_constructors": selected_constructors.map(func(unit): return unit.id),
+			"selected_constructors": selected_constructors.map(func(unit): return {
+					"unit": unit.id,
+					"pos": unit.global_position,
+					"rot": unit.global_rotation,
+				}
+			),
 			"structure": structure.id,
 			"rotation": structure.global_rotation,
 			"position": structure.global_transform.origin,
@@ -115,35 +120,32 @@ func _navigate_selected_units_towards_unit(target_unit):
 
 func _navigate_unit_towards_unit(unit, target_unit):
 	if Actions.CollectingResourcesSequentially.is_applicable(unit, target_unit):
-		# unit.action = Actions.CollectingResourcesSequentially.new(target_unit)
 		CommandBus.push_command({
 			"tick": Match.tick + 1,
 			"type": Enums.CommandType.COLLECTING_RESOURCES_SEQUENTIALLY,
 			"data": {
-				"targets": [unit.id],
+				"targets": [{"unit": unit.id, "pos": unit.global_position, "rot": unit.global_rotation}],
 				"target_unit": target_unit.id,
 			}
 		})
 
 		return true
 	if Actions.AutoAttacking.is_applicable(unit, target_unit):
-		# unit.action = Actions.AutoAttacking.new(target_unit)
 		CommandBus.push_command({
 			"tick": Match.tick + 1,
 			"type": Enums.CommandType.AUTO_ATTACKING,
 			"data": {
-				"targets": [unit.id],
+				"targets": [{"unit": unit.id, "pos": unit.global_position, "rot": unit.global_rotation}],
 				"target_unit": target_unit.id,
 			}
 		})
 		return true
 	if Actions.Constructing.is_applicable(unit, target_unit):
-		unit.action = Actions.Constructing.new(target_unit)
 		CommandBus.push_command({
 			"tick": Match.tick + 1,
 			"type": Enums.CommandType.CONSTRUCTING,
 			"data": {
-				"selected_constructors": [unit.id],
+				"selected_constructors": [{"unit": unit.id, "pos": unit.global_position, "rot": unit.global_rotation}],
 				"structure": target_unit.id,
 				"rotation": target_unit.global_rotation,
 				"position": target_unit.global_transform.origin,
@@ -154,23 +156,21 @@ func _navigate_unit_towards_unit(unit, target_unit):
 		(target_unit.is_in_group("adversary_units") or target_unit.is_in_group("controlled_units"))
 		and Actions.Following.is_applicable(unit)
 	):
-		# unit.action = Actions.Following.new(target_unit)
 		CommandBus.push_command({
 			"tick": Match.tick + 1,
 			"type": Enums.CommandType.FOLLOWING,
 			"data": {
-				"targets": [unit.id],
+				"targets": [{"unit": unit.id, "pos": unit.global_position, "rot": unit.global_rotation}],
 				"target_unit": target_unit.id,
 			}
 		})
 		return true
 	if Actions.MovingToUnit.is_applicable(unit):
-		# unit.action = Actions.MovingToUnit.new(target_unit)
 		CommandBus.push_command({
 			"tick": Match.tick + 1,
 			"type": Enums.CommandType.MOVING_TO_UNIT,
 			"data": {
-				"targets": [unit.id],
+				"targets": [{"unit": unit.id, "pos": unit.global_position, "rot": unit.global_rotation}],
 				"target_unit": target_unit.id,
 			}
 		})
@@ -218,8 +218,6 @@ func _on_navigate_unit_to_rally_point(unit, rally_point):
 			"tick": Match.tick + 1,
 			"type": Enums.CommandType.MOVE,
 			"data": {
-				"targets": [unit].map(
-					func(t): return {"unit": t.id, "pos": rally_point.global_position}
-				)
+				"targets": [{"unit": unit.id, "pos": rally_point.global_position, "rot": unit.global_rotation}]
 			}
 		})

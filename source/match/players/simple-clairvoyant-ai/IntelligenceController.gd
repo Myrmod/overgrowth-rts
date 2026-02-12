@@ -52,8 +52,12 @@ func _navigate_to_random_unit(drone):
 	var players_in_random_order = get_tree().get_nodes_in_group("players").filter(
 		func(player): return player != _player and player.team != _player.team
 	)
+	if players_in_random_order.is_empty():
+		return
 	players_in_random_order.shuffle()
 	var random_player_to_visit = players_in_random_order.front()
+	if random_player_to_visit == null:
+		return
 	var random_player_units_in_random_order = get_tree().get_nodes_in_group("units").filter(
 		func(unit): return unit.player == random_player_to_visit
 	)
@@ -65,7 +69,14 @@ func _navigate_to_random_unit(drone):
 	if not random_player_units_in_random_order.is_empty():
 		var target_unit = random_player_units_in_random_order.front()
 		_blacklisted_drone_target_paths[drone] = target_unit.get_path()
-		drone.action = MovingToUnitAction.new(target_unit)
+		CommandBus.push_command({
+			"tick": Match.tick + 1,
+			"type": Enums.CommandType.MOVING_TO_UNIT,
+			"data": {
+				"targets": [{"unit": drone.id, "pos": drone.global_position, "rot": drone.global_rotation}],
+				"target_unit": target_unit.id,
+			}
+		})
 	else:
 		var units_in_random_order = get_tree().get_nodes_in_group("units").filter(
 			func(unit): return unit.player != _player and unit.player.team != _player.team
@@ -77,7 +88,14 @@ func _navigate_to_random_unit(drone):
 		if not units_in_random_order.is_empty():
 			var target_unit = units_in_random_order.front()
 			_blacklisted_drone_target_paths[drone] = target_unit.get_path()
-			drone.action = MovingToUnitAction.new(target_unit)
+			CommandBus.push_command({
+				"tick": Match.tick + 1,
+				"type": Enums.CommandType.MOVING_TO_UNIT,
+				"data": {
+					"targets": [{"unit": drone.id, "pos": drone.global_position, "rot": drone.global_rotation}],
+					"target_unit": target_unit.id,
+				}
+			})
 
 
 func _on_drone_action_changed(new_action, drone):
