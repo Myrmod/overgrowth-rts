@@ -8,7 +8,7 @@ enum BlueprintPositionValidity {
 	OUT_OF_MAP,
 }
 
-const ROTATION_BY_KEY_STEP = 45.0
+const ROTATION_BY_KEY_STEP = 90.0
 const ROTATION_DEAD_ZONE_DISTANCE = 0.1
 
 const MATERIALS_ROOT = "res://source/match/resources/materials/"
@@ -20,6 +20,7 @@ var _pending_structure_radius = null
 var _pending_structure_navmap_rid = null
 var _pending_structure_prototype = null
 var _blueprint_rotating = false
+var _free_placement_mode = false
 
 @onready var _player = get_parent()
 @onready var _match = find_parent("Match")
@@ -38,6 +39,8 @@ func _unhandled_input(event):
 		_handle_lmb_down_event(event)
 	if event.is_action_pressed("rotate_structure"):
 		_try_rotating_blueprint_by(ROTATION_BY_KEY_STEP)
+	if event.is_action_pressed("toggle_free_placement"):
+		_toggle_free_placement_mode()
 	if (
 		event is InputEventMouseButton
 		and event.button_index == MOUSE_BUTTON_LEFT
@@ -156,6 +159,9 @@ func _start_structure_placement(structure_prototype):
 	_active_blueprint_node.global_transform = Transform3D(Basis(), blueprint_origin).looking_at(
 		rotate_towards, Vector3.UP
 	)
+	# Snap initial rotation to 90 degrees if grid mode is enabled
+	if FeatureFlags.use_grid_based_placement:
+		_snap_rotation_to_90_degrees()
 	add_child(_active_blueprint_node)
 	var temporary_structure_instance = _pending_structure_prototype.instantiate()
 	_pending_structure_radius = temporary_structure_instance.radius
@@ -172,8 +178,12 @@ func _set_blueprint_position_based_on_mouse_pos():
 	var mouse_pos_3d = get_viewport().get_camera_3d().get_ray_intersection(mouse_pos_2d)
 	if mouse_pos_3d == null:
 		return
-	_active_blueprint_node.global_transform.origin = mouse_pos_3d
-	_feedback_label.global_transform.origin = mouse_pos_3d
+	# Apply grid snapping unless free placement mode is enabled or grid placement is disabled
+	var target_position = mouse_pos_3d
+	if FeatureFlags.use_grid_based_placement and not _free_placement_mode:
+		target_position = _snap_to_grid(mouse_pos_3d)
+	_active_blueprint_node.global_transform.origin = target_position
+	_feedback_label.global_transform.origin = target_position
 
 
 func _update_blueprint_color(blueprint_position_is_valid):
@@ -222,6 +232,9 @@ func _try_rotating_blueprint_by(degrees):
 	_active_blueprint_node.global_transform.basis = (
 		_active_blueprint_node.global_transform.basis.rotated(Vector3.UP, deg_to_rad(degrees))
 	)
+	# Snap to 90-degree increments when in grid mode
+	if FeatureFlags.use_grid_based_placement and not _free_placement_mode:
+		_snap_rotation_to_90_degrees()
 
 
 func _rotate_blueprint_towards_mouse_pos():
@@ -240,10 +253,38 @@ func _rotate_blueprint_towards_mouse_pos():
 	_active_blueprint_node.global_transform = _active_blueprint_node.global_transform.looking_at(
 		rotation_target, Vector3.UP
 	)
+	# Snap to 90-degree increments when in grid mode
+	if FeatureFlags.use_grid_based_placement and not _free_placement_mode:
+		_snap_rotation_to_90_degrees()
 
 
 func _finish_blueprint_rotation():
 	_blueprint_rotating = false
+
+
+func _toggle_free_placement_mode():
+	_free_placement_mode = not _free_placement_mode
+	# Update blueprint position to snap/unsnap from grid
+	_set_blueprint_position_based_on_mouse_pos()
+
+
+func _snap_to_grid(position: Vector3) -> Vector3:
+	var grid_size = FeatureFlags.grid_cell_size
+	return Vector3(
+		round(position.x / grid_size) * grid_size,
+		position.y,
+		round(position.z / grid_size) * grid_size
+	)
+
+
+func _snap_rotation_to_90_degrees():
+	# Get current Y rotation in degrees
+	var current_rotation = _active_blueprint_node.rotation.y
+	var current_degrees = rad_to_deg(current_rotation)
+	# Round to nearest 90 degrees
+	var snapped_degrees = round(current_degrees / 90.0) * 90.0
+	# Apply snapped rotation
+	_active_blueprint_node.rotation.y = deg_to_rad(snapped_degrees)
 
 
 func _on_structure_placement_request(structure_prototype):

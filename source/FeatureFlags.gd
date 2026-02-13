@@ -9,6 +9,8 @@ extends Node
 @export var handle_match_end = true
 @export var show_minimap = true
 @export var allow_navigation_rebaking = true
+@export var use_grid_based_placement = true
+@export var grid_cell_size = 2.0
 
 @export_group("Match/Debug")
 @export var frame_incrementer = false
