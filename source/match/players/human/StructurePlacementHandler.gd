@@ -96,15 +96,15 @@ func _calculate_blueprint_position_validity():
 		return BlueprintPositionValidity.OUT_OF_MAP
 	if not _player_has_enough_resources():
 		return BlueprintPositionValidity.NOT_ENOUGH_RESOURCES
-	var placement_validity = Utils.MatchUtils.Placement.validate_agent_placement_position(
+	var placement_validity = MatchUtils.Placement.validate_agent_placement_position(
 		_active_blueprint_node.global_position,
 		_pending_structure_radius,
 		get_tree().get_nodes_in_group("units") + get_tree().get_nodes_in_group("resource_units"),
 		_pending_structure_navmap_rid
 	)
-	if placement_validity == Utils.MatchUtils.Placement.COLLIDES_WITH_AGENT:
+	if placement_validity == MatchUtils.Placement.COLLIDES_WITH_AGENT:
 		return BlueprintPositionValidity.COLLIDES_WITH_OBJECT
-	if placement_validity == Utils.MatchUtils.Placement.NOT_NAVIGABLE:
+	if placement_validity == MatchUtils.Placement.NOT_NAVIGABLE:
 		return BlueprintPositionValidity.NOT_NAVIGABLE
 	return BlueprintPositionValidity.VALID
 

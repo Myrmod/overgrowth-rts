@@ -36,8 +36,8 @@ func _on_refresh():
 	)
 	if not structures_to_construct.is_empty() and not workers.is_empty():
 		# TODO: introduce some algortihm based on distances
-		Utils.MatchUtils.rng_shuffle(workers)
-		Utils.MatchUtils.rng_shuffle(structures_to_construct)
+		MatchUtils.rng_shuffle(workers)
+		MatchUtils.rng_shuffle(structures_to_construct)
 		CommandBus.push_command({
 			"tick": Match.tick + 1,
 			"type": Enums.CommandType.CONSTRUCTING,

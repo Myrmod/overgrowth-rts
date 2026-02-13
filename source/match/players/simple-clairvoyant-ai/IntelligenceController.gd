@@ -66,7 +66,7 @@ func _navigate_to_random_unit(drone):
 	)
 	if players_in_random_order.is_empty():
 		return
-	Utils.MatchUtils.rng_shuffle(players_in_random_order)
+	MatchUtils.rng_shuffle(players_in_random_order)
 	var random_player_to_visit = players_in_random_order.front()
 	if random_player_to_visit == null:
 		return
@@ -77,7 +77,7 @@ func _navigate_to_random_unit(drone):
 	random_player_units_in_random_order = random_player_units_in_random_order.filter(
 		func(unit): return unit.get_path() != blacklisted_drone_target_path
 	)
-	Utils.MatchUtils.rng_shuffle(random_player_units_in_random_order)
+	MatchUtils.rng_shuffle(random_player_units_in_random_order)
 	if not random_player_units_in_random_order.is_empty():
 		var target_unit = random_player_units_in_random_order.front()
 		_blacklisted_drone_target_paths[drone] = target_unit.get_path()
@@ -94,7 +94,7 @@ func _navigate_to_random_unit(drone):
 		var units_in_random_order = get_tree().get_nodes_in_group("units").filter(
 			func(unit): return unit.player != _player and unit.player.team != _player.team
 		)
-		Utils.MatchUtils.rng_shuffle(units_in_random_order)
+		MatchUtils.rng_shuffle(units_in_random_order)
 		units_in_random_order = units_in_random_order.filter(
 			func(unit): return unit.get_path() != blacklisted_drone_target_path
 		)

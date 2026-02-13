@@ -6,8 +6,6 @@ extends Control
 # Mode B — replay:
 # ReplayMenu → Play (replay mode) → Loading → Match
 
-const MatchSettings = preload("res://source/data-model/MatchSettings.gd")
-const PlayerSettings = preload("res://source/data-model/PlayerSettings.gd")
 const PlayerSettingsScene = preload("res://source/main-menu/PlayerSettings.tscn")
 const LoadingScene = preload("res://source/main-menu/Loading.tscn")
 

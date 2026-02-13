@@ -141,7 +141,7 @@ func _try_creating_new_battlegroup():
 	var adversary_players = get_tree().get_nodes_in_group("players").filter(
 		func(player): return player != _player and player.team != _player.team
 	)
-	Utils.MatchUtils.rng_shuffle(adversary_players)
+	MatchUtils.rng_shuffle(adversary_players)
 	var battlegroup = AutoAttackingBattlegroup.new(
 		_ai.expected_number_of_units_in_battlegroup, adversary_players, _player
 	)
@@ -177,7 +177,7 @@ func _construct_structure(structure_scene):
 	var reference_position_for_placement = (
 		ccs[0].global_position if not ccs.is_empty() else workers[0].global_position
 	)
-	var placement_position = Utils.MatchUtils.Placement.find_valid_position_radially(
+	var placement_position = MatchUtils.Placement.find_valid_position_radially(
 		reference_position_for_placement,
 		unit_to_spawn.radius + UnitConstants.EMPTY_SPACE_RADIUS_SURROUNDING_STRUCTURE_M,
 		find_parent("Match").navigation.get_navigation_map_rid_by_domain(

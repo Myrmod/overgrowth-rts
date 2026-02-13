@@ -106,7 +106,7 @@ func _is_movable():
 
 func _setup_color():
 	var material = player.get_color_material()
-	Utils.MatchUtils.traverse_node_tree_and_replace_materials_matching_albedo(
+	MatchUtils.traverse_node_tree_and_replace_materials_matching_albedo(
 		find_child("Geometry"),
 		MATERIAL_ALBEDO_TO_REPLACE,
 		MATERIAL_ALBEDO_TO_REPLACE_EPSILON,

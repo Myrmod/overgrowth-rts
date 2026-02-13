@@ -13,8 +13,8 @@ class_name Match
 # DETERMINISM:
 #   - Tick-based: a Timer fires TICK_RATE times/sec, advancing tick counter
 #   - Each tick: all commands for that tick are fetched and executed in order
-#   - RNG is a match-local RandomNumberGenerator seeded with match_seed
-#   - All gameplay random calls go through Match.rng / Utils.MatchUtils.rng_shuffle()
+#   - RNG is a match-local RandomNumberGenerator seeded via Match.rng.seed
+#   - All gameplay random calls go through Match.rng / MatchUtils.rng_shuffle()
 #   - Replay = same seed + same commands in same tick order → identical game
 #
 # COMMAND FLOW:
@@ -45,10 +45,6 @@ var visible_players = null:
 
 var is_replay_mode = false
 
-## Deterministic seed for this match. Set before _ready() by Loading.gd or test harness.
-## All game RNG (shuffle, randf, etc.) is seeded from this so replays reproduce exactly.
-var match_seed: int = 0
-
 @onready var navigation = $Navigation
 @onready var fog_of_war = $FogOfWar
 
@@ -60,8 +56,9 @@ var match_seed: int = 0
 static var tick := 0
 
 # Match-local RNG. ALL gameplay randomness MUST go through this — never use global
-# randi()/randf()/shuffle(). Seeded from match_seed so replays reproduce identically.
-# Static so AI controllers and utility functions can access it without a node reference.
+# randi()/randf()/shuffle(). Seeded via Match.rng.seed by Loading.gd (or test harness)
+# before the match enters the tree. Replays reproduce identically because the same seed
+# produces the same sequence. Static so controllers and utils can access it directly.
 static var rng := RandomNumberGenerator.new()
 
 const TICK_RATE := 10 # RTS logic ticks per second
@@ -72,10 +69,6 @@ func _enter_tree():
 
 
 func _ready():
-	# Seed the match-local RNG so all gameplay random calls are deterministic.
-	# The same seed produces the same sequence → replays reproduce identical outcomes.
-	rng.seed = match_seed
-
 	if is_replay_mode:
 		ReplayRecorder.start_replay()
 
@@ -590,7 +583,7 @@ func _move_camera_to_player_units_crowd_pivot(player):
 		func(unit): return unit.player == player
 	)
 	assert(not player_units.is_empty(), "player must have at least one initial unit")
-	var crowd_pivot = Utils.MatchUtils.Movement.calculate_aabb_crowd_pivot_yless(player_units)
+	var crowd_pivot = MatchUtils.Movement.calculate_aabb_crowd_pivot_yless(player_units)
 	_camera.set_position_safely(crowd_pivot)
 
 

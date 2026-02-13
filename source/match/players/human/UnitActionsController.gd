@@ -15,7 +15,6 @@ extends Node
 class_name UnitActionsController
 
 const Structure = preload("res://source/match/units/Structure.gd")
-const ResourceUnit = preload("res://source/match/units/non-player/ResourceUnit.gd")
 
 @onready var _player = get_parent()
 
@@ -46,10 +45,10 @@ func _try_navigating_selected_units_towards_position(target_point):
 			)
 	)
 	# Calculate new positions for units to move to (handles unit grouping and collision avoidance)
-	var new_unit_targets = Utils.MatchUtils.Movement.crowd_moved_to_new_pivot(
+	var new_unit_targets = MatchUtils.Movement.crowd_moved_to_new_pivot(
 		terrain_units_to_move, target_point
 	)
-	new_unit_targets += Utils.MatchUtils.Movement.crowd_moved_to_new_pivot(
+	new_unit_targets += MatchUtils.Movement.crowd_moved_to_new_pivot(
 		air_units_to_move, target_point
 	)
 

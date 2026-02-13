@@ -144,7 +144,7 @@ func _construct_cc():
 	if not _player.has_resources(construction_cost):
 		return
 	var unit_to_spawn = CommandCenterScene.instantiate()
-	var placement_position = Utils.MatchUtils.Placement.find_valid_position_radially(
+	var placement_position = MatchUtils.Placement.find_valid_position_radially(
 		_cc_base_position if _cc_base_position != null else _workers[0].global_position,
 		unit_to_spawn.radius + UnitConstants.EMPTY_SPACE_RADIUS_SURROUNDING_STRUCTURE_M,
 		find_parent("Match").navigation.get_navigation_map_rid_by_domain(

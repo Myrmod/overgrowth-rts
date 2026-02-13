@@ -40,9 +40,9 @@ func _ready():
 	# Generate a match seed (or restore from replay) so all RNG (shuffle, randf, etc.)
 	# reproduces identically. This is essential for replay determinism.
 	if replay_resource != null and replay_resource.get("match_seed") != null:
-		a_match.match_seed = replay_resource.match_seed
+		Match.rng.seed = replay_resource.match_seed
 	else:
-		a_match.match_seed = randi()
+		Match.rng.seed = randi()
 
 	# ── COMMAND BUS LIFECYCLE ───────────────────────────────────────
 	# Clear before loading: ensures no stale commands from previous match
