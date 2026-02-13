@@ -23,11 +23,10 @@ func _assign_grid_shortcuts():
 			continue
 		var button: Button = hotkey_buttons[button_roles[i]]
 		
-		var k = KEY_Z
 		var keycode = hotkeys[i]
 		
 		var ev := InputEventKey.new()
 		var sc := Shortcut.new()
-		ev.keycode = k
+		ev.keycode = keycode
 		sc.events = [ev]
 		button.shortcut = sc
