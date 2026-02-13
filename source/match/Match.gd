@@ -279,6 +279,9 @@ func _execute_command(cmd: Dictionary):
 					continue
 				if not _verify_unit_ownership(unit, cmd.player_id, "AUTO_ATTACKING"):
 					continue
+				if not Actions.AutoAttacking.is_applicable(unit, target_unit):
+					push_warning("AUTO_ATTACKING: unit %s cannot attack target %s (no attack_range or wrong domain)" % [parsed["unit_id"], cmd.data.target_unit])
+					continue
 				unit.action = Actions.AutoAttacking.new(target_unit)
 
 		# ── CONSTRUCTION ──────────────────────────────────────────────

@@ -6,7 +6,7 @@ const Placement = preload("res://source/match/utils/UnitPlacementUtils.gd")
 ## Fisher-Yates shuffle using the match-local RNG. Deterministic across replays.
 static func rng_shuffle(array: Array) -> void:
 	for i in range(array.size() - 1, 0, -1):
-		var j = Match.rng.randi() % (i + 1)
+		var j = Match.rng.randi_range(0, i)
 		var tmp = array[i]
 		array[i] = array[j]
 		array[j] = tmp

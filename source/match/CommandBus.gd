@@ -259,13 +259,10 @@ func get_commands_for_tick(a_tick: int) -> Array:
 		return _live_commands_for_tick(a_tick)
 
 func _replay_commands_for_tick(a_tick: int) -> Array:
-	# Scan the replay's command list for all entries matching this tick.
-	# This is a linear scan — acceptable since replays are read once per tick.
-	var result := []
-	for cmd in ReplayRecorder.replay.commands:
-		if cmd.tick == a_tick:
-			result.append(cmd)
-	return result
+	# Return commands for this tick from the tick-indexed map built by load_from_replay_array().
+	if not commands.has(a_tick):
+		return []
+	return commands[a_tick]
 
 func _live_commands_for_tick(a_tick: int) -> Array:
 	# Return commands queued for this tick during live gameplay.
