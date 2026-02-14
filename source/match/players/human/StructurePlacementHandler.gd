@@ -6,6 +6,7 @@ enum BlueprintPositionValidity {
 	NOT_NAVIGABLE,
 	NOT_ENOUGH_RESOURCES,
 	OUT_OF_MAP,
+	OUTSIDE_BUILD_RADIUS,
 }
 
 const ROTATION_BY_KEY_STEP_GRID = 90.0
@@ -26,7 +27,6 @@ var _free_placement_mode = false
 @onready var _player = get_parent()
 @onready var _match = find_parent("Match")
 @onready var _feedback_label = find_child("FeedbackLabel3D")
-@onready var _footprint_overlay = find_child("FootprintOverlay")
 
 func _ready():
 	_feedback_label.hide()
@@ -101,6 +101,10 @@ func _calculate_blueprint_position_validity():
 		return BlueprintPositionValidity.OUT_OF_MAP
 	if not _player_has_enough_resources():
 		return BlueprintPositionValidity.NOT_ENOUGH_RESOURCES
+	if FeatureFlags.use_grid_based_placement and not BuildRadius.is_position_in_any_build_radius(
+		get_tree(), _active_blueprint_node.global_position, _player
+	):
+		return BlueprintPositionValidity.OUTSIDE_BUILD_RADIUS
 	var placement_validity = MatchUtils.Placement.validate_agent_placement_position(
 		_active_blueprint_node.global_position,
 		_pending_structure_radius,
@@ -142,6 +146,8 @@ func _update_feedback_label(blueprint_position_validity):
 			_feedback_label.text = tr("BLUEPRINT_NOT_ENOUGH_RESOURCES")
 		BlueprintPositionValidity.OUT_OF_MAP:
 			_feedback_label.text = tr("BLUEPRINT_OUT_OF_MAP")
+		BlueprintPositionValidity.OUTSIDE_BUILD_RADIUS:
+			_feedback_label.text = tr("BLUEPRINT_OUTSIDE_BUILD_RADIUS")
 
 
 func _start_structure_placement(structure_prototype):
@@ -173,15 +179,8 @@ func _start_structure_placement(structure_prototype):
 		.get_navigation_map_rid_by_domain(temporary_structure_instance.movement_domain)
 	)
 	temporary_structure_instance.free()
+	MatchSignals.structure_placement_started.emit()
 
-	# create visual grid
-	_footprint_overlay.visible = true
-
-	var cells = _radius_to_cells(_pending_structure_radius)
-	var size = cells * FeatureFlags.grid_cell_size
-
-	var mesh := _footprint_overlay.mesh as PlaneMesh
-	mesh.size = Vector2(size, size)
 
 func _set_blueprint_position_based_on_mouse_pos():
 	var mouse_pos_2d = get_viewport().get_mouse_position()
@@ -195,8 +194,6 @@ func _set_blueprint_position_based_on_mouse_pos():
 	_active_blueprint_node.global_transform.origin = target_position
 	_feedback_label.global_transform.origin = target_position
 
-	_footprint_overlay.global_position = _active_blueprint_node.global_position
-
 func _update_blueprint_color(blueprint_position_is_valid):
 	var material_to_set = (
 		preload(BLUEPRINT_VALID_PATH)
@@ -207,12 +204,7 @@ func _update_blueprint_color(blueprint_position_is_valid):
 		if "material_override" in child:
 			child.material_override = material_to_set
 
-	var mat := _footprint_overlay.material_override as ShaderMaterial
-	if mat:
-		mat.set_shader_parameter(
-			"line_color",
-			Color(0,1,0,0.5) if blueprint_position_is_valid else Color(1,0,0,0.5)
-		)
+
 
 
 func _cancel_structure_placement():
@@ -222,7 +214,7 @@ func _cancel_structure_placement():
 		_active_blueprint_node = null
 		# Reset to grid mode for next placement
 		_free_placement_mode = false
-		_footprint_overlay.visible = false
+		MatchSignals.structure_placement_ended.emit()
 
 
 func _finish_structure_placement():
@@ -315,6 +307,3 @@ func _snap_rotation_to_90_degrees():
 
 func _on_structure_placement_request(structure_prototype):
 	_start_structure_placement(structure_prototype)
-
-func _radius_to_cells(radius: float) -> int:
-	return ceil(radius / FeatureFlags.grid_cell_size)

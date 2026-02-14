@@ -1,14 +1,6 @@
 [gd_scene format=3 uid="uid://q5w474dvts3f"]
 
 [ext_resource type="Script" uid="uid://c3x272pkecnqo" path="res://source/match/players/human/StructurePlacementHandler.gd" id="1_u6cl4"]
-[ext_resource type="Shader" uid="uid://b1yipfbaqhigc" path="res://source/shaders/3d/StructurePlacementHandler.gdshader" id="2_vbd5o"]
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_31feg"]
-render_priority = 0
-shader = ExtResource("2_vbd5o")
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_ibr1l"]
-material = SubResource("ShaderMaterial_31feg")
 
 [node name="StructurePlacementHandler" type="Node3D" unique_id=1215717534]
 script = ExtResource("1_u6cl4")
@@ -20,7 +12,3 @@ billboard = 1
 no_depth_test = true
 fixed_size = true
 text = "test"
-
-[node name="FootprintOverlay" type="MeshInstance3D" parent="." unique_id=455318395]
-transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.05, 0)
-mesh = SubResource("PlaneMesh_ibr1l")

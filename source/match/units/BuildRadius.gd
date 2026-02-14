@@ -1,0 +1,140 @@
+extends Node3D
+class_name BuildRadius
+
+const Human = preload("res://source/match/players/human/Human.gd")
+
+@export var cell_size := 1.0
+
+# Option A: Set a radius (in cells) to auto-generate a circular build area.
+# If > 0, this overrides allowed_cells with all cells within this radius.
+@export var radius_in_cells := 0
+
+# Option B: Manually define which grid cells are buildable (used when radius_in_cells == 0)
+@export var allowed_cells: Array[Vector2i] = []
+
+@onready var mesh_instance: MeshInstance3D = $GridOverlayMesh
+
+func _ready():
+	cell_size = FeatureFlags.grid_cell_size
+	if radius_in_cells > 0:
+		allowed_cells = _generate_circular_cells(radius_in_cells)
+	# Grab the material from the original PlaneMesh before replacing it
+	var original_mat: Material = null
+	if mesh_instance.mesh and mesh_instance.mesh.get_surface_count() > 0:
+		original_mat = mesh_instance.mesh.surface_get_material(0)
+	if original_mat == null:
+		original_mat = mesh_instance.material_override
+	mesh_instance.mesh = _build_mesh(original_mat)
+	# Sync shader cell_size
+	var mat = original_mat as ShaderMaterial
+	if mat:
+		mat.set_shader_parameter("cell_size", cell_size)
+	# Detach from parent's rotation so the grid stays axis-aligned
+	top_level = true
+	global_position = get_parent().global_position
+	# Hidden by default — shown when placement mode is active
+	visible = false
+	add_to_group("build_radii")
+	MatchSignals.structure_placement_started.connect(_on_placement_started)
+	MatchSignals.structure_placement_ended.connect(_on_placement_ended)
+
+
+func _on_placement_started():
+	# Only show for own/allied structures
+	var unit = get_parent()
+	if unit == null or not is_instance_valid(unit):
+		return
+	var player = unit.player if "player" in unit else null
+	if player == null:
+		return
+	# Find the human player to compare ownership/alliance
+	var human_players = get_tree().get_nodes_in_group("players").filter(
+		func(p): return p is Human
+	)
+	if human_players.is_empty():
+		return
+	var human_player = human_players[0]
+	var is_own = (player == human_player)
+	var is_allied = (player != human_player and player.team == human_player.team)
+	if is_own or (is_allied and FeatureFlags.allow_placement_in_allied_build_radius):
+		visible = true
+
+
+func _on_placement_ended():
+	visible = false
+
+
+func _build_mesh(mat: Material) -> ArrayMesh:
+	var st := SurfaceTool.new()
+	st.begin(Mesh.PRIMITIVE_TRIANGLES)
+
+	for cell in allowed_cells:
+		_add_cell_quad(st, cell)
+
+	var mesh = st.commit()
+	if mat:
+		mesh.surface_set_material(0, mat)
+	return mesh
+
+
+func _add_cell_quad(st: SurfaceTool, cell: Vector2i):
+	var half = cell_size * 0.5
+
+	var cx = cell.x * cell_size
+	var cz = cell.y * cell_size
+
+	var a = Vector3(cx-half, 0.02, cz-half)
+	var b = Vector3(cx+half, 0.02, cz-half)
+	var c = Vector3(cx+half, 0.02, cz+half)
+	var d = Vector3(cx-half, 0.02, cz+half)
+
+	st.add_vertex(a)
+	st.add_vertex(b)
+	st.add_vertex(c)
+
+	st.add_vertex(a)
+	st.add_vertex(c)
+	st.add_vertex(d)
+
+
+func _generate_circular_cells(radius: int) -> Array[Vector2i]:
+	var cells: Array[Vector2i] = []
+	for x in range(-radius, radius + 1):
+		for y in range(-radius, radius + 1):
+			if Vector2(x, y).length() <= radius:
+				cells.append(Vector2i(x, y))
+	return cells
+
+
+## Returns the grid cell coordinate for a world position
+func _world_to_cell(world_pos: Vector3) -> Vector2i:
+	var local_pos = world_pos - global_position
+	return Vector2i(
+		roundi(local_pos.x / cell_size),
+		roundi(local_pos.z / cell_size)
+	)
+
+
+## Checks if a world position falls within this BuildRadius's allowed cells
+func is_position_in_radius(world_pos: Vector3) -> bool:
+	var cell = _world_to_cell(world_pos)
+	return cell in allowed_cells
+
+
+## Static helper: checks if a world position is within any owned/allied build radius.
+## Pass the player who is placing the structure.
+static func is_position_in_any_build_radius(tree: SceneTree, world_pos: Vector3, placing_player) -> bool:
+	var build_radii = tree.get_nodes_in_group("build_radii")
+	for br: BuildRadius in build_radii:
+		var unit = br.get_parent()
+		if unit == null or not is_instance_valid(unit):
+			continue
+		var owner_player = unit.player if "player" in unit else null
+		if owner_player == null:
+			continue
+		var is_own = (owner_player == placing_player)
+		var is_allied = (owner_player != placing_player and owner_player.team == placing_player.team)
+		if is_own or (is_allied and FeatureFlags.allow_placement_in_allied_build_radius):
+			if br.is_position_in_radius(world_pos):
+				return true
+	return false

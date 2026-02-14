@@ -25,3 +25,5 @@ signal unit_production_finished(unit, producer_unit)
 signal unit_construction_finished(unit)
 signal not_enough_resources_for_production(player)
 signal not_enough_resources_for_construction(player)
+signal structure_placement_started
+signal structure_placement_ended
