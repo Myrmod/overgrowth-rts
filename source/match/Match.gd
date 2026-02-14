@@ -315,7 +315,7 @@ func _execute_command(cmd: Dictionary):
 				return
 			var self_constructing = cmd.data.get("self_constructing", false)
 			# Deduct construction cost (the single authority for resource changes)
-			var construction_cost = UnitConstants.CONSTRUCTION_COSTS.get(cmd.data.structure_prototype, null)
+			var construction_cost = UnitConstants.DEFAULT_PROPERTIES.get(cmd.data.structure_prototype, {}).get("costs", null)
 			if construction_cost != null:
 				if not player.has_resources(construction_cost):
 					# This is expected in a tick-based system: the AI checks resources before queuing

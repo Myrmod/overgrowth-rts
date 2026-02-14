@@ -125,7 +125,7 @@ func _enforce_number_of_aa_turrets():
 
 
 func _construct_turret(turret_scene):
-	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[turret_scene.resource_path]
+	var construction_cost = UnitConstants.DEFAULT_PROPERTIES[turret_scene.resource_path]["costs"]
 	# Pre-check resources as an optimistic filter. The authoritative check happens in
 	# Match._execute_command() — another command may spend the resources before execution.
 	if not _player.has_resources(construction_cost):

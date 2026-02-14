@@ -115,7 +115,7 @@ func _provision_unit(unit_scene, structure_producing_unit, resources, metadata):
 		"data": {
 			"entity_id": structure_producing_unit.id,
 			"unit_type": unit_scene.resource_path,
-			"time_total": UnitConstants.PRODUCTION_TIMES[unit_scene.resource_path],
+			"time_total": UnitConstants.DEFAULT_PROPERTIES[unit_scene.resource_path]["build_time"],
 			"ignore_limit": true,
 		}
 	})
@@ -161,7 +161,7 @@ func _attach_current_battle_units():
 
 
 func _construct_structure(structure_scene):
-	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[structure_scene.resource_path]
+	var construction_cost = UnitConstants.DEFAULT_PROPERTIES[structure_scene.resource_path]["costs"]
 	# Pre-check resources as an optimistic filter. The authoritative check happens in
 	# Match._execute_command() — another command may spend the resources before execution.
 	if not _player.has_resources(construction_cost):

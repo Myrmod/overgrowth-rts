@@ -100,7 +100,7 @@ func _finalize_production(former_queue_element):
 		)
 	)
 	MatchSignals.setup_and_spawn_unit.emit(
-		produced_unit, Transform3D(Basis(), placement_position), _unit.player
+		produced_unit, Transform3D(Basis(), placement_position), _unit.player, false,
 	)
 	MatchSignals.unit_production_finished.emit(produced_unit, _unit)
 

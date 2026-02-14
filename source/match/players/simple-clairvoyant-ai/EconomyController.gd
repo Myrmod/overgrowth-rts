@@ -48,7 +48,7 @@ func provision(resources, metadata):
 			"data": {
 				"entity_id": _ccs[0].id,
 				"unit_type": WorkerScene.resource_path,
-				"time_total": UnitConstants.PRODUCTION_TIMES[WorkerScene.resource_path],
+				"time_total": UnitConstants.DEFAULT_PROPERTIES[WorkerScene.resource_path]["build_time"],
 				"ignore_limit": true,
 			}
 		})

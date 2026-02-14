@@ -43,7 +43,7 @@ func _show():
 	get_tree().paused = true
 
 
-func _on_new_unit(unit, _transform, _player):
+func _on_new_unit(unit, _transform, _player, _self_constructing = false):
 	unit.tree_exited.connect(_on_unit_tree_exited)
 
 
