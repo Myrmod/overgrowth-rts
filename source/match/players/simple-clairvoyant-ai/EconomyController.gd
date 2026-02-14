@@ -33,7 +33,7 @@ func setup(player):
 func provision(resources, metadata):
 	if metadata == "worker":
 		assert(
-			resources == UnitConstants.PRODUCTION_COSTS[WorkerScene.resource_path],
+			resources == UnitConstants.DEFAULT_PROPERTIES[WorkerScene.resource_path]["costs"],
 			"unexpected amount of resources"
 		)
 		_number_of_pending_worker_resource_requests -= 1
@@ -48,14 +48,14 @@ func provision(resources, metadata):
 			"data": {
 				"entity_id": _ccs[0].id,
 				"unit_type": WorkerScene.resource_path,
-				"time_total": UnitConstants.PRODUCTION_TIMES[WorkerScene.resource_path],
+				"time_total": UnitConstants.DEFAULT_PROPERTIES[WorkerScene.resource_path]["build_time"],
 				"ignore_limit": true,
 			}
 		})
 		_number_of_pending_workers += 1
 	elif metadata == "cc":
 		assert(
-			resources == UnitConstants.CONSTRUCTION_COSTS[CommandCenterScene.resource_path],
+			resources == UnitConstants.DEFAULT_PROPERTIES[CommandCenterScene.resource_path]["costs"],
 			"unexpected amount of resources"
 		)
 		_number_of_pending_cc_resource_requests -= 1
@@ -112,7 +112,7 @@ func _enforce_number_of_ccs():
 	)
 	for _i in range(number_of_extra_ccs_required):
 		resources_required.emit(
-			UnitConstants.CONSTRUCTION_COSTS[CommandCenterScene.resource_path], "cc"
+			UnitConstants.DEFAULT_PROPERTIES[CommandCenterScene.resource_path]["costs"], "cc"
 		)
 		_number_of_pending_cc_resource_requests += 1
 
@@ -129,13 +129,13 @@ func _enforce_number_of_workers():
 	)
 	for _i in range(number_of_extra_workers_required):
 		resources_required.emit(
-			UnitConstants.PRODUCTION_COSTS[WorkerScene.resource_path], "worker"
+			UnitConstants.DEFAULT_PROPERTIES[WorkerScene.resource_path]["costs"], "worker"
 		)
 		_number_of_pending_worker_resource_requests += 1
 
 
 func _construct_cc():
-	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[
+	var construction_cost = UnitConstants.DEFAULT_PROPERTIES[
 		CommandCenterScene.resource_path
 	]
 	# Pre-check resources as an optimistic filter. The authoritative check happens in
@@ -165,6 +165,7 @@ func _construct_cc():
 		"data": {
 			"structure_prototype": CommandCenterScene.resource_path,
 			"transform": target_transform,
+			"self_constructing": true,
 		}
 	})
 

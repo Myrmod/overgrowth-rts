@@ -313,8 +313,9 @@ func _execute_command(cmd: Dictionary):
 			if structure_prototype == null:
 				push_error("STRUCTURE_PLACED: cannot load %s" % cmd.data.structure_prototype)
 				return
+			var self_constructing = cmd.data.get("self_constructing", false)
 			# Deduct construction cost (the single authority for resource changes)
-			var construction_cost = UnitConstants.CONSTRUCTION_COSTS.get(cmd.data.structure_prototype, null)
+			var construction_cost = UnitConstants.DEFAULT_PROPERTIES.get(cmd.data.structure_prototype, {}).get("costs", null)
 			if construction_cost != null:
 				if not player.has_resources(construction_cost):
 					# This is expected in a tick-based system: the AI checks resources before queuing
@@ -325,7 +326,8 @@ func _execute_command(cmd: Dictionary):
 			MatchSignals.setup_and_spawn_unit.emit(
 				structure_prototype.instantiate(),
 				cmd.data.transform,
-				player
+				player,
+				self_constructing
 			)
 
 		# ── PRODUCTION ────────────────────────────────────────────────
@@ -529,10 +531,10 @@ func _spawn_player_units(player, spawn_transform):
 	)
 
 
-func _setup_and_spawn_unit(unit, a_transform, player, mark_structure_under_construction = true):
+func _setup_and_spawn_unit(unit, a_transform, player, self_constructing = false):
 	unit.global_transform = a_transform
-	if unit is Structure and mark_structure_under_construction:
-		unit.mark_as_under_construction()
+	if unit is Structure and self_constructing:
+		unit.mark_as_under_construction(true)
 	_setup_unit_groups(unit, player)
 	player.add_child(unit)
 	MatchSignals.unit_spawned.emit(unit)

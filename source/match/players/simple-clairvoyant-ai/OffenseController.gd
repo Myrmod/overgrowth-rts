@@ -87,7 +87,7 @@ func _on_tick_advanced():
 
 func _provision_structure(structure_scene, resources, metadata):
 	assert(
-		resources == UnitConstants.CONSTRUCTION_COSTS[structure_scene.resource_path],
+		resources == UnitConstants.DEFAULT_PROPERTIES[structure_scene.resource_path]["costs"],
 		"unexpected amount of resources"
 	)
 	var workers = get_tree().get_nodes_in_group("units").filter(
@@ -101,7 +101,7 @@ func _provision_structure(structure_scene, resources, metadata):
 
 func _provision_unit(unit_scene, structure_producing_unit, resources, metadata):
 	assert(
-		resources == UnitConstants.PRODUCTION_COSTS[unit_scene.resource_path],
+		resources == UnitConstants.DEFAULT_PROPERTIES[unit_scene.resource_path]["costs"],
 		"unexpected amount of resources"
 	)
 	if structure_producing_unit == null:
@@ -115,7 +115,7 @@ func _provision_unit(unit_scene, structure_producing_unit, resources, metadata):
 		"data": {
 			"entity_id": structure_producing_unit.id,
 			"unit_type": unit_scene.resource_path,
-			"time_total": UnitConstants.PRODUCTION_TIMES[unit_scene.resource_path],
+			"time_total": UnitConstants.DEFAULT_PROPERTIES[unit_scene.resource_path]["build_time"],
 			"ignore_limit": true,
 		}
 	})
@@ -161,7 +161,7 @@ func _attach_current_battle_units():
 
 
 func _construct_structure(structure_scene):
-	var construction_cost = UnitConstants.CONSTRUCTION_COSTS[structure_scene.resource_path]
+	var construction_cost = UnitConstants.DEFAULT_PROPERTIES[structure_scene.resource_path]["costs"]
 	# Pre-check resources as an optimistic filter. The authoritative check happens in
 	# Match._execute_command() — another command may spend the resources before execution.
 	if not _player.has_resources(construction_cost):
@@ -198,6 +198,7 @@ func _construct_structure(structure_scene):
 		"data": {
 			"structure_prototype": structure_scene.resource_path,
 			"transform": target_transform,
+			"self_constructing": true,
 		}
 	})
 	_enforce_primary_units_production.call_deferred()
@@ -221,7 +222,7 @@ func _enforce_structure_existence(structure, structure_scene, type):
 			_number_of_pending_structure_resource_requests.get(type, 0) + 1
 		)
 		resources_required.emit(
-			UnitConstants.CONSTRUCTION_COSTS[structure_scene.resource_path], type
+			UnitConstants.DEFAULT_PROPERTIES[structure_scene.resource_path]["costs"], type
 		)
 
 
@@ -242,7 +243,7 @@ func _enforce_units_production(structure, unit_scene, type):
 			_number_of_pending_unit_resource_requests.get(type, 0) + 1
 		)
 		resources_required.emit(
-			UnitConstants.PRODUCTION_COSTS[unit_scene.resource_path], type
+			UnitConstants.DEFAULT_PROPERTIES[unit_scene.resource_path]["costs"], type
 		)
 
 

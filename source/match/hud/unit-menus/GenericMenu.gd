@@ -8,7 +8,7 @@ func _ready():
 	super._ready()
 
 func _on_cancel_action_button_pressed():
-	if len(units) == 1 and units[0] is Structure and units[0].is_under_construction():
+	if len(units) == 1 and is_instance_valid(units[0]) and units[0] is Structure and units[0].is_under_construction():
 		# Cancel construction through CommandBus (refunds resources + frees structure)
 		CommandBus.push_command({
 			"tick": Match.tick + 1,
