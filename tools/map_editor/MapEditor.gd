@@ -119,7 +119,7 @@ func _setup_ui_connections():
 	# Get UI elements from scene
 	var toolbar = get_node_or_null("VBoxContainer/Toolbar")
 	var entity_palette = get_node_or_null(
-		"VBoxContainer/MainArea/LeftPalette/PaletteScroll/EntityPalette"
+		"VBoxContainer/MainArea/LeftPalette/PaletteScroll/MarginContainer/EntityPalette"
 	)
 	status_label = get_node_or_null("VBoxContainer/StatusBar/StatusLabel")
 
