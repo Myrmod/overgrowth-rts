@@ -14,7 +14,7 @@
 - Fossil reserves nearly depeleted, Fusion not scalable, solar power is inefficient due to atmospheric dust changes, atmosphere completely collapsing, Energy became currency.
 - Scientist needed to step up to find a logical solution before total blackout.
 ## The vines discovery( 2069)
-- Scientist all over the globe were looking for a reliable energy source, approx 40 years after The Ash war, scientist found in a deep ancient prime Egyptian anchor site, They found a dorminant vine like organism.
+- Scientist all over the globe were looking for a reliable energy source, approx 40 years after The Ash war, scientist found in a deep ancient underground prime Egyptian anchor site, They found a dorminant vine like organism.
 - This organism was clearly hidden, conflict between scientist arose.
 - They began trying to study it, replicate it or applify it to almost no success.
 - 1 Scientist discovered that this vine was potientially a completely living organism , tried warning other scientist to not trying simulating it with artificial energy to no success.
