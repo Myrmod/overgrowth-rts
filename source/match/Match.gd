@@ -29,8 +29,6 @@ const Structure = preload("res://source/match/units/Structure.gd")
 const Human = preload("res://source/match/players/human/Human.gd")
 
 const CommandCenter = preload("res://source/factions/the_amuns/structures/CommandCenter.tscn")
-const Drone = preload("res://source/factions/the_amuns/units/Drone.tscn")
-const Worker = preload("res://source/factions/the_amuns/units/Worker.tscn")
 
 @export var settings: Resource = null
 
@@ -584,15 +582,7 @@ func _setup_player_units():
 
 func _spawn_player_units(player, spawn_transform):
 	_setup_and_spawn_unit(CommandCenter.instantiate(), spawn_transform, player, false)
-	_setup_and_spawn_unit(
-		Drone.instantiate(), spawn_transform.translated(Vector3(-2, 0, -2)), player
-	)
-	_setup_and_spawn_unit(
-		Worker.instantiate(), spawn_transform.translated(Vector3(-3, 0, 3)), player
-	)
-	_setup_and_spawn_unit(
-		Worker.instantiate(), spawn_transform.translated(Vector3(3, 0, 3)), player
-	)
+	# starting units would be set here, e.g.: workers
 
 
 func _setup_and_spawn_unit(unit, a_transform, player, self_constructing = false):
