@@ -1,5 +1,6 @@
-extends Control
 class_name MapEditorDialogs
+
+extends Control
 
 ## Helper class for managing file dialogs in the map editor
 
@@ -26,7 +27,7 @@ func _setup_dialogs():
 	_save_dialog.title = "Save Map"
 	_save_dialog.file_selected.connect(_on_save_file_selected)
 	add_child(_save_dialog)
-	
+
 	# Load dialog
 	_load_dialog = FileDialog.new()
 	_load_dialog.file_mode = FileDialog.FILE_MODE_OPEN_FILE
@@ -35,7 +36,7 @@ func _setup_dialogs():
 	_load_dialog.title = "Load Map"
 	_load_dialog.file_selected.connect(_on_load_file_selected)
 	add_child(_load_dialog)
-	
+
 	# Export dialog
 	_export_dialog = FileDialog.new()
 	_export_dialog.file_mode = FileDialog.FILE_MODE_SAVE_FILE
