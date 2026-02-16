@@ -14,14 +14,17 @@
 - Fossil reserves nearly depeleted, Fusion not scalable, solar power is inefficient due to atmospheric dust changes, atmosphere completely collapsing, Energy became currency.
 - Scientist needed to step up to find a logical solution before total blackout.
 ## The vines discovery( 2069)
-- Scientist all over the globe were looking for a reliable energy source, approx 40 years after The Ash war, scientist found in a deep ancient underground prime Egyptian anchor site, They found a dorminant vine like organism.
+- Scientist all over the globe were looking for a reliable energy source, approx 40 years after The Ash war.
+- Africa was generally less nuked and damaged than the rest of the world, so solar farms started rising in the sahara desert, research and GPR technology looking for any clean source of power.
+-  scientist found in a deep ancient underground prime Egyptian anchor site, They found a dorminant vine like organism.
 - This organism was clearly hidden, conflict between scientist arose.
 - They began trying to study it, replicate it or applify it to almost no success.
 - 1 Scientist discovered that this vine was potientially a completely living organism , tried warning other scientist to not trying simulating it with artificial energy to no success.
 - He was shut down by the government , locked up due to the panic he spread about this new organism, governments were desperate for a new energy source, willing to take risk they decided to high simulate the vine organism with energy to stop it from being dorminant.
 # The Awakening:
 ## Across the globe:
-- Vine became active instantly, growth erupts in cities and rural regions, Infrastructure swallowed, houses destroyed , farms demolished, millions dead or mutated
+- Vine became active , energy pulse spikes in egypt, within hours dormant spores active regionally, within weeks contienetial eruptions happen, and within month global overgrowth.
+- Growth erupts in cities and rural regions, Infrastructure swallowed, houses destroyed , farms demolished, millions dead or mutated
 - But energy output spikes dramastically.This is where the conflict begins...
 ## The people divided:
 - The humans instantly divdied into 2 groups:
