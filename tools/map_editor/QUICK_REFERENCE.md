@@ -143,7 +143,6 @@ MapEditor (Control)
 │   ├── PaintCollisionBrush
 │   ├── EraseBrush
 │   ├── StructureBrush
-│   └── UnitBrush
 │
 ├── Commands (Undo/Redo)
 │   ├── EditorCommand (base)
@@ -174,7 +173,7 @@ MapEditor (Control)
 ### Adding New Entity Types
 1. Add scene to UnitConstants
 2. EntityPalette auto-updates
-3. Use StructureBrush or UnitBrush
+3. Use EntityBrush
 
 ## Support
 

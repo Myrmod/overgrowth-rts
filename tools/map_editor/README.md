@@ -75,8 +75,7 @@ All editing operations use brushes:
 - `EditorBrush`: Base class for all brushes
 - `PaintCollisionBrush`: Paint collision tiles
 - `EraseBrush`: Erase entities
-- `StructureBrush`: Place structures
-- `UnitBrush`: Place units
+- `EntityBrush`: Place entities
 
 #### Command Pattern (Undo/Redo)
 All operations are commands:

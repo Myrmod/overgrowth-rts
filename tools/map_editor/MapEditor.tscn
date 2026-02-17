@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://bm0tyugi4obyy" path="res://tools/map_editor/MapEditor.gd" id="1_map_editor"]
 [ext_resource type="Script" uid="uid://cftdr3jcpcmeh" path="res://tools/map_editor/ui/EntityPalette.gd" id="2_entity_palette"]
 
+[sub_resource type="World3D" id="World3D_6yib5"]
+
 [node name="MapEditor" type="Control" unique_id=1115945208]
 layout_mode = 3
 anchors_preset = 15
@@ -103,9 +105,11 @@ text = "Test Button"
 
 [node name="ObjectsContainer" type="FoldableContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette" unique_id=1321707504]
 layout_mode = 2
+folded = true
 title = "Objects"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette/ObjectsContainer" unique_id=2012060010]
+visible = false
 layout_mode = 2
 
 [node name="Button" type="Button" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette/ObjectsContainer/VBoxContainer" unique_id=1777046724]
@@ -114,9 +118,11 @@ text = "Test Button"
 
 [node name="NormalGroundContainer" type="FoldableContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette" unique_id=1027875116]
 layout_mode = 2
+folded = true
 title = "Normal ground"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette/NormalGroundContainer" unique_id=322854379]
+visible = false
 layout_mode = 2
 
 [node name="Button" type="Button" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette/NormalGroundContainer/VBoxContainer" unique_id=635039106]
@@ -125,9 +131,11 @@ text = "Test Button"
 
 [node name="WaterContainer" type="FoldableContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette" unique_id=1863790125]
 layout_mode = 2
+folded = true
 title = "Water"
 
 [node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette/WaterContainer" unique_id=974091285]
+visible = false
 layout_mode = 2
 
 [node name="Button" type="Button" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Environment/EnvironmentPalette/WaterContainer/VBoxContainer" unique_id=1285250171]
@@ -249,12 +257,54 @@ layout_mode = 2
 layout_mode = 2
 text = "Test Button"
 
+[node name="Brushsettings" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette" unique_id=1506579842]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="VBoxContainer/MainArea/LeftPalette/Brushsettings" unique_id=935307413]
+layout_mode = 2
+text = "Brush settings"
+
+[node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MainArea/LeftPalette/Brushsettings" unique_id=1826137274]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette/Brushsettings/MarginContainer" unique_id=468634052]
+layout_mode = 2
+
+[node name="BrushForm" type="OptionButton" parent="VBoxContainer/MainArea/LeftPalette/Brushsettings/MarginContainer/VBoxContainer" unique_id=633604237]
+layout_mode = 2
+selected = 0
+item_count = 2
+popup/item_0/text = "Circle"
+popup/item_0/id = 0
+popup/item_1/text = "Square"
+popup/item_1/id = 1
+
+[node name="BrushSize" type="SpinBox" parent="VBoxContainer/MainArea/LeftPalette/Brushsettings/MarginContainer/VBoxContainer" unique_id=764435510]
+layout_mode = 2
+prefix = "Brush size:"
+
 [node name="ViewportArea" type="PanelContainer" parent="VBoxContainer/MainArea" unique_id=606799797]
 layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="MarginContainer" type="MarginContainer" parent="VBoxContainer/MainArea/ViewportArea" unique_id=256389804]
 layout_mode = 2
+
+[node name="ViewportContainer" type="SubViewportContainer" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer" unique_id=1383602968]
+layout_mode = 2
+stretch = true
+
+[node name="EditorViewport" type="SubViewport" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer" unique_id=1010968828]
+world_3d = SubResource("World3D_6yib5")
+size = Vector2i(1615, 1018)
+
+[node name="Viewport3D" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=907894722]
+
+[node name="VisualLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=1173281011]
+
+[node name="CollisionLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=2102924395]
+
+[node name="GridLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=251285702]
 
 [node name="StatusBar" type="HBoxContainer" parent="VBoxContainer" unique_id=1046591900]
 layout_mode = 2

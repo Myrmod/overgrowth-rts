@@ -40,13 +40,8 @@
   - Works with all entity types
   - Symmetry-aware removal
 
-- StructureBrush
+- EntityBrush
   - Place buildings from palette
-  - Player/faction assignment
-  - Rotation support (placeholder)
-
-- UnitBrush
-  - Place units from palette
   - Player/faction assignment
   - Rotation support (placeholder)
 

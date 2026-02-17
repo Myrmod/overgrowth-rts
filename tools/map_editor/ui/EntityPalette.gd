@@ -4,12 +4,7 @@ extends TabContainer
 
 ## Automatically generates and manages the entity palette for the map editor
 
-signal entity_selected(entity_type: String, scene_path: String)
-signal brush_selected(brush_name: String)
-
-# Palette categories (now MenuButtons)
-
-var _current_selection: MenuButton = null
+signal entity_selected(scene_path: String)
 
 # Environment Container
 @onready var objects_container = $Environment/EnvironmentPalette/ObjectsContainer/VBoxContainer
@@ -99,8 +94,5 @@ func create_scene_button(file_name: String, scenes_path: String, container: Node
 
 
 func _on_scene_button_pressed(scene_path: String):
-	var scene: PackedScene = load(scene_path)
-	var instance = scene.instantiate()
-
-	print("Loaded:", scene_path)
-	# place into map editor here
+	print("Scene button pressed: ", scene_path)
+	entity_selected.emit(scene_path)

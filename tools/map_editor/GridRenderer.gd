@@ -1,11 +1,11 @@
-extends Node3D
 class_name GridRenderer
+
+extends Node3D
 
 ## Renders a grid visualization using MultiMeshInstance3D
 ## Used to show the map grid in the editor
 
 var grid_size: Vector2i = Vector2i(50, 50)
-var cell_size: float = 1.0
 var grid_color: Color = Color(1, 1, 1, 0.2)
 
 var _multimesh_instance: MultiMeshInstance3D
@@ -20,8 +20,10 @@ func _setup_multimesh():
 	"""Create and configure the multimesh for grid rendering"""
 	# Create the cell mesh (flat square)
 	_cell_mesh = PlaneMesh.new()
-	_cell_mesh.size = Vector2(cell_size * 0.95, cell_size * 0.95)  # Slightly smaller for gaps
-	
+	_cell_mesh.size = Vector2(
+		FeatureFlags.grid_cell_size * 0.95, FeatureFlags.grid_cell_size * 0.95
+	)  # Slightly smaller for gaps
+
 	# Create material
 	var material = StandardMaterial3D.new()
 	material.albedo_color = grid_color
@@ -30,21 +32,25 @@ func _setup_multimesh():
 	material.disable_receive_shadows = true
 	material.cull_mode = BaseMaterial3D.CULL_DISABLED
 	_cell_mesh.material = material
-	
+
 	# Create multimesh
 	var multimesh = MultiMesh.new()
 	multimesh.transform_format = MultiMesh.TRANSFORM_3D
 	multimesh.mesh = _cell_mesh
 	multimesh.instance_count = grid_size.x * grid_size.y
-	
+
 	# Position each grid cell
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var index = y * grid_size.x + x
 			var transform = Transform3D()
-			transform.origin = Vector3(x * cell_size + cell_size / 2.0, 0.01, y * cell_size + cell_size / 2.0)
+			transform.origin = Vector3(
+				x * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0,
+				0.01,
+				y * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0
+			)
 			multimesh.set_instance_transform(index, transform)
-	
+
 	# Create and add the multimesh instance
 	_multimesh_instance = MultiMeshInstance3D.new()
 	_multimesh_instance.multimesh = multimesh

@@ -28,8 +28,7 @@ This implementation provides a comprehensive in-game Map Editor for the Overgrow
    - `EditorBrush` base class
    - `PaintCollisionBrush` for terrain
    - `EraseBrush` for removing entities
-   - `StructureBrush` for building placement
-   - `UnitBrush` for unit placement
+   - `EntityBrush` for entity placement
    - Symmetry-aware positioning
 
 5. **Undo/Redo System** - Command pattern implementation:
@@ -130,7 +129,6 @@ tools/map_editor/
 │   ├── PaintCollisionBrush.gd (35 lines)
 │   ├── EraseBrush.gd (44 lines)
 │   ├── StructureBrush.gd (66 lines)
-│   └── UnitBrush.gd (63 lines)
 ├── Commands
 │   ├── EditorCommand.gd (19 lines)
 │   ├── CommandStack.gd (72 lines)
