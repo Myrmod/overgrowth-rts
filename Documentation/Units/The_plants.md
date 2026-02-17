@@ -1,16 +1,26 @@
 # Catogeries:
 ## Infantry:
 ### The phase seedling:
-- Weapon : melee sting or bite
-- weapon: melee
-- Hp:50
-- Dmg:10
-- Range:0(melee)
-- Dmg type:melee
-- Speed:5
-- Attack speed:0.5
-- Turn rate:
-- Abilities: no abilities
-- Crushable: crushable
-- Armor: 0%rifle 0% plasma 0% melee
-- cost:0.5x
+#### General
+- movement_speed: 3
+- turn_rate:
+- hp: 50
+- max_hp: 50
+- cost: 0.5X
+- armor:
+  - 0% rifle
+  - 0% plasma
+  - 0% melee
+
+#### Weapon: melee
+- damage_type: melee
+- dmg: 10
+- aoe: 0
+- range: 0
+- attack_speed: 0.5
+
+#### Abilities:
+- no abilities
+
+#### Trait
+- crushable: yes

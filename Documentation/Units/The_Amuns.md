@@ -15,7 +15,8 @@
 #### Weapon: plasma gun
 - damage_type: Plasma
 - dmg: 25
-- range: 3.0
+- aoe: 1
+- range: 3.5
 - attack_speed: 2.5
 
 #### Abilities:
@@ -23,3 +24,4 @@
 - can activate stealth (ability purshace needed t2)
 
 #### Trait
+- crushable: no
