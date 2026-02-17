@@ -9,11 +9,15 @@ signal brush_applied(positions: Array[Vector2i])
 
 var map_resource: MapResource
 var symmetry_system: SymmetrySystem
+var command_stack: CommandStack
 
 
-func _init(map_res: MapResource = null, symmetry_sys: SymmetrySystem = null):
+func _init(
+	map_res: MapResource = null, symmetry_sys: SymmetrySystem = null, cmd_stack: CommandStack = null
+):
 	map_resource = map_res
 	symmetry_system = symmetry_sys
+	command_stack = cmd_stack
 
 
 func apply(cell_pos: Vector2i):

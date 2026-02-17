@@ -51,6 +51,8 @@ var _action_locked = false
 
 
 func _ready():
+	if not _match:
+		return
 	if not _match.is_node_ready():
 		await _match.ready
 	_player_ref = get_parent()

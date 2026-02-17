@@ -13,8 +13,6 @@ extends Resource
 
 # Entity placements
 @export var placed_entities: Array[Dictionary] = []
-@export var placed_units: Array[Dictionary] = []
-@export var resource_nodes: Array[Dictionary] = []
 
 # Cosmetics (decorative tiles, not gameplay-affecting)
 @export var cosmetic_tiles: Array[Dictionary] = []
@@ -60,8 +58,6 @@ func resize_map(new_size: Vector2i):
 
 func _remove_out_of_bounds_placements():
 	placed_entities = placed_entities.filter(func(e): return _is_in_bounds(e.pos))
-	placed_units = placed_units.filter(func(u): return _is_in_bounds(u.pos))
-	resource_nodes = resource_nodes.filter(func(r): return _is_in_bounds(r.pos))
 	cosmetic_tiles = cosmetic_tiles.filter(func(c): return _is_in_bounds(c.pos))
 
 
@@ -92,28 +88,10 @@ func add_entity(scene_path: String, grid_pos: Vector2i, player_id: int, rotation
 	)
 
 
-func add_unit(scene_path: String, grid_pos: Vector2i, player_id: int, rotation: float = 0.0):
-	"""Add a unit placement"""
-	placed_units.append(
-		{"scene_path": scene_path, "pos": grid_pos, "player": player_id, "rotation": rotation}
-	)
-
-
-func add_resource_node(
-	scene_path: String, grid_pos: Vector2i, resource_type: String = "resource_a"
-):
-	"""Add a resource node placement"""
-	resource_nodes.append(
-		{"scene_path": scene_path, "pos": grid_pos, "resource_type": resource_type}
-	)
-
-
 func clear_all():
 	"""Clear all map data"""
 	_initialize_collision_grid()
 	placed_entities.clear()
-	placed_units.clear()
-	resource_nodes.clear()
 	cosmetic_tiles.clear()
 
 
@@ -131,13 +109,5 @@ func validate() -> Array[String]:
 	for entity in placed_entities:
 		if not _is_in_bounds(entity.pos):
 			errors.append("Entity at %s is outside map bounds" % entity.pos)
-
-	for unit in placed_units:
-		if not _is_in_bounds(unit.pos):
-			errors.append("Unit at %s is outside map bounds" % unit.pos)
-
-	for resource in resource_nodes:
-		if not _is_in_bounds(resource.pos):
-			errors.append("Resource at %s is outside map bounds" % resource.pos)
 
 	return errors

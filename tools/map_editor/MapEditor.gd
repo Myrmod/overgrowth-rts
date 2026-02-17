@@ -49,6 +49,8 @@ var grid_layer: Node3D
 # Renderers
 var grid_renderer: GridRenderer
 var collision_renderer: CollisionRenderer
+# Entity preview nodes for editor visualization
+var entity_preview_nodes := {}
 
 # Camera control
 var camera: Camera3D
@@ -295,7 +297,9 @@ func _create_brush(brush_type: BrushType):
 		BrushType.ERASE:
 			current_brush = EraseBrush.new(current_map, symmetry_system)
 		BrushType.PLACE_ENTITY:
-			current_brush = EntityBrush.new(current_map, symmetry_system, "", current_player)
+			current_brush = EntityBrush.new(
+				current_map, symmetry_system, command_stack, "", current_player
+			)
 
 	# Connect brush signals
 	if current_brush and current_brush.brush_applied.is_connected(_on_brush_applied):
@@ -314,6 +318,8 @@ func _on_brush_applied(positions: Array[Vector2i]):
 	"""Handle brush application - update visuals"""
 	if collision_renderer and current_brush_type == BrushType.PAINT_COLLISION:
 		collision_renderer.update_cells(positions)
+	if current_brush_type == BrushType.PLACE_ENTITY:
+		_refresh_entity_previews()
 
 
 func _process(delta):
@@ -440,6 +446,33 @@ func _refresh_view():
 	"""Refresh the 3D view to reflect map changes"""
 	if collision_renderer:
 		collision_renderer.refresh()
+	_refresh_entity_previews()
+
+
+# --- Entity preview rendering ---
+func _refresh_entity_previews():
+	# Remove old previews
+	if entity_preview_nodes:
+		for node in entity_preview_nodes.values():
+			if is_instance_valid(node):
+				node.queue_free()
+		entity_preview_nodes.clear()
+	if not visual_layer:
+		return
+	# Add new previews for all placed entities
+	for entity in current_map.placed_entities:
+		if not entity.has("scene_path") or entity.scene_path == "":
+			continue
+		var scene = load(entity.scene_path)
+		if not scene:
+			continue
+		var inst = scene.instantiate()
+		inst.name = "EntityPreview_%s_%s" % [entity.scene_path.get_file(), str(entity.pos)]
+		inst.position = Vector3(entity.pos.x, 0, entity.pos.y)
+		if entity.has("rotation"):
+			inst.rotation.y = entity.rotation
+		visual_layer.add_child(inst)
+		entity_preview_nodes[entity.pos] = inst
 
 
 func set_view_mode(mode: ViewMode):

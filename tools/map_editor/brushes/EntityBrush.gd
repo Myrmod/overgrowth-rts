@@ -12,27 +12,20 @@ var rotation: float = 0.0
 func _init(
 	map_res: MapResource = null,
 	symmetry_sys: SymmetrySystem = null,
+	cmd_stack: CommandStack = null,
 	entity_path: String = "",
 	player: int = 0
 ):
-	super._init(map_res, symmetry_sys)
+	print("Initializing EntityBrush with cmd_stack: ", cmd_stack)
+	super._init(map_res, symmetry_sys, cmd_stack)
 	scene_path = entity_path
 	player_id = player
 
 
 func apply(cell_pos: Vector2i):
-	print(
-		"Applying EntityBrush at ",
-		cell_pos,
-		" with scene: ",
-		scene_path,
-		" player: ",
-		player_id,
-		" rotation: ",
-		rotation
-	)
+	print("Applying EntityBrush at ", cell_pos)
+
 	if not can_apply(cell_pos):
-		push_warning("EntityBrush: Cannot apply at ", cell_pos, " - out of bounds")
 		return
 
 	if scene_path.is_empty():
@@ -41,19 +34,13 @@ func apply(cell_pos: Vector2i):
 
 	var affected_positions = get_affected_positions(cell_pos)
 
-	for pos in affected_positions:
-		# First erase anything at this position
-		_erase_at_position(pos)
-		# Then place the entity
-		map_resource.add_entity(scene_path, pos, player_id, rotation)
+	var cmd = PlaceEntityCommand.new(
+		map_resource, affected_positions, scene_path, player_id, rotation
+	)
+
+	command_stack.push_command(cmd)
 
 	brush_applied.emit(affected_positions)
-
-
-func _erase_at_position(pos: Vector2i):
-	"""Remove any existing entities/units at position before placing"""
-	map_resource.placed_entities = map_resource.placed_entities.filter(func(e): return e.pos != pos)
-	map_resource.placed_units = map_resource.placed_units.filter(func(u): return u.pos != pos)
 
 
 func set_entity(path: String):

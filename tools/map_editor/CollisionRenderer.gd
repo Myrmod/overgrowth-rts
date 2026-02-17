@@ -96,6 +96,7 @@ func _setup_multimesh():
 
 
 func update_cell(pos: Vector2i):
+	print("Updating collision visualization for cell: ", pos)
 	"""Update a single cell's visualization"""
 	if not _multimesh_instance or not map_resource:
 		return

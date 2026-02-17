@@ -131,9 +131,7 @@ res://source/factions/the_amuns/structures/CommandCenter.tscn
 MapEditor (Control)
 ├── MapResource (data)
 │   ├── collision_grid: PackedByteArray
-│   ├── placed_structures: Array[Dict]
-│   ├── placed_units: Array[Dict]
-│   └── resource_nodes: Array[Dict]
+│   ├── placed_entities: Array[Dict]
 │
 ├── SymmetrySystem
 │   └── Coordinate transformations

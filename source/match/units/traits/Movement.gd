@@ -51,6 +51,8 @@ func _physics_process(delta):
 
 
 func _ready():
+	if not _match:
+		return
 	if _match.navigation == null:
 		await _match.ready
 	velocity_computed.connect(_on_velocity_computed)
