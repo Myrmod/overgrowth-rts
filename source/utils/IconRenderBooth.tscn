@@ -261,23 +261,6 @@ use_debanding = true
 size = Vector2i(256, 256)
 render_target_update_mode = 4
 
-[node name="ResourceA" type="Node3D" parent="RenderBooth"]
-
-[node name="ResourceA" type="Node3D" parent="RenderBooth/ResourceA"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -1.5)
-
-[node name="tmpParent" type="Node3D" parent="RenderBooth/ResourceA/ResourceA"]
-
-[node name="rock_crystalsLargeA2" type="MeshInstance3D" parent="RenderBooth/ResourceA/ResourceA/tmpParent"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1.5)
-mesh = SubResource("ArrayMesh_7jkhr")
-skeleton = NodePath("")
-surface_material_override/2 = ExtResource("2_67sfm")
-
-[node name="Camera3D" type="Camera3D" parent="RenderBooth/ResourceA"]
-transform = Transform3D(-0.793353, -0.257274, 0.551725, 0, 0.906308, 0.422618, -0.608761, 0.335286, -0.719022, 2, 1.685, -2.66)
-fov = 20.0
-
 [node name="CommandCenter" type="Node3D" parent="RenderBooth"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, 0)
 

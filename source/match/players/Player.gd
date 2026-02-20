@@ -27,21 +27,30 @@ func _ready():
 
 func add_resources(resources):
 	for resource in resources:
-		set(resource, get(resource) + resources[resource])
+		var current = get(resource)
+		if current == null:
+			current = 0
+		set(resource, current + resources[resource])
 
 
 func has_resources(resources):
 	if FeatureFlags.allow_resources_deficit_spending:
 		return true
 	for resource in resources:
-		if get(resource) < resources[resource]:
+		var current = get(resource)
+		if current == null:
+			current = 0
+		if current < resources[resource]:
 			return false
 	return true
 
 
 func subtract_resources(resources):
 	for resource in resources:
-		set(resource, get(resource) - resources[resource])
+		var current = get(resource)
+		if current == null:
+			current = 0
+		set(resource, current - resources[resource])
 
 
 func get_color_material():

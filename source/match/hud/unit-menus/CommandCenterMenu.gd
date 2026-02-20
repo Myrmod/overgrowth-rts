@@ -23,7 +23,7 @@ func _ready():
 	super._ready()
 	var ag_turret_properties = UnitConstants.DEFAULT_PROPERTIES[AntiGroundTurretUnit.resource_path]
 	_ag_turret_button.tooltip_text = (
-		"{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}, {6}: {7}"
+		"{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}"
 		. format(
 			[
 				tr("AG_TURRET"),
@@ -40,7 +40,7 @@ func _ready():
 	)
 	var aa_turret_properties = UnitConstants.DEFAULT_PROPERTIES[AntiAirTurretUnit.resource_path]
 	_aa_turret_button.tooltip_text = (
-		"{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}, {6}: {7}"
+		"{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}"
 		. format(
 			[
 				tr("AA_TURRET"),
@@ -56,7 +56,7 @@ func _ready():
 		)
 	)
 	_cc_button.tooltip_text = (
-		"{0} - {1}\n{2} HP\n{3}: {4}, {5}: {6}"
+		"{0} - {1}\n{2} HP\n{3}: {4}"
 		. format(
 			[
 				tr("CC"),
@@ -71,7 +71,7 @@ func _ready():
 		)
 	)
 	_vehicle_factory_button.tooltip_text = (
-		"{0} - {1}\n{2} HP\n{3}: {4}, {5}: {6}"
+		"{0} - {1}\n{2} HP\n{3}: {4}"
 		. format(
 			[
 				tr("VEHICLE_FACTORY"),
@@ -86,7 +86,7 @@ func _ready():
 		)
 	)
 	_aircraft_factory_button.tooltip_text = (
-		"{0} - {1}\n{2} HP\n{3}: {4}, {5}: {6}"
+		"{0} - {1}\n{2} HP\n{3}: {4}"
 		. format(
 			[
 				tr("AIRCRAFT_FACTORY"),

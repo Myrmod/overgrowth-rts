@@ -13,7 +13,7 @@ func _ready():
 	super._ready()
 	var helicopter_properties = UnitConstants.DEFAULT_PROPERTIES[HelicopterUnit.resource_path]
 	_helicopter_button.tooltip_text = (
-		"{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}, {6}: {7}"
+		"{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}"
 		. format(
 			[
 				tr("HELICOPTER"),
@@ -26,7 +26,7 @@ func _ready():
 		)
 	)
 	_drone_button.tooltip_text = (
-		"{0} - {1}\n{2} HP\n{3}: {4}, {5}: {6}"
+		"{0} - {1}\n{2} HP\n{3}: {4}"
 		. format(
 			[
 				tr("DRONE"),
@@ -44,7 +44,7 @@ func _on_produce_helicopter_button_pressed():
 		ProductionQueue
 		. _generate_unit_production_command(
 			unit.id,
-			DroneUnit.resource_path,
+			HelicopterUnit.resource_path,
 			unit.player.id,
 		)
 	)

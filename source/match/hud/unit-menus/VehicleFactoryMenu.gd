@@ -12,7 +12,7 @@ var unit = null
 func _ready():
 	super._ready()
 	_worker_button.tooltip_text = (
-		"{0} - {1}\n{2} HP\n{3}: {4}, {5}: {6}"
+		"{0} - {1}\n{2} HP\n{3}: {4}"
 		. format(
 			[
 				tr("WORKER"),
@@ -25,7 +25,7 @@ func _ready():
 	)
 	var tank_properties = UnitConstants.DEFAULT_PROPERTIES[TankUnit.resource_path]
 	_tank_button.tooltip_text = (
-		"{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}, {6}: {7}"
+		"{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}"
 		. format(
 			[
 				tr("TANK"),
@@ -33,6 +33,7 @@ func _ready():
 				tank_properties["hp_max"],
 				tank_properties["attack_damage"] * tank_properties["attack_interval"],
 				tr("RESOURCE"),
+				UnitConstants.DEFAULT_PROPERTIES[TankUnit.resource_path]["costs"]["resource"],
 			]
 		)
 	)
