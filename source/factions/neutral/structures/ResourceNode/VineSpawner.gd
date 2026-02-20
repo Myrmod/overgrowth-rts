@@ -2,7 +2,7 @@ class_name VineSpawner
 
 extends Area3D
 
-@export var search_radius_cells := 8
+@export var search_radius_cells := 5
 
 @onready var vine_scene = preload("uid://dwihfgr811wiv")
 
@@ -52,7 +52,6 @@ func _spawn_vine():
 		origin_cell, Vector2i(1, 1), search_radius_cells
 	)
 	if free_cell == null:
-		print("No free cell for vine")
 		return
 
 	var vine = vine_scene.instantiate()
@@ -61,5 +60,3 @@ func _spawn_vine():
 
 	# mark occupied in map data
 	MatchGlobal.map.occupy_area(free_cell, Vector2i(1, 1), _type)
-
-	print("Vine spawned at ", free_cell)
