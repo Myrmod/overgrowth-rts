@@ -4,9 +4,9 @@ extends Node3D
 
 signal changed
 
-@export var resource_a = 10:
+@export var resource = 10:
 	set(value):
-		resource_a = value
+		resource = value
 		emit_changed()
 
 @export var color = Color.WHITE

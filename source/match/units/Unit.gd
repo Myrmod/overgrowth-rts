@@ -1,6 +1,6 @@
-extends Area3D
-
 class_name Unit
+
+extends Area3D
 
 signal selected
 signal deselected
@@ -59,7 +59,7 @@ func _ready():
 	_setup_color()
 	_setup_default_properties_from_constants()
 	assert(_safety_checks())
-	id = EntityRegistry.register(self )
+	id = EntityRegistry.register(self)
 
 
 func is_revealing():
@@ -125,7 +125,7 @@ func _set_action(action_node):
 	_teardown_current_action()
 	action = action_node
 	if action != null:
-		var action_copy = action # bind() performs copy itself, but lets force copy just in case
+		var action_copy = action  # bind() performs copy itself, but lets force copy just in case
 		action.tree_exited.connect(_on_action_node_tree_exited.bind(action_copy))
 		add_child(action_node)
 	_action_locked = false
@@ -142,16 +142,13 @@ func _get_type():
 func _teardown_current_action():
 	if action != null and action.is_inside_tree():
 		action.queue_free()
-		remove_child(action) # triggers _on_action_node_tree_exited immediately
+		remove_child(action)  # triggers _on_action_node_tree_exited immediately
 
 
 func _safety_checks():
 	if movement_domain == NavigationConstants.Domain.AIR:
 		assert(
-			(
-				radius < Air.MAX_AGENT_RADIUS
-				or is_equal_approx(radius, Air.MAX_AGENT_RADIUS)
-			),
+			radius < Air.MAX_AGENT_RADIUS or is_equal_approx(radius, Air.MAX_AGENT_RADIUS),
 			"Unit radius exceeds the established limit"
 		)
 	elif movement_domain == NavigationConstants.Domain.TERRAIN:
@@ -172,14 +169,14 @@ func _handle_unit_death():
 	# Unregister from EntityRegistry so get_unit() returns null for dead units
 	# and the entities dict doesn't grow unbounded during a match.
 	EntityRegistry.unregister(self)
-	tree_exited.connect(func(): MatchSignals.unit_died.emit(self ))
+	tree_exited.connect(func(): MatchSignals.unit_died.emit(self))
 	queue_free()
 
 
 func _setup_default_properties_from_constants():
-	var default_properties = UnitConstants.DEFAULT_PROPERTIES[
-		get_script().resource_path.replace(".gd", ".tscn")
-	]
+	var default_properties = UnitConstants.DEFAULT_PROPERTIES[get_script().resource_path.replace(
+		".gd", ".tscn"
+	)]
 	for property in default_properties:
 		set(property, default_properties[property])
 

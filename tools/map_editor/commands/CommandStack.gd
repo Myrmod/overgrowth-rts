@@ -12,7 +12,6 @@ var _max_history: int = 100
 
 
 func push_command(command: EditorCommand):
-	print("push_command: ", command.get_description())
 	"""Execute a command and add it to the undo stack"""
 	command.execute()
 	_undo_stack.append(command)

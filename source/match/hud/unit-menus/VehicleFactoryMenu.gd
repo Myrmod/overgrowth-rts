@@ -18,8 +18,8 @@ func _ready():
 				tr("WORKER"),
 				tr("WORKER_DESCRIPTION"),
 				UnitConstants.DEFAULT_PROPERTIES[WorkerUnit.resource_path]["hp_max"],
-				tr("RESOURCE_A"),
-				UnitConstants.DEFAULT_PROPERTIES[WorkerUnit.resource_path]["costs"]["resource_a"],
+				tr("RESOURCE"),
+				UnitConstants.DEFAULT_PROPERTIES[WorkerUnit.resource_path]["costs"]["resource"],
 			]
 		)
 	)
@@ -32,7 +32,7 @@ func _ready():
 				tr("TANK_DESCRIPTION"),
 				tank_properties["hp_max"],
 				tank_properties["attack_damage"] * tank_properties["attack_interval"],
-				tr("RESOURCE_A"),
+				tr("RESOURCE"),
 			]
 		)
 	)

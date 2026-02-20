@@ -39,7 +39,7 @@ func _setup_timer():
 	_timer = Timer.new()
 	_timer.timeout.connect(_transfer_single_resource_unit_from_resource_to_worker)
 	add_child(_timer)
-	if "resource_a" in _resource_unit:
+	if "resource" in _resource_unit:
 		_timer.start(Resources.A.COLLECTING_TIME_S)
 
 
@@ -47,9 +47,9 @@ func _transfer_single_resource_unit_from_resource_to_worker():
 	if not MatchUtils.Movement.units_adhere(_unit, _resource_unit):
 		queue_free()
 		return
-	if "resource_a" in _resource_unit:
-		_resource_unit.resource_a -= 1
-		_unit.resource_a += 1
+	if "resource" in _resource_unit:
+		_resource_unit.resource -= _unit.resources_gather_rate
+		_unit.resource += _unit.resources_gather_rate
 	if _unit.is_full():
 		queue_free()
 

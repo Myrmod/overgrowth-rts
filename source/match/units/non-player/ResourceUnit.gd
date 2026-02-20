@@ -6,7 +6,9 @@ const ResourceDecayAnimation = preload("res://source/match/utils/ResourceDecayAn
 
 var radius:
 	get:
-		return find_child("MovementObstacle").radius
+		if find_child("MovementObstacle"):
+			return find_child("MovementObstacle").radius
+		return 0
 var global_position_yless:
 	get:
 		return global_position * Vector3(1, 0, 1)

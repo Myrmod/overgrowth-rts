@@ -53,16 +53,6 @@ func execute():
 			func(u): return u.pos != pos
 		)
 
-		print(
-			"Placing entity at ",
-			pos,
-			" with scene: ",
-			scene_path,
-			" player: ",
-			player_id,
-			" rotation: ",
-			rotation
-		)
 		# Place new entity
 		map_resource.add_entity(scene_path, pos, player_id, rotation)
 

@@ -186,15 +186,15 @@ func _construct_cc():
 
 func _calculate_resource_collecting_statistics():
 	var number_of_workers_per_resource_kind = {
-		"resource_a": 0,
+		"resource": 0,
 	}
 	for worker in _workers:
 		if worker.action != null and worker.action is CollectingResourcesSequentially:
 			var resource_unit = worker.action.get_resource_unit()
 			if resource_unit == null:
 				continue
-			if "resource_a" in resource_unit:
-				number_of_workers_per_resource_kind["resource_a"] += 1
+			if "resource" in resource_unit:
+				number_of_workers_per_resource_kind["resource"] += 1
 			else:
 				assert(false, "unexpected flow")
 	return number_of_workers_per_resource_kind
@@ -203,8 +203,8 @@ func _calculate_resource_collecting_statistics():
 func _make_worker_collecting_resources(worker):
 	var number_of_workers_per_resource_kind = _calculate_resource_collecting_statistics()
 	var resource_filter = null
-	if number_of_workers_per_resource_kind["resource_a"] != 0:
-		resource_filter = func(resource_unit): return "resource_a" in resource_unit
+	if number_of_workers_per_resource_kind["resource"] != 0:
+		resource_filter = func(resource_unit): return "resource" in resource_unit
 	var closest_resource_unit = (
 		ResourceUtils
 		. find_resource_unit_closest_to_unit_yet_no_further_than(
@@ -238,7 +238,7 @@ func _make_worker_collecting_resources(worker):
 
 func _retarget_workers_if_necessary():
 	var number_of_workers_per_resource_kind = _calculate_resource_collecting_statistics()
-	if number_of_workers_per_resource_kind["resource_a"] >= 2:
+	if number_of_workers_per_resource_kind["resource"] >= 2:
 		for worker in _workers:
 			_make_worker_collecting_resources(worker)
 

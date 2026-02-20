@@ -1,16 +1,38 @@
 class_name VineSpawner
 
-extends ResourceUnit
-
-# res://source/factions/neutral/structures/ResourceA.tscn
-const VineScene = preload("uid://bf3jjdafqvh0w")
+extends Area3D
 
 @export var search_radius_cells := 8
+
+@onready var vine_scene = preload("uid://dwihfgr811wiv")
+
+var id: int
+
+var global_position_yless:
+	get:
+		return global_position * Vector3(1, 0, 1)
+
+var radius:
+	get:
+		if find_child("MovementObstacle"):
+			return find_child("MovementObstacle").radius
+		return 0
+
+var _occupied_cell: Vector2i
+var _footprint: Vector2i = Vector2i(1, 1)
+var _type = Enums.OccupationType.RESOURCE_SPAWNER
 
 
 func _ready() -> void:
 	MatchSignals.tick_advanced.connect(_on_tick_advanced)
-	_type = Enums.OccupationType.RESOURCE_SPAWNER
+	id = EntityRegistry.register(self)
+
+	var map = MatchGlobal.map
+	if map == null:
+		push_error("VineSpawner: MatchGlobal.map is null")
+		return
+	_occupied_cell = map.world_to_cell(global_position)
+	map.occupy_area(_occupied_cell, _footprint, _type)
 
 
 func _on_tick_advanced():
@@ -33,11 +55,11 @@ func _spawn_vine():
 		print("No free cell for vine")
 		return
 
-	var vine = VineScene.instantiate()
-	vine.global_position = MatchGlobal.map.cell_to_world(free_cell)
+	var vine = vine_scene.instantiate()
 	get_tree().current_scene.add_child(vine)
+	vine.global_position = MatchGlobal.map.cell_to_world(free_cell)
 
 	# mark occupied in map data
-	MatchGlobal.map.occupy_area(free_cell, Vector2i(1, 1))
+	MatchGlobal.map.occupy_area(free_cell, Vector2i(1, 1), _type)
 
 	print("Vine spawned at ", free_cell)

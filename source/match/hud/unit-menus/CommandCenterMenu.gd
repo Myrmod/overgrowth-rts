@@ -30,10 +30,10 @@ func _ready():
 				tr("AG_TURRET_DESCRIPTION"),
 				ag_turret_properties["hp_max"],
 				ag_turret_properties["attack_damage"] * ag_turret_properties["attack_interval"],
-				tr("RESOURCE_A"),
+				tr("RESOURCE"),
 				(
 					UnitConstants
-					. DEFAULT_PROPERTIES[AntiGroundTurretUnit.resource_path]["costs"]["resource_a"]
+					. DEFAULT_PROPERTIES[AntiGroundTurretUnit.resource_path]["costs"]["resource"]
 				),
 			]
 		)
@@ -47,10 +47,10 @@ func _ready():
 				tr("AA_TURRET_DESCRIPTION"),
 				aa_turret_properties["hp_max"],
 				aa_turret_properties["attack_damage"] * aa_turret_properties["attack_interval"],
-				tr("RESOURCE_A"),
+				tr("RESOURCE"),
 				(
 					UnitConstants
-					. DEFAULT_PROPERTIES[AntiAirTurretUnit.resource_path]["costs"]["resource_a"]
+					. DEFAULT_PROPERTIES[AntiAirTurretUnit.resource_path]["costs"]["resource"]
 				),
 			]
 		)
@@ -62,10 +62,10 @@ func _ready():
 				tr("CC"),
 				tr("CC_DESCRIPTION"),
 				UnitConstants.DEFAULT_PROPERTIES[CommandCenterUnit.resource_path]["hp_max"],
-				tr("RESOURCE_A"),
+				tr("RESOURCE"),
 				(
 					UnitConstants
-					. DEFAULT_PROPERTIES[CommandCenterUnit.resource_path]["costs"]["resource_a"]
+					. DEFAULT_PROPERTIES[CommandCenterUnit.resource_path]["costs"]["resource"]
 				),
 			]
 		)
@@ -77,10 +77,10 @@ func _ready():
 				tr("VEHICLE_FACTORY"),
 				tr("VEHICLE_FACTORY_DESCRIPTION"),
 				UnitConstants.DEFAULT_PROPERTIES[VehicleFactoryUnit.resource_path]["hp_max"],
-				tr("RESOURCE_A"),
+				tr("RESOURCE"),
 				(
 					UnitConstants
-					. DEFAULT_PROPERTIES[VehicleFactoryUnit.resource_path]["costs"]["resource_a"]
+					. DEFAULT_PROPERTIES[VehicleFactoryUnit.resource_path]["costs"]["resource"]
 				),
 			]
 		)
@@ -92,10 +92,10 @@ func _ready():
 				tr("AIRCRAFT_FACTORY"),
 				tr("AIRCRAFT_FACTORY_DESCRIPTION"),
 				UnitConstants.DEFAULT_PROPERTIES[AircraftFactoryUnit.resource_path]["hp_max"],
-				tr("RESOURCE_A"),
+				tr("RESOURCE"),
 				(
 					UnitConstants
-					. DEFAULT_PROPERTIES[AircraftFactoryUnit.resource_path]["costs"]["resource_a"]
+					. DEFAULT_PROPERTIES[AircraftFactoryUnit.resource_path]["costs"]["resource"]
 				),
 			]
 		)

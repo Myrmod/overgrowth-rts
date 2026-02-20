@@ -20,11 +20,8 @@ func _ready():
 				tr("HELICOPTER_DESCRIPTION"),
 				helicopter_properties["hp_max"],
 				helicopter_properties["attack_damage"] * helicopter_properties["attack_interval"],
-				tr("RESOURCE_A"),
-				(
-					UnitConstants
-					. DEFAULT_PROPERTIES[HelicopterUnit.resource_path]["costs"]["resource_a"]
-				),
+				tr("RESOURCE"),
+				UnitConstants.DEFAULT_PROPERTIES[HelicopterUnit.resource_path]["costs"]["resource"],
 			]
 		)
 	)
@@ -35,8 +32,8 @@ func _ready():
 				tr("DRONE"),
 				tr("DRONE_DESCRIPTION"),
 				UnitConstants.DEFAULT_PROPERTIES[DroneUnit.resource_path]["hp_max"],
-				tr("RESOURCE_A"),
-				UnitConstants.DEFAULT_PROPERTIES[DroneUnit.resource_path]["costs"]["resource_a"],
+				tr("RESOURCE"),
+				UnitConstants.DEFAULT_PROPERTIES[DroneUnit.resource_path]["costs"]["resource"],
 			]
 		)
 	)

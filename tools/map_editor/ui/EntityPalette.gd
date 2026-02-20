@@ -97,5 +97,4 @@ func create_scene_button(file_name: String, scenes_path: String, container: Node
 
 
 func _on_scene_button_pressed(scene_path: String):
-	print("Scene button pressed: ", scene_path)
 	entity_selected.emit(scene_path)

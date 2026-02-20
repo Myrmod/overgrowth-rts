@@ -16,15 +16,12 @@ func _init(
 	entity_path: String = "",
 	player: int = 0
 ):
-	print("Initializing EntityBrush with cmd_stack: ", cmd_stack)
 	super._init(map_res, symmetry_sys, cmd_stack)
 	scene_path = entity_path
 	player_id = player
 
 
 func apply(cell_pos: Vector2i):
-	print("Applying EntityBrush at ", cell_pos)
-
 	if not can_apply(cell_pos):
 		return
 
