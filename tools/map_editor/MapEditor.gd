@@ -10,6 +10,7 @@ const CommandStack = preload("res://tools/map_editor/commands/CommandStack.gd")
 const PaintCollisionBrush = preload("res://tools/map_editor/brushes/PaintCollisionBrush.gd")
 const EraseBrush = preload("res://tools/map_editor/brushes/EraseBrush.gd")
 const EntityBrush = preload("res://tools/map_editor/brushes/EntityBrush.gd")
+const TextureBrush = preload("res://tools/map_editor/brushes/TextureBrush.gd")
 
 const PaintCollisionCommand = preload("res://tools/map_editor/commands/PaintCollisionCommand.gd")
 const GridRenderer = preload("res://tools/map_editor/GridRenderer.gd")
@@ -166,15 +167,6 @@ func _on_file_menu_item_selected(id: int):
 			dialogs.show_save_dialog()
 		3:  # Export
 			dialogs.show_export_dialog()
-
-
-func _on_palette_brush_selected(brush_name: String):
-	"""Handle brush selection from palette"""
-	match brush_name:
-		"paint_collision":
-			_create_brush(BrushType.PAINT_COLLISION)
-		"erase":
-			_create_brush(BrushType.ERASE)
 
 
 func _on_palette_entity_selected(scene_path: String):

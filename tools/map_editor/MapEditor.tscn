@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://bm0tyugi4obyy" path="res://tools/map_editor/MapEditor.gd" id="1_map_editor"]
 [ext_resource type="Script" uid="uid://cftdr3jcpcmeh" path="res://tools/map_editor/ui/EntityPalette.gd" id="2_entity_palette"]
+[ext_resource type="Script" uid="uid://dueeo8aayojqe" path="res://tools/map_editor/ui/TexturePalette.gd" id="3_c1img"]
+[ext_resource type="Resource" uid="uid://wobncmqv0prv" path="res://tools/map_editor/library/TerrainLibrary/TerrainLibrary.tres" id="4_gsndc"]
 
 [sub_resource type="World3D" id="World3D_6yib5"]
 
@@ -75,10 +77,11 @@ text = "Palette"
 
 [node name="PaletteSelect" type="TabContainer" parent="VBoxContainer/MainArea/LeftPalette" unique_id=277663447]
 layout_mode = 2
-current_tab = 0
+current_tab = 2
 script = ExtResource("2_entity_palette")
 
 [node name="Environment" type="MarginContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect" unique_id=804728807]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -221,7 +224,6 @@ layout_mode = 2
 text = "Test Button"
 
 [node name="Textures" type="MarginContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect" unique_id=1315734546]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -234,28 +236,16 @@ metadata/_tab_index = 2
 [node name="TexturePalette" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures" unique_id=386711233]
 layout_mode = 2
 size_flags_horizontal = 3
+script = ExtResource("3_c1img")
+terrain_library = ExtResource("4_gsndc")
 
-[node name="DefaultContainer" type="FoldableContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures/TexturePalette" unique_id=2030451322]
+[node name="GridContainer" type="GridContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures/TexturePalette" unique_id=1379265558]
 layout_mode = 2
-title = "Default"
+columns = 2
 
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures/TexturePalette/DefaultContainer" unique_id=553011724]
+[node name="Button" type="TextureButton" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures/TexturePalette/GridContainer" unique_id=72641563]
+custom_minimum_size = Vector2(90, 90)
 layout_mode = 2
-
-[node name="Button" type="Button" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures/TexturePalette/DefaultContainer/VBoxContainer" unique_id=607981555]
-layout_mode = 2
-text = "Test Button"
-
-[node name="DessertContainer" type="FoldableContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures/TexturePalette" unique_id=1741183223]
-layout_mode = 2
-title = "Dessert"
-
-[node name="VBoxContainer" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures/TexturePalette/DessertContainer" unique_id=2064892319]
-layout_mode = 2
-
-[node name="Button" type="Button" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect/Textures/TexturePalette/DessertContainer/VBoxContainer" unique_id=1325266368]
-layout_mode = 2
-text = "Test Button"
 
 [node name="Brushsettings" type="VBoxContainer" parent="VBoxContainer/MainArea/LeftPalette" unique_id=1506579842]
 layout_mode = 2

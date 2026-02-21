@@ -1,15 +1,26 @@
 [gd_scene format=3 uid="uid://bkqj84vbodkb6"]
 
 [ext_resource type="PackedScene" uid="uid://b7c1crf36x1li" path="res://source/match/Map.tscn" id="1_c0hq7"]
-[ext_resource type="Texture2D" uid="uid://dql5j5at70xmx" path="res://source/textures/sand_hard.png" id="2_w1pt1"]
+[ext_resource type="Texture2D" uid="uid://dhpb3f8vv6hsa" path="res://source/textures/Ground048_1K-PNG/Ground048_1K-PNG_Color.png" id="2_wg71e"]
+[ext_resource type="Texture2D" uid="uid://cauysayi3wikw" path="res://source/textures/Ground048_1K-PNG/Ground048_1K-PNG_AmbientOcclusion.png" id="3_4ecoi"]
+[ext_resource type="Texture2D" uid="uid://bmnxf35b6dp2o" path="res://source/textures/Ground048_1K-PNG/Ground048_1K-PNG_Displacement.png" id="4_5frur"]
+[ext_resource type="Texture2D" uid="uid://bobe4hujvon4o" path="res://source/textures/Ground048_1K-PNG/Ground048_1K-PNG_NormalGL.png" id="5_8t16r"]
 [ext_resource type="PackedScene" uid="uid://btor1402wkw8k" path="res://source/decorations/RockLargeA.tscn" id="5_blryv"]
 [ext_resource type="PackedScene" uid="uid://ifedmjndcw3x" path="res://source/factions/neutral/structures/ResourceNode/AncientTreeResourceNode.tscn" id="5_pkctb"]
+[ext_resource type="Texture2D" uid="uid://bfxovaj7bisp4" path="res://source/textures/Ground048_1K-PNG/Ground048_1K-PNG_Roughness.png" id="6_rbmah"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_pkctb"]
-albedo_texture = ExtResource("2_w1pt1")
+albedo_texture = ExtResource("2_wg71e")
+roughness_texture = ExtResource("6_rbmah")
+normal_enabled = true
+normal_texture = ExtResource("5_8t16r")
+ao_enabled = true
+ao_texture = ExtResource("3_4ecoi")
+heightmap_enabled = true
+heightmap_texture = ExtResource("4_5frur")
 uv1_scale = Vector3(60, 60, 60)
 
-[sub_resource type="PlaneMesh" id="PlaneMesh_84gik"]
+[sub_resource type="PlaneMesh" id="PlaneMesh_l51e2"]
 resource_local_to_scene = true
 material = SubResource("StandardMaterial3D_pkctb")
 size = Vector2(104, 104)
@@ -22,7 +33,7 @@ size = Vector2(100, 100)
 metadata/_edit_lock_ = true
 
 [node name="Terrain" parent="Geometry" index="1"]
-mesh = SubResource("PlaneMesh_84gik")
+mesh = SubResource("PlaneMesh_l51e2")
 metadata/_edit_lock_ = true
 
 [node name="Marker3D" type="Marker3D" parent="SpawnPoints" index="0" unique_id=1986936700]
