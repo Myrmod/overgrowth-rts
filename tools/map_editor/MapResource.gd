@@ -19,8 +19,10 @@ extends Resource
 # Entity placements
 @export var placed_entities: Array[Dictionary] = []
 
-# Cosmetics (decorative tiles, not gameplay-affecting)
-@export var cosmetic_tiles: Array[Dictionary] = []
+@export var terrain_library: TerrainLibrary
+
+# for texture blending we need multiple of those
+@export var splatmaps: Array[Image]
 
 # Metadata
 @export var map_name: String = "Untitled Map"
@@ -35,6 +37,8 @@ func _init():
 	if terrain_grid.is_empty():
 		_initialize_terrain_grid()
 
+	_initialize_splatmaps()
+
 
 func _initialize_collision_grid():
 	var grid_size = size.x * size.y
@@ -46,6 +50,23 @@ func _initialize_terrain_grid():
 	var grid_size = size.x * size.y
 	terrain_grid.resize(grid_size)
 	terrain_grid.fill(0)
+
+
+func _initialize_splatmaps():
+	if terrain_library:
+		for terrain_type in terrain_library:
+			var pixel_count = size.x * size.y
+			var splat_data: PackedByteArray
+			splat_data.resize(pixel_count * 4)
+
+			for i in range(pixel_count):
+				var base_index = i * 4
+				splat_data[base_index + 0] = 255  # R
+				splat_data[base_index + 1] = 0  # G
+				splat_data[base_index + 2] = 0  # B
+				splat_data[base_index + 3] = 0  # A
+
+			splatmaps.push_back(splat_data)
 
 
 func resize_map(new_size: Vector2i):
@@ -71,7 +92,6 @@ func resize_map(new_size: Vector2i):
 
 func _remove_out_of_bounds_placements():
 	placed_entities = placed_entities.filter(func(e): return _is_in_bounds(e.pos))
-	cosmetic_tiles = cosmetic_tiles.filter(func(c): return _is_in_bounds(c.pos))
 
 
 func _is_in_bounds(pos: Vector2i) -> bool:
@@ -105,7 +125,6 @@ func clear_all():
 	"""Clear all map data"""
 	_initialize_collision_grid()
 	placed_entities.clear()
-	cosmetic_tiles.clear()
 
 
 func validate() -> Array[String]:

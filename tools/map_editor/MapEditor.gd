@@ -203,7 +203,6 @@ func _on_palette_entity_selected(scene_path: String):
 
 	# Update brush info
 	var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
-	print("Updating brush info label: ", brush_info)
 	if brush_info and current_brush:
 		brush_info.text = current_brush.get_brush_name()
 
@@ -215,8 +214,8 @@ func _on_palette_texture_selected_as_base_layer(terrain: TerrainType):
 func _on_palette_texture_selected(terrain: TerrainType):
 	"""Handle entity selection from palette"""
 	_create_brush(BrushType.PAINT_TEXTURE)
-	if current_brush is TextureBrush:
-		current_brush.set_texture(terrain)
+	print(current_brush, terrain)
+	current_brush.set_texture(terrain)
 
 	# Update brush info
 	var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
@@ -354,6 +353,7 @@ func _create_brush(brush_type: BrushType):
 			)
 
 	# Connect brush signals
+	print("trying to apply brush:", current_brush)
 	if current_brush and current_brush.brush_applied.is_connected(_on_brush_applied):
 		current_brush.brush_applied.disconnect(_on_brush_applied)
 	if current_brush:
@@ -372,6 +372,8 @@ func _on_brush_applied(positions: Array[Vector2i]):
 		collision_renderer.update_cells(positions)
 	if current_brush_type == BrushType.PLACE_ENTITY:
 		_refresh_entity_previews()
+	if current_brush_type == BrushType.PAINT_TEXTURE:
+		print("TODO")
 
 
 func _process(delta):
@@ -442,7 +444,6 @@ func _try_paint_at_mouse(mouse_pos: Vector2):
 		return
 
 	# Convert global mouse → SubViewport local
-	print("Mouse position: ", mouse_pos)
 	var rect = viewport_container.get_global_rect()
 	if not rect.has_point(mouse_pos):
 		return  # mouse not over viewport
@@ -460,7 +461,6 @@ func _try_paint_at_mouse(mouse_pos: Vector2):
 	query.collide_with_bodies = true
 	query.collide_with_areas = true
 
-	print("Casting ray from ", ray_origin, " in direction ", ray_dir)
 	var hit = space_state.intersect_ray(query)
 	if hit.is_empty():
 		return

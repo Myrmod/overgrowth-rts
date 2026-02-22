@@ -12,17 +12,17 @@ func _init(
 	map_res: MapResource = null,
 	symmetry_sys: SymmetrySystem = null,
 	cmd_stack: CommandStack = null,
-	texture: TerrainType = null,
+	_texture: TerrainType = null,
 ):
 	super._init(map_res, symmetry_sys, cmd_stack)
-	texture = texture
+	texture = _texture
 
 
 func apply(cell_pos: Vector2i):
 	if not can_apply(cell_pos):
 		return
 
-	if !texture || texture.is_empty():
+	if not texture:
 		push_warning("TextureBrush: No texture set")
 		return
 
@@ -35,8 +35,8 @@ func apply(cell_pos: Vector2i):
 	brush_applied.emit(affected_positions)
 
 
-func set_texture(texture: TerrainType):
-	texture = texture
+func set_texture(_texture: TerrainType):
+	texture = _texture
 
 
 func set_rotation(rot: float):
@@ -44,7 +44,7 @@ func set_rotation(rot: float):
 
 
 func get_brush_name() -> String:
-	if not texture or texture.is_empty():
+	if not texture:
 		return "Texture (None Selected)"
 	return "Texture: " + texture.name
 

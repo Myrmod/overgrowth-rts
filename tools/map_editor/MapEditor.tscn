@@ -302,6 +302,7 @@ render_target_update_mode = 4
 [node name="TerrainSystem" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport/VisualLayer" unique_id=1246279829 instance=ExtResource("5_afdhn")]
 
 [node name="CollisionLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=2102924395]
+visible = false
 
 [node name="GridLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=251285702]
 visible = false

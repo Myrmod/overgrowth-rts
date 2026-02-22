@@ -15,7 +15,7 @@ extends Resource
 @export var entity_spawns: Array[Dictionary] = []
 
 # Visual data (optional, for cosmetic rendering)
-@export var cosmetic_data: Array[Dictionary] = []
+@export var placed_textures: Array[Dictionary] = []
 
 
 func instantiate_runtime() -> Node3D:
@@ -36,7 +36,7 @@ static func from_editor_map(editor_map: MapResource) -> MapRuntimeResource:
 	runtime_map.structure_spawns = editor_map.placed_structures.duplicate(true)
 	runtime_map.entity_spawns = editor_map.placed_entities.duplicate(true)
 	runtime_map.resource_spawns = editor_map.resource_nodes.duplicate(true)
-	runtime_map.cosmetic_data = editor_map.cosmetic_tiles.duplicate(true)
+	runtime_map.placed_textures = editor_map.played_textures.duplicate(true)
 
 	# Navigation baking would happen here in a full implementation
 	# For now, we'll just store the collision grid data

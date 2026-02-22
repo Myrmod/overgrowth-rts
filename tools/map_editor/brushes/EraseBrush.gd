@@ -24,7 +24,7 @@ func _erase_at_position(pos: Vector2i):
 	)
 
 	# Remove cosmetics
-	map_resource.cosmetic_tiles = map_resource.cosmetic_tiles.filter(func(c): return c.pos != pos)
+	map_resource.placed_textures = map_resource.placed_textures.filter(func(c): return c.pos != pos)
 
 
 func get_brush_name() -> String:

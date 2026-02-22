@@ -6,7 +6,9 @@
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_id0cr"]
 render_priority = 0
 shader = ExtResource("2_tlr23")
+shader_parameter/use_dx_normal = false
 shader_parameter/uv_scale = 1.0
+shader_parameter/height_strength = 0.05
 
 [node name="TerrainSystem" type="Node3D" unique_id=1246279829]
 script = ExtResource("1_cn2ly")

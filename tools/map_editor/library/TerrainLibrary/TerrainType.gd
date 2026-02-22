@@ -10,3 +10,5 @@ extends Resource
 @export var normal_dx: Texture2D
 @export var normal_gl: Texture2D
 @export var roughness: Texture2D
+
+var id: int

@@ -8,55 +8,27 @@ var map_resource: MapResource
 var positions: Array[Vector2i]
 var terrain: TerrainType
 var rotation: float
+var terrain_id: int
+var previous_values := []
 
-# For undo: store what was at these positions before
-var removed_textures: Array[Dictionary] = []
 
-
-func _init(
-	map_res: MapResource,
-	affected_positions: Array[Vector2i],
-	terrain: TerrainType,
-	rot: float = 0.0
-):
+func _init(map_res, _positions, texture: TerrainType, _rotation):
 	map_resource = map_res
-	positions = affected_positions.duplicate()
-	terrain = terrain
-	rotation = rot
-
-	# Store what will be removed for undo
-	_store_removed_textures()
-
-	description = "Place texture (%d positions)" % [positions.size()]
-
-
-func _store_removed_textures():
-	"""Store textures that will be removed for undo"""
-	for pos in positions:
-		var removed_at_pos = []
-
-		removed_textures.append({"pos": pos, "textures": removed_at_pos})
+	positions = _positions
+	terrain_id = texture.id
 
 
 func execute():
-	for pos in positions:
-		# Remove existing textures at position
-		map_resource.placed_textures = map_resource.placed_textures.filter(
-			func(u): return u.pos != pos
-		)
+	previous_values.clear()
 
-		# Place new texture
-		map_resource.add_texture(terrain, pos, rotation)
+	for pos in positions:
+		var index = pos.y * map_resource.size.x + pos.x
+		previous_values.append(map_resource.terrain_grid[index])
+		map_resource.terrain_grid[index] = terrain_id
 
 
 func undo():
-	# Remove placed textures
-	for pos in positions:
-		map_resource.placed_textures = map_resource.placed_textures.filter(
-			func(u): return u.pos != pos
-		)
-
-	# Restore removed textures
-	for item in removed_textures:
-		for texture in item.textures:
-			map_resource.placed_textures.append(texture.data)
+	for i in range(positions.size()):
+		var pos = positions[i]
+		var index = pos.y * map_resource.size.x + pos.x
+		map_resource.terrain_grid[index] = previous_values[i]
