@@ -44,6 +44,10 @@ text = "Edit"
 [node name="ViewMenu" type="MenuButton" parent="VBoxContainer/Toolbar" unique_id=908549479]
 layout_mode = 2
 text = "View"
+item_count = 1
+popup/item_0/text = "Show collision"
+popup/item_0/checkable = 1
+popup/item_0/id = 0
 
 [node name="SymmetryLabel" type="Label" parent="VBoxContainer/Toolbar" unique_id=707318740]
 layout_mode = 2

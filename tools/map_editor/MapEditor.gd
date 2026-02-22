@@ -156,6 +156,11 @@ func _setup_ui_connections():
 			symmetry_option.add_item("Quad", SymmetrySystem.Mode.QUAD)
 			symmetry_option.item_selected.connect(_on_symmetry_changed)
 
+		var view_menu = toolbar.get_node_or_null("ViewMenu")
+		if view_menu:
+			var popup = view_menu.get_popup()
+			popup.id_pressed.connect(_on_view_menu_item_selected.bind(popup))
+
 
 func _on_file_menu_item_selected(id: int):
 	"""Handle file menu item selection"""
@@ -170,6 +175,24 @@ func _on_file_menu_item_selected(id: int):
 			dialogs.show_save_dialog()
 		3:  # Export
 			dialogs.show_export_dialog()
+
+
+# TODO: this needs some rework so that we dont have duplicate code with the keyboard shortcuts
+func _on_view_menu_item_selected(id: int, _popup):
+	"""Handle view menu item selection"""
+	match id:
+		0:
+			_toggle_view_mode()
+
+
+func _toggle_view_mode():
+	# Toggle view mode
+	if view_mode == ViewMode.GAME_VIEW:
+		print("viewmode to collision")
+		set_view_mode(ViewMode.COLLISION_VIEW)
+	else:
+		print("viewmode to game")
+		set_view_mode(ViewMode.GAME_VIEW)
 
 
 func _on_palette_entity_selected(scene_path: String):
@@ -385,13 +408,7 @@ func _input(event):
 			# Reset camera to default
 			_reset_camera()
 		elif event.keycode == KEY_V:
-			# Toggle view mode
-			if view_mode == ViewMode.GAME_VIEW:
-				print("viewmode to collision")
-				set_view_mode(ViewMode.COLLISION_VIEW)
-			else:
-				print("viewmode to game")
-				set_view_mode(ViewMode.GAME_VIEW)
+			_toggle_view_mode()
 
 	# Handle mouse scroll for zoom and middle mouse for orbit
 	if event is InputEventMouseButton:
@@ -446,7 +463,6 @@ func _try_paint_at_mouse(mouse_pos: Vector2):
 	print("Casting ray from ", ray_origin, " in direction ", ray_dir)
 	var hit = space_state.intersect_ray(query)
 	if hit.is_empty():
-		print("No hit detected for raycast")
 		return
 
 	var hit_pos: Vector3 = hit.position
