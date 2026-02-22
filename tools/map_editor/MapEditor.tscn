@@ -4,6 +4,7 @@
 [ext_resource type="Script" uid="uid://cftdr3jcpcmeh" path="res://tools/map_editor/ui/EntityPalette.gd" id="2_entity_palette"]
 [ext_resource type="Script" uid="uid://dueeo8aayojqe" path="res://tools/map_editor/ui/TexturePalette.gd" id="3_c1img"]
 [ext_resource type="Resource" uid="uid://wobncmqv0prv" path="res://tools/map_editor/library/TerrainLibrary/TerrainLibrary.tres" id="4_gsndc"]
+[ext_resource type="PackedScene" uid="uid://bxe2bwqo30j5o" path="res://source/match/TerrainSystem.tscn" id="5_afdhn"]
 
 [sub_resource type="World3D" id="World3D_6yib5"]
 
@@ -293,6 +294,8 @@ render_target_update_mode = 4
 [node name="Viewport3D" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=907894722]
 
 [node name="VisualLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=1173281011]
+
+[node name="TerrainSystem" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport/VisualLayer" unique_id=1246279829 instance=ExtResource("5_afdhn")]
 
 [node name="CollisionLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=2102924395]
 visible = false

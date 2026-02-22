@@ -22,7 +22,7 @@ func apply(cell_pos: Vector2i):
 	if not can_apply(cell_pos):
 		return
 
-	if texture.is_empty():
+	if !texture || texture.is_empty():
 		push_warning("TextureBrush: No texture set")
 		return
 
@@ -44,7 +44,7 @@ func set_rotation(rot: float):
 
 
 func get_brush_name() -> String:
-	if texture.is_empty():
+	if not texture or texture.is_empty():
 		return "Texture (None Selected)"
 	return "Texture: " + texture.name
 

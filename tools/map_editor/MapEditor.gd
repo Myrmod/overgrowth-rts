@@ -3,20 +3,6 @@ extends Control
 ## Main Map Editor Controller
 ## Provides UI and tools for creating and editing RTS maps
 
-const MapResource = preload("res://tools/map_editor/MapResource.gd")
-const MapRuntimeResource = preload("res://tools/map_editor/MapRuntimeResource.gd")
-const SymmetrySystem = preload("res://tools/map_editor/SymmetrySystem.gd")
-const CommandStack = preload("res://tools/map_editor/commands/CommandStack.gd")
-const PaintCollisionBrush = preload("res://tools/map_editor/brushes/PaintCollisionBrush.gd")
-const EraseBrush = preload("res://tools/map_editor/brushes/EraseBrush.gd")
-const EntityBrush = preload("res://tools/map_editor/brushes/EntityBrush.gd")
-const TextureBrush = preload("res://tools/map_editor/brushes/TextureBrush.gd")
-
-const PaintCollisionCommand = preload("res://tools/map_editor/commands/PaintCollisionCommand.gd")
-const GridRenderer = preload("res://tools/map_editor/GridRenderer.gd")
-const CollisionRenderer = preload("res://tools/map_editor/CollisionRenderer.gd")
-const MapEditorDialogs = preload("res://tools/map_editor/ui/MapEditorDialogs.gd")
-
 enum ViewMode { GAME_VIEW, COLLISION_VIEW }
 
 enum BrushType { PAINT_COLLISION, ERASE, PLACE_ENTITY, PAINT_TEXTURE }
@@ -25,6 +11,7 @@ enum BrushType { PAINT_COLLISION, ERASE, PLACE_ENTITY, PAINT_TEXTURE }
 var current_map: MapResource
 var symmetry_system: SymmetrySystem
 var command_stack: CommandStack
+var terrain_system: TerrainSystem
 var current_brush
 var current_brush_type: BrushType = BrushType.PAINT_COLLISION
 
@@ -227,11 +214,12 @@ func _setup_3d_scene():
 	# Create viewport entity
 	viewport_container = $VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer
 
-	editor_viewport = $VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport
-	viewport_3d = $VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport/Viewport3D
-	grid_layer = $VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport/GridLayer
-	visual_layer = $VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport/VisualLayer
-	collision_layer = $VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport/CollisionLayer
+	editor_viewport = viewport_container.get_node("EditorViewport")
+	viewport_3d = editor_viewport.get_node("Viewport3D")
+	grid_layer = editor_viewport.get_node("GridLayer")
+	visual_layer = editor_viewport.get_node("VisualLayer")
+	terrain_system = visual_layer.get_node("TerrainSystem")
+	collision_layer = editor_viewport.get_node("CollisionLayer")
 
 	# hitbox for raycasting (invisible)
 	var ground_body := StaticBody3D.new()
@@ -277,6 +265,12 @@ func _setup_3d_scene():
 	var world_env = WorldEnvironment.new()
 	world_env.environment = env
 	viewport_3d.add_child(world_env)
+
+	# setup TerrainSystem
+	print("terrainSystem: ", terrain_system)
+	# Example: initialize textures or heights
+	# terrain_system.setup_textures(current_map.texture_data)
+	# terrain_system.setup_heights(current_map.height_data)
 
 
 func _update_camera_position():
