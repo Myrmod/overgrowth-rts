@@ -80,10 +80,6 @@ mesh = SubResource("PlaneMesh_ypksr")
 
 [node name="TerrainSystem" parent="Geometry" unique_id=1246279829 instance=ExtResource("4_usfks")]
 
-[node name="TerrainMesh" type="MeshInstance3D" parent="Geometry/TerrainSystem" unique_id=1186585190]
-
-[node name="WaterMesh" type="MeshInstance3D" parent="Geometry/TerrainSystem" unique_id=180812330]
-
 [node name="SpawnPoints" type="Node3D" parent="." unique_id=1918326678]
 
 [node name="Resources" type="Node3D" parent="." unique_id=1136795596]

@@ -186,11 +186,10 @@ func _on_palette_entity_selected(scene_path: String):
 
 
 func _on_palette_texture_selected_as_base_layer(terrain: TerrainType):
-	print("_on_palette_texture_selected_as_base_layer: ", terrain.name, current_map)
+	terrain_system.base_layer = terrain
 
 
 func _on_palette_texture_selected(terrain: TerrainType):
-	print("Terrain selected from palette: ", terrain.name)
 	"""Handle entity selection from palette"""
 	_create_brush(BrushType.PAINT_TEXTURE)
 	if current_brush is TextureBrush:
@@ -268,6 +267,7 @@ func _setup_3d_scene():
 
 	# setup TerrainSystem
 	print("terrainSystem: ", terrain_system)
+	terrain_system.set_map(current_map)
 	# Example: initialize textures or heights
 	# terrain_system.setup_textures(current_map.texture_data)
 	# terrain_system.setup_heights(current_map.height_data)
@@ -478,6 +478,7 @@ func _refresh_view():
 	if collision_renderer:
 		collision_renderer.refresh()
 	_refresh_entity_previews()
+	terrain_system.set_map(current_map)
 
 
 # --- Entity preview rendering ---

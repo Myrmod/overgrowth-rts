@@ -1,6 +1,17 @@
 [gd_scene format=3 uid="uid://bxe2bwqo30j5o"]
 
 [ext_resource type="Script" uid="uid://dfswsd3q4ogqh" path="res://source/match/TerrainSystem.gd" id="1_cn2ly"]
+[ext_resource type="Shader" uid="uid://c6n2inphyhccf" path="res://source/shaders/3d/TerrainSystemTerrainMesh.gdshader" id="2_tlr23"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_id0cr"]
+render_priority = 0
+shader = ExtResource("2_tlr23")
+shader_parameter/uv_scale = 1.0
 
 [node name="TerrainSystem" type="Node3D" unique_id=1246279829]
 script = ExtResource("1_cn2ly")
+
+[node name="TerrainMesh" type="MeshInstance3D" parent="." unique_id=1188752785]
+material_override = SubResource("ShaderMaterial_id0cr")
+
+[node name="WaterMesh" type="MeshInstance3D" parent="." unique_id=1955076504]
