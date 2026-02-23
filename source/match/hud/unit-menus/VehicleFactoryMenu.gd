@@ -23,7 +23,6 @@ func _ready():
 	))
 	
 	super._ready()
-	
 
 func _on_produce_tank_button_pressed():
 	ProductionQueue._generate_unit_production_command(

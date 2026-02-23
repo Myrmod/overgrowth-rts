@@ -3,34 +3,29 @@ extends GridContainer
 class_name Hotkeys
 
 
-var container = ""
+@export var faction: String = "general"
 
 func _ready():
 	_assign_grid_shortcuts()
 	UserSettings.hotkeys_changed.connect(_assign_grid_shortcuts)
 
 func _assign_grid_shortcuts():	
-	var faction = get_meta("faction")
-	if faction == null:
-		push_warning("unable to load hotkeys, missing faction meta", name)
-		return
-		
-	var action_container = get_meta("actionContainer")
-	if action_container == null:
-		push_warning("unable to load hotkeys, missing actionContainer meta", name)
-		return
-		
-		
-	for button in find_children("*", "Button", true):
-		var action = button.get_meta("actionName")
-		if action == null:
-			push_warning("unable to load hotkey for ", button.name, "in", name, "no actionName metadata")
-			continue
-		var keycode = UserSettings.get_hotkey(action_container, action)
-		if keycode == Key.KEY_NONE:
-			push_warning("no hotkey assignment for ", action_container, action)
-		var ev := InputEventKey.new()
-		var sc := Shortcut.new()
-		ev.keycode = keycode
-		sc.events = [ev]
-		button.shortcut = sc
+	print("assigning shortcuts for ", name, " from faction ", faction)
+	
+	for button: Button in find_children("*", "Button", true):
+		# See if the button is connected to anything. If not then its not hotkeyable
+		if _has_connection(button):
+			var keycode = UserSettings.get_hotkey(faction, name, button.name)
+			if keycode == Key.KEY_NONE:
+				push_warning("not hotkey assignment for ", faction, name, button.name)
+			else:
+				print("assigning keycode: ", keycode, " to ", faction, name, button.name)
+			var ev := InputEventKey.new()
+			var sc := Shortcut.new()
+			ev.keycode = keycode
+			sc.events = [ev]
+			button.shortcut = sc
+
+func _has_connection(button: Button) -> bool:
+	return button.pressed.get_connections().size() > 0 \
+		or button.toggled.get_connections().size() > 0

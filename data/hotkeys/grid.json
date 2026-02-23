@@ -1,5 +1,21 @@
 {
-	"vehicleFactory": {
-		"buildTank": "Z"
+	"general": {
+		"AircraftFactoryMenu": {
+			"ProduceHelicopterButton": "Z",
+			"ProduceDroneButton": "X"
+		},
+		"CommandCenterMenu": {
+			"ProduceWorkerButton": "Z",
+		},
+		"VehicleFactoryMenu": {
+			"ProduceTankButton": "Z"
+		},
+		"WorkerMenu": {
+			"PlaceAntiGroundTurretButton": "A",
+			"PlaceAntiAirTurretButton": "S",
+			"PlaceCommandCenterButton": "Z",
+			"PlaceVehicleFactoryButton": "X",
+			"PlaceAircraftFactoryButton": "C"
+		}
 	}
 }

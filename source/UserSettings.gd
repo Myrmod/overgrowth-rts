@@ -3,20 +3,27 @@ extends Node
 signal hotkeys_changed
 
 var _hotkey_pack_scheme = "res://"
-var _hotkey_pack_name = "grid"
+var _hotkey_pack_name = "default"
 
 var _hotkey_data: Dictionary
 
 # What is a good nesting strategy here? container -> action? or do we need a third level
-func get_hotkey(container: String, action: String) -> Key:
-	var container_json = _hotkey_data[container]
+func get_hotkey(faction: String, container: String, action: String) -> Key:
+	var faction_json = _hotkey_data.get(faction)
+	if typeof(faction_json) != TYPE_DICTIONARY:
+		push_error("malformed/missing hotkey data at ", faction)
+		return Key.KEY_NONE
+		
+	var container_json = faction_json.get(container)
 	if typeof(container_json) != TYPE_DICTIONARY:
-		push_error("malformed hotkey data at ", container)
+		push_error("malformed/missing hotkey data at ", faction, ".", container)
 		return Key.KEY_NONE
-	var action_json = container_json[action]
+
+	var action_json = container_json.get(action)
 	if typeof(action_json) != TYPE_STRING:
-		push_error("malformed hotkey data at ", container, action)
+		push_error("malformed hotkey data at ", faction, ".", container, ".", action)
 		return Key.KEY_NONE
+
 	return OS.find_keycode_from_string(action_json)
 
 # Called when the node enters the scene tree for the first time.
