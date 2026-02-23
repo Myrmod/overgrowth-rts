@@ -13,15 +13,6 @@ var god_mode = false
 var cache = {}
 
 
-func _ready() -> void:
-	var i = 0
-	for terrain in TERRAIN_LIBRARY.terrain_types:
-		terrain.id = i
-		i += 1
-		terrain_types.push_front(terrain)
-	print(terrain_types)
-
-
 func _unhandled_input(event):
 	if event.is_action_pressed("toggle_god_mode"):
 		_toggle_god_mode()
