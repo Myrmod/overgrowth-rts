@@ -112,3 +112,47 @@ func rebuild_terrain_index_texture():
 			var index = y * map.size.x + x
 			var value = map.terrain_grid[index]
 			img.set_pixel(x, y, Color(value / 255.0, 0, 0))
+
+
+# Generates a splat map image for up to 4 terrain types using RGBA channels.
+# Each channel (R, G, B, A) represents the weight of a terrain type at each pixel.
+# terrains: Array of up to 4 TerrainType objects to encode in the splat map.
+# Returns: An Image where each pixel's RGBA values represent the blend weights for the terrains.
+func generate_splat_map(terrains: Array[TerrainType]) -> Image:
+	var image = Image.new()
+	image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
+	image.lock()
+
+	# Iterate over every pixel in the map
+	for x in size.x:
+		for y in size.y:
+			var color = Color(0, 0, 0, 0)
+			# Assign each terrain type to a channel if present
+			if terrains.size() > 0:
+				color.r = 1.0  # Full weight for terrain 0 (Red channel)
+			if terrains.size() > 1:
+				color.g = 0.0  # Weight for terrain 1 (Green channel)
+			if terrains.size() > 2:
+				color.b = 0.0  # Weight for terrain 2 (Blue channel)
+			if terrains.size() > 3:
+				color.a = 0.0  # Weight for terrain 3 (Alpha channel)
+			image.set_pixel(x, y, color)
+
+	image.unlock()
+
+	return image
+
+
+# Generates an array of splat map images, each encoding up to 4 terrain types.
+# This is necessary if there are more than 4 terrain types,
+# since each image can only encode 4 types (RGBA).
+# terrains: Array of TerrainType objects to encode.
+# Returns: Array of Images, each representing up to 4 terrain types.
+func generate_splat_map_array(terrains: Array[TerrainType]) -> Array[Image]:
+	var splat_map_array = []
+
+	# Process terrains in groups of 4 (since RGBA = 4 channels)
+	for i in range(0, terrains.size(), 4):
+		var splat_map = generate_splat_map(terrains.slice(i, i + 4))
+		splat_map_array.append(splat_map)
+	return splat_map_array
