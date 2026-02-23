@@ -1,14 +1,25 @@
 extends Node
 
 const Options = preload("res://source/data-model/Options.gd")
+const TERRAIN_LIBRARY = preload("uid://wobncmqv0prv")
 
 var options = (
 	load(Constants.get_options_file_path())
 	if ResourceLoader.exists(Constants.get_options_file_path())
 	else Options.new()
 )
+var terrain_types: Array[TerrainType]
 var god_mode = false
 var cache = {}
+
+
+func _ready() -> void:
+	var i = 0
+	for terrain in TERRAIN_LIBRARY.terrain_types:
+		terrain.id = i
+		i += 1
+		terrain_types.push_front(terrain)
+	print(terrain_types)
 
 
 func _unhandled_input(event):

@@ -7,8 +7,6 @@ extends VBoxContainer
 signal texture_selected(texture: TerrainType)
 signal texture_selected_as_base_layer(texture: TerrainType)
 
-@export var terrain_library: TerrainLibrary
-
 var base_layer_button: TextureButton = null
 
 # Faction container
@@ -27,8 +25,8 @@ func populate_textures():
 	# Clear existing buttons if reloading
 	for c in texture_container.get_children():
 		c.queue_free()
-
-	for t in terrain_library.terrain_types:
+	print("Globals.terrain_library",Globals.terrain_types)
+	for t in Globals.terrain_types:
 		create_scene_button(t, texture_container)
 
 

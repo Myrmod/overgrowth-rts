@@ -35,7 +35,6 @@ EntityRegistry="*uid://ih1cm60v3gld"
 GameData="*uid://ufpaci6ywatp"
 CommandType="*uid://fjmnrbmh4ujk"
 MatchGlobal="*uid://u8dmif40cejc"
-TerrainLibrary="*uid://c4s1goa5mxjb"
 
 [debug]
 

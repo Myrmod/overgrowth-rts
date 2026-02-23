@@ -44,7 +44,7 @@ func set_map(_map: MapResource):
 
 func _apply_base_layer():
 	if not base_layer:
-		base_layer = TerrainLibrary.terrain_types.front()
+		base_layer = Globals.terrain_library.terrain_types.front()
 
 	var mat := $TerrainMesh.material_override as ShaderMaterial
 	if not mat:

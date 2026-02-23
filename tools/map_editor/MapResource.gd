@@ -19,8 +19,6 @@ extends Resource
 # Entity placements
 @export var placed_entities: Array[Dictionary] = []
 
-@export var terrain_library: TerrainLibrary
-
 # for texture blending we need multiple of those
 @export var splatmaps: Array[Image]
 
@@ -53,20 +51,20 @@ func _initialize_terrain_grid():
 
 
 func _initialize_splatmaps():
-	if terrain_library:
-		for terrain_type in terrain_library:
-			var pixel_count = size.x * size.y
-			var splat_data: PackedByteArray
-			splat_data.resize(pixel_count * 4)
+	for terrain_type in Globals.terrain_types:
+		var pixel_count = size.x * size.y
+		var splat_data: PackedByteArray
+		splat_data.resize(pixel_count * 4)
 
-			for i in range(pixel_count):
-				var base_index = i * 4
-				splat_data[base_index + 0] = 255  # R
-				splat_data[base_index + 1] = 0  # G
-				splat_data[base_index + 2] = 0  # B
-				splat_data[base_index + 3] = 0  # A
+		for i in range(pixel_count):
+			var base_index = i * 4
+			splat_data[base_index + 0] = 255  # R
+			splat_data[base_index + 1] = 0  # G
+			splat_data[base_index + 2] = 0  # B
+			splat_data[base_index + 3] = 0  # A
 
-			splatmaps.push_back(splat_data)
+		splatmaps.push_back(splat_data)
+	print("splatmaps", splatmaps)
 
 
 func resize_map(new_size: Vector2i):
