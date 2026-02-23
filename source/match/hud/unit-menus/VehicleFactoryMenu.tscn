@@ -6,6 +6,8 @@
 [node name="VehicleFactoryMenu" type="GridContainer" unique_id=1972008825]
 columns = 4
 script = ExtResource("1_hxrij")
+metadata/actionContainer = "vehicleFactory"
+metadata/faction = "default"
 
 [node name="Padding" type="Button" parent="." unique_id=1868917789]
 custom_minimum_size = Vector2(48, 48)
@@ -43,6 +45,7 @@ layout_mode = 2
 layout_mode = 2
 focus_mode = 0
 text = "T"
+metadata/actionName = "buildTank"
 
 [node name="TextureRect" type="TextureRect" parent="ProduceTankButton" unique_id=1047477306]
 layout_mode = 1

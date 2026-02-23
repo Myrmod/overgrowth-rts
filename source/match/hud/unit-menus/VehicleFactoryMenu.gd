@@ -8,9 +8,6 @@ var unit = null
 
 
 func _ready():
-	declare_hotkey_container("vehicleFactory")
-	declare_hotkey_button("buildTank", _tank_button)
-	
 	var tank_properties = UnitConstants.DEFAULT_PROPERTIES[TankUnit.resource_path]
 	_tank_button.tooltip_text = ("{0} - {1}\n{2} HP, {3} DPS\n{4}: {5}, {6}: {7}".format(
 		[

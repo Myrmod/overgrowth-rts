@@ -4,32 +4,31 @@ class_name Hotkeys
 
 
 var container = ""
-var hotkey_buttons = []
-
-# Declare the container name
-# This is used during hotkey lookups as the container path
-# It must be called before the first invocation of _assign_grid_shortcuts or no hotkeys will be loaded
-# You should do this in _ready before calling super._ready()
-func declare_hotkey_container(c: String) -> void:
-	container = c
-	
-# Declare a button and a corresponding action
-# You should do this in _ready before calling super._ready()
-func declare_hotkey_button(action: String, button: Button) -> void:
-	hotkey_buttons.append([button, action])
 
 func _ready():
 	_assign_grid_shortcuts()
 	UserSettings.hotkeys_changed.connect(_assign_grid_shortcuts)
 
 func _assign_grid_shortcuts():	
-	for tuple in hotkey_buttons:
-		var button: Button = tuple[0]
-		var action: String = tuple[1]
+	var faction = get_meta("faction")
+	if faction == null:
+		push_warning("unable to load hotkeys, missing faction meta", name)
+		return
 		
-		var keycode = UserSettings.get_hotkey(container, action)
+	var action_container = get_meta("actionContainer")
+	if action_container == null:
+		push_warning("unable to load hotkeys, missing actionContainer meta", name)
+		return
+		
+		
+	for button in find_children("*", "Button", true):
+		var action = button.get_meta("actionName")
+		if action == null:
+			push_warning("unable to load hotkey for ", button.name, "in", name, "no actionName metadata")
+			continue
+		var keycode = UserSettings.get_hotkey(action_container, action)
 		if keycode == Key.KEY_NONE:
-			push_warning("no hotkey assignment for ", container, action)
+			push_warning("no hotkey assignment for ", action_container, action)
 		var ev := InputEventKey.new()
 		var sc := Shortcut.new()
 		ev.keycode = keycode
