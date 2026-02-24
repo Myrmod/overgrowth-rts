@@ -1,4 +1,4 @@
-[gd_resource type="Resource" format=3 uid="uid://wobncmqv0prv"]
+[gd_resource type="Resource" script_class="TerrainLibrary" format=3 uid="uid://wobncmqv0prv"]
 
 [ext_resource type="Script" uid="uid://c4s1goa5mxjb" path="res://tools/map_editor/library/TerrainLibrary/TerrainLibrary.gd" id="1_gpkdy"]
 [ext_resource type="Script" uid="uid://s622ule41hbv" path="res://tools/map_editor/library/TerrainLibrary/TerrainType.gd" id="2_jpajb"]

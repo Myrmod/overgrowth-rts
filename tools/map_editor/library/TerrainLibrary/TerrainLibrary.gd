@@ -1,3 +1,5 @@
+class_name TerrainLibrary
+
 extends Resource
 
 const TERRAIN_LIBRARY = preload("uid://wobncmqv0prv")

@@ -72,7 +72,7 @@ func set_grid_color(color: Color):
 		_cell_mesh.material.albedo_color = color
 
 
-func set_visible_range(min_pos: Vector2i, max_pos: Vector2i):
+func set_visible_range(_min_pos: Vector2i, _max_pos: Vector2i):
 	"""Show only a specific range of grid cells (for large maps)"""
 	# For optimization on very large maps
 	# This would update which instances are visible

@@ -25,8 +25,8 @@ func populate_textures():
 	# Clear existing buttons if reloading
 	for c in texture_container.get_children():
 		c.queue_free()
-	print("Globals.terrain_library",Globals.terrain_types)
-	for t in Globals.terrain_types:
+	print("Globals.terrain_library", Globals.terrain_library.terrain_types)
+	for t in Globals.terrain_library.terrain_types:
 		create_scene_button(t, texture_container)
 
 

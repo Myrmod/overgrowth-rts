@@ -8,9 +8,20 @@ var options = (
 	if ResourceLoader.exists(Constants.get_options_file_path())
 	else Options.new()
 )
+var terrain_library: TerrainLibrary
 var terrain_types: Array[TerrainType]
 var god_mode = false
 var cache = {}
+
+
+func _ready():
+	terrain_library = TERRAIN_LIBRARY as TerrainLibrary
+
+	if terrain_library == null:
+		push_error("Failed to load TerrainLibrary")
+		return
+
+	print("Loaded terrain types:", terrain_library.terrain_types.size())
 
 
 func _unhandled_input(event):

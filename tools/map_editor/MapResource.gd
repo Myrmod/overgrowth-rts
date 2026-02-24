@@ -3,139 +3,242 @@ class_name MapResource
 extends Resource
 
 ## Map data format for the editor
-## This stores all editable map data including terrain, collision, and entity placements
+## Stores all editable map data including terrain height, water, splat blending,
+## collision and entity placements.
 
 @export var size: Vector2i = Vector2i(50, 50)
 @export var terrain_seed: int = 0
 
-# Logical grid data for collision (1 byte per cell: 0=walkable, 1=blocked)
+# 0 = walkable, 1 = blocked
 @export var collision_grid: PackedByteArray = PackedByteArray()
 
-@export var terrain_grid: PackedByteArray = PackedByteArray()
+# Height per cell (used for terrain shape & cliffs)
+@export var height_grid: PackedFloat32Array = PackedFloat32Array()
 
-# Size = map.size.x * map.size.y
-@export var height_grid: PackedFloat32Array
+# Water level or water mask per cell (0 = none, 1 = full water)
+@export var water_grid: PackedFloat32Array = PackedFloat32Array()
+
+# Texture blending (RGBA splatmaps, 4 terrain layers per image)
+@export var splatmaps: Array[Image] = []
 
 # Entity placements
 @export var placed_entities: Array[Dictionary] = []
-
-# for texture blending we need multiple of those
-@export var splatmaps: Array[Image]
 
 # Metadata
 @export var map_name: String = "Untitled Map"
 @export var author: String = ""
 @export var description: String = ""
 
+# ============================================================
+# Initialization
+# ============================================================
+
 
 func _init():
-	# Initialize with default size if needed
 	if collision_grid.is_empty():
 		_initialize_collision_grid()
-	if terrain_grid.is_empty():
-		_initialize_terrain_grid()
 
-	_initialize_splatmaps()
+	if height_grid.is_empty():
+		_initialize_height_grid()
+
+	if water_grid.is_empty():
+		_initialize_water_grid()
 
 
 func _initialize_collision_grid():
-	var grid_size = size.x * size.y
-	collision_grid.resize(grid_size)
-	collision_grid.fill(0)  # 0 = walkable
+	var count = size.x * size.y
+	collision_grid.resize(count)
+	collision_grid.fill(0)
 
 
-func _initialize_terrain_grid():
-	var grid_size = size.x * size.y
-	terrain_grid.resize(grid_size)
-	terrain_grid.fill(0)
+func _initialize_height_grid():
+	var count = size.x * size.y
+	height_grid.resize(count)
+	height_grid.fill(0.0)
 
 
-func _initialize_splatmaps():
-	for terrain_type in Globals.terrain_types:
-		var pixel_count = size.x * size.y
-		var splat_data: PackedByteArray
-		splat_data.resize(pixel_count * 4)
-
-		for i in range(pixel_count):
-			var base_index = i * 4
-			splat_data[base_index + 0] = 255  # R
-			splat_data[base_index + 1] = 0  # G
-			splat_data[base_index + 2] = 0  # B
-			splat_data[base_index + 3] = 0  # A
-
-		splatmaps.push_back(splat_data)
-	print("splatmaps", splatmaps)
+func _initialize_water_grid():
+	var count = size.x * size.y
+	water_grid.resize(count)
+	water_grid.fill(0.0)
 
 
-func resize_map(new_size: Vector2i):
-	"""Resize the map, preserving existing data where possible"""
+# Called by TerrainSystem once terrain library is known
+func initialize_splatmaps(terrain_count: int):
+	splatmaps.clear()
+
+	var splat_count = int(ceil(terrain_count / 4.0))
+
+	for i in range(splat_count):
+		var img = Image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
+		img.fill(Color(0, 0, 0, 0))
+		splatmaps.append(img)
+
+
+# ============================================================
+# Resize Logic (Safe + Future Proof)
+# ============================================================
+
+
+func resize_map(new_size: Vector2i, terrain_count: int):
 	var old_size = size
-	var new_grid = PackedByteArray()
-	new_grid.resize(new_size.x * new_size.y)
-	new_grid.fill(0)
-
-	# Copy old data to new grid
-	for y in range(min(old_size.y, new_size.y)):
-		for x in range(min(old_size.x, new_size.x)):
-			var old_index = y * old_size.x + x
-			var new_index = y * new_size.x + x
-			new_grid[new_index] = collision_grid[old_index]
-
 	size = new_size
-	collision_grid = new_grid
 
-	# Remove placements outside new bounds
+	_resize_byte_grid(collision_grid, old_size, 0)
+	_resize_float_grid(height_grid, old_size, 0.0)
+	_resize_float_grid(water_grid, old_size, 0.0)
+	_resize_splatmaps(old_size, terrain_count)
+
 	_remove_out_of_bounds_placements()
 
 
-func _remove_out_of_bounds_placements():
-	placed_entities = placed_entities.filter(func(e): return _is_in_bounds(e.pos))
+func _resize_byte_grid(grid: PackedByteArray, old_size: Vector2i, default_value: int):
+	var new_grid = PackedByteArray()
+	new_grid.resize(size.x * size.y)
+	new_grid.fill(default_value)
+
+	for y in range(min(old_size.y, size.y)):
+		for x in range(min(old_size.x, size.x)):
+			var old_index = y * old_size.x + x
+			var new_index = y * size.x + x
+			new_grid[new_index] = grid[old_index]
+
+	grid.resize(new_grid.size())
+	grid = new_grid
+
+
+func _resize_float_grid(grid: PackedFloat32Array, old_size: Vector2i, default_value: float):
+	var new_grid = PackedFloat32Array()
+	new_grid.resize(size.x * size.y)
+	new_grid.fill(default_value)
+
+	for y in range(min(old_size.y, size.y)):
+		for x in range(min(old_size.x, size.x)):
+			var old_index = y * old_size.x + x
+			var new_index = y * size.x + x
+			new_grid[new_index] = grid[old_index]
+
+	grid.resize(new_grid.size())
+	grid = new_grid
+
+
+func _resize_splatmaps(old_size: Vector2i, terrain_count: int):
+	var splat_count = int(ceil(terrain_count / 4.0))
+	var new_maps: Array[Image] = []
+
+	for i in range(splat_count):
+		var new_img = Image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
+		new_img.fill(Color(0, 0, 0, 0))
+
+		if i < splatmaps.size():
+			var old_img = splatmaps[i]
+			old_img.lock()
+			new_img.lock()
+
+			for y in range(min(old_img.get_height(), size.y)):
+				for x in range(min(old_img.get_width(), size.x)):
+					new_img.set_pixel(x, y, old_img.get_pixel(x, y))
+
+			old_img.unlock()
+			new_img.unlock()
+
+		new_maps.append(new_img)
+
+	splatmaps = new_maps
+
+
+# ============================================================
+# Bounds
+# ============================================================
 
 
 func _is_in_bounds(pos: Vector2i) -> bool:
 	return pos.x >= 0 and pos.x < size.x and pos.y >= 0 and pos.y < size.y
 
 
+# ============================================================
+# Height
+# ============================================================
+
+
+func get_height_at(pos: Vector2i) -> float:
+	if not _is_in_bounds(pos):
+		return 0.0
+	return height_grid[pos.y * size.x + pos.x]
+
+
+func set_height_at(pos: Vector2i, value: float):
+	if not _is_in_bounds(pos):
+		return
+	height_grid[pos.y * size.x + pos.x] = value
+
+
+# ============================================================
+# Water
+# ============================================================
+
+
+func get_water_at(pos: Vector2i) -> float:
+	if not _is_in_bounds(pos):
+		return 0.0
+	return water_grid[pos.y * size.x + pos.x]
+
+
+func set_water_at(pos: Vector2i, value: float):
+	if not _is_in_bounds(pos):
+		return
+	water_grid[pos.y * size.x + pos.x] = clamp(value, 0.0, 1.0)
+
+
+# ============================================================
+# Collision
+# ============================================================
+
+
 func get_collision_at(pos: Vector2i) -> int:
-	"""Get collision value at grid position. Returns 0=walkable, 1=blocked, -1=out of bounds"""
 	if not _is_in_bounds(pos):
 		return -1
-	var index = pos.y * size.x + pos.x
-	return collision_grid[index]
+	return collision_grid[pos.y * size.x + pos.x]
 
 
 func set_collision_at(pos: Vector2i, value: int):
-	"""Set collision value at grid position"""
 	if not _is_in_bounds(pos):
 		return
-	var index = pos.y * size.x + pos.x
-	collision_grid[index] = value
+	collision_grid[pos.y * size.x + pos.x] = value
+
+
+# ============================================================
+# Entities
+# ============================================================
 
 
 func add_entity(scene_path: String, grid_pos: Vector2i, player_id: int, rotation: float = 0.0):
-	"""Add an entity placement"""
+	if not _is_in_bounds(grid_pos):
+		return
+
 	placed_entities.append(
 		{"scene_path": scene_path, "pos": grid_pos, "player": player_id, "rotation": rotation}
 	)
 
 
-func clear_all():
-	"""Clear all map data"""
-	_initialize_collision_grid()
-	placed_entities.clear()
+func _remove_out_of_bounds_placements():
+	placed_entities = placed_entities.filter(func(e): return _is_in_bounds(e.pos))
+
+
+# ============================================================
+# Validation
+# ============================================================
 
 
 func validate() -> Array[String]:
-	"""Validate map data and return list of errors"""
 	var errors: Array[String] = []
 
 	if size.x < 10 or size.y < 10:
 		errors.append("Map size is too small (minimum 10x10)")
 
-	if size.x > 200 or size.y > 200:
-		errors.append("Map size is too large (maximum 200x200)")
+	if size.x > 512 or size.y > 512:
+		errors.append("Map size is too large (maximum 512x512)")
 
-	# Check for placements outside bounds
 	for entity in placed_entities:
 		if not _is_in_bounds(entity.pos):
 			errors.append("Entity at %s is outside map bounds" % entity.pos)
@@ -143,13 +246,13 @@ func validate() -> Array[String]:
 	return errors
 
 
-func get_terrain_at(pos: Vector2i) -> int:
-	if not _is_in_bounds(pos):
-		return -1
-	return terrain_grid[pos.y * size.x + pos.x]
+# ============================================================
+# Utility
+# ============================================================
 
 
-func set_terrain_at(pos: Vector2i, value: int):
-	if not _is_in_bounds(pos):
-		return
-	terrain_grid[pos.y * size.x + pos.x] = value
+func clear_all():
+	_initialize_collision_grid()
+	_initialize_height_grid()
+	_initialize_water_grid()
+	placed_entities.clear()

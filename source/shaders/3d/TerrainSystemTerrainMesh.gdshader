@@ -2,54 +2,101 @@ shader_type spatial;
 
 render_mode cull_back, depth_draw_opaque;
 
-uniform sampler2D albedo_tex;
-uniform sampler2D normal_gl_tex;
-uniform sampler2D normal_dx_tex;
-uniform sampler2D roughness_tex;
-uniform sampler2D ambient_occlusion_tex;
-uniform sampler2D height_tex;
+// ==== CONFIG ====
+const int MAX_TERRAINS = 16;
+const int MAX_SPLATS = 4; // 4 splat maps * 4 channels = 16 terrains
 
-uniform bool use_dx_normal = false;
+// ==== Terrain Texture Arrays ====
+uniform sampler2D albedo_tex[MAX_TERRAINS];
+uniform sampler2D normal_tex[MAX_TERRAINS];
+uniform sampler2D roughness_tex[MAX_TERRAINS];
+uniform sampler2D ao_tex[MAX_TERRAINS];
+uniform sampler2D height_tex[MAX_TERRAINS];
+
+// ==== Splat Maps ====
+uniform sampler2D splat_tex[MAX_SPLATS];
+
+uniform int terrain_count = 1;
+uniform int splat_count = 1;
+
 uniform float uv_scale = 1.0;
-uniform float height_strength = 0.05;
+uniform float height_strength = 0.0;
 
-// Called for every vertex the material is visible on.
 void vertex() {
-    // Optional vertex displacement
     if (height_strength > 0.0) {
-        float height = texture(height_tex, UV).r;
-        VERTEX.y += height * height_strength;
+        vec2 tiled_uv = UV * uv_scale;
+
+        float total_height = 0.0;
+        float total_weight = 0.0;
+
+        for (int s = 0; s < MAX_SPLATS; s++) {
+            if (s >= splat_count) break;
+
+            vec4 splat = texture(splat_tex[s], UV);
+
+            for (int c = 0; c < 4; c++) {
+                int terrain_index = s * 4 + c;
+                if (terrain_index >= terrain_count) break;
+
+                float weight = splat[c];
+                float h = texture(height_tex[terrain_index], tiled_uv).r;
+
+                total_height += h * weight;
+                total_weight += weight;
+            }
+        }
+
+        if (total_weight > 0.0) {
+            VERTEX.y += (total_height / total_weight) * height_strength;
+        }
     }
 }
 
-// Called for every pixel the material is visible on.
 void fragment() {
     vec2 tiled_uv = UV * uv_scale;
 
-    // --- Albedo ---
-    vec3 albedo = texture(albedo_tex, tiled_uv).rgb;
-    ALBEDO = albedo;
+    vec3 final_albedo = vec3(0.0);
+    vec3 final_normal = vec3(0.0);
+    float final_roughness = 0.0;
+    float final_ao = 0.0;
 
-    // --- Roughness ---
-    ROUGHNESS = texture(roughness_tex, tiled_uv).r;
+    float total_weight = 0.0;
 
-    // --- Ambient Occlusion ---
-    AO = texture(ambient_occlusion_tex, tiled_uv).r;
+    for (int s = 0; s < MAX_SPLATS; s++) {
+        if (s >= splat_count) break;
 
-    // --- Normal ---
-    vec3 normal_sample;
+        vec4 splat = texture(splat_tex[s], UV);
 
-    if (use_dx_normal) {
-        normal_sample = texture(normal_dx_tex, tiled_uv).rgb;
-        normal_sample.g = 1.0 - normal_sample.g; // invert green channel
-    } else {
-        normal_sample = texture(normal_gl_tex, tiled_uv).rgb;
+        for (int c = 0; c < 4; c++) {
+            int terrain_index = s * 4 + c;
+            if (terrain_index >= terrain_count) break;
+
+            float weight = splat[c];
+            if (weight <= 0.001) continue;
+
+            vec3 albedo = texture(albedo_tex[terrain_index], tiled_uv).rgb;
+            vec3 normal = texture(normal_tex[terrain_index], tiled_uv).rgb * 2.0 - 1.0;
+            float rough = texture(roughness_tex[terrain_index], tiled_uv).r;
+            float ao = texture(ao_tex[terrain_index], tiled_uv).r;
+
+            final_albedo += albedo * weight;
+            final_normal += normal * weight;
+            final_roughness += rough * weight;
+            final_ao += ao * weight;
+
+            total_weight += weight;
+        }
     }
 
-    NORMAL = normal_sample * 2.0 - 1.0;
-}
+    if (total_weight > 0.0) {
+        final_albedo /= total_weight;
+        final_normal = normalize(final_normal / total_weight);
+        final_roughness /= total_weight;
+        final_ao /= total_weight;
+    }
 
-//void light() {
-//	// Called for every pixel for every light affecting the material.
-//	// Uncomment to replace the default light processing function with this one.
-//}
+    ALBEDO = final_albedo;
+    NORMAL = final_normal;
+    ROUGHNESS = final_roughness;
+    AO = final_ao;
+}
