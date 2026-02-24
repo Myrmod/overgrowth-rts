@@ -22,6 +22,7 @@ func _ready():
 		return
 
 	print("Loaded terrain types:", terrain_library.terrain_types.size())
+	terrain_types = terrain_library.terrain_types
 
 
 func _unhandled_input(event):
