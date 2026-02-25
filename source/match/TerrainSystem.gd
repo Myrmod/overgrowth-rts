@@ -61,15 +61,12 @@ func _apply_base_layer():
 
 	# Clear all splatmaps first
 	for img in map.splatmaps:
-		img.lock()
 		for x in range(map.size.x):
 			for y in range(map.size.y):
 				img.set_pixel(x, y, Color(0, 0, 0, 0))
-		img.unlock()
 
 	# Fill selected terrain channel = 1
 	var base_img = map.splatmaps[splat_index]
-	base_img.lock()
 
 	for x in range(map.size.x):
 		for y in range(map.size.y):
@@ -87,8 +84,6 @@ func _apply_base_layer():
 
 			base_img.set_pixel(x, y, c)
 
-	base_img.unlock()
-
 	_update_splat_textures()
 	_upload_splats_to_shader()
 	_upload_terrain_textures()
@@ -103,48 +98,50 @@ func _update_splat_textures():
 
 
 func _upload_splats_to_shader():
-	var mat := $TerrainMesh.material_override as ShaderMaterial
+	var mat := $TerrainMesh.get_active_material(0) as ShaderMaterial
 	if not mat:
 		push_warning("TerrainMesh has no ShaderMaterial")
 		return
 
-	if map.splatmaps.is_empty():
-		push_warning("No splat maps found")
+	if splat_textures.is_empty():
+		push_warning("No splat textures found")
 		return
 
+	mat.set_shader_parameter("splat_tex", splat_textures)
 	mat.set_shader_parameter("splat_count", splat_textures.size())
-
-	for i in range(splat_textures.size()):
-		mat.set_shader_parameter("splat_tex[%d]" % i, splat_textures[i])
 
 
 func _upload_terrain_textures():
-	var mat := $TerrainMesh.material_override as ShaderMaterial
+	var mat := $TerrainMesh.get_active_material(0) as ShaderMaterial
 	if not mat:
+		push_warning("TerrainMesh has no ShaderMaterial")
 		return
 
 	var terrains = Globals.terrain_types
+	if terrains.is_empty():
+		push_warning("No terrain types found")
+		return
 
-	for i in range(terrains.size()):
-		var t = terrains[i]
+	var albedo_array: Array[Texture2D] = []
+	var normal_array: Array[Texture2D] = []
+	var rough_array: Array[Texture2D] = []
+	var ao_array: Array[Texture2D] = []
+	var height_array: Array[Texture2D] = []
 
-		if t.albedo:
-			mat.set_shader_parameter("albedo_tex[" + str(i) + "]", t.albedo)
+	for t in terrains:
+		albedo_array.append(t.albedo)
+		normal_array.append(t.normal_gl)
+		rough_array.append(t.roughness)
+		ao_array.append(t.ao)
+		height_array.append(t.displacement)
 
-		if t.normal_gl:
-			mat.set_shader_parameter("normal_tex[" + str(i) + "]", t.normal_gl)
-
-		if t.roughness:
-			mat.set_shader_parameter("roughness_tex[" + str(i) + "]", t.roughness)
-
-		if t.ao:
-			mat.set_shader_parameter("ao_tex[" + str(i) + "]", t.ao)
-
-		if t.displacement:
-			mat.set_shader_parameter("height_tex[" + str(i) + "]", t.displacement)
+	mat.set_shader_parameter("albedo_tex", albedo_array)
+	mat.set_shader_parameter("normal_tex", normal_array)
+	mat.set_shader_parameter("roughness_tex", rough_array)
+	mat.set_shader_parameter("ao_tex", ao_array)
+	mat.set_shader_parameter("height_tex", height_array)
 
 	mat.set_shader_parameter("terrain_count", terrains.size())
-
 
 func rebuild_terrain_index_texture():
 	var img = Image.create(map.size.x, map.size.y, false, Image.FORMAT_R8)
@@ -183,9 +180,7 @@ func apply_terrain_brush_stroke(
 
 			for s in range(map.splatmaps.size()):
 				var img = map.splatmaps[s]
-				img.lock()
 				var c = img.get_pixel(px, py)
-				img.unlock()
 				weights.append([c.r, c.g, c.b, c.a])
 
 			# Flatten to 1D list
@@ -213,12 +208,10 @@ func apply_terrain_brush_stroke(
 			var index = 0
 			for s in range(map.splatmaps.size()):
 				var img = map.splatmaps[s]
-				img.lock()
 
 				var c = Color(flat[index], flat[index + 1], flat[index + 2], flat[index + 3])
 
 				img.set_pixel(px, py, c)
-				img.unlock()
 
 				splat_textures[s].update(img)
 
@@ -232,7 +225,6 @@ func apply_terrain_brush_stroke(
 func generate_splat_map(terrains: Array[TerrainType]) -> Image:
 	var image = Image.new()
 	image.create(size.x, size.y, false, Image.FORMAT_RGBA8)
-	image.lock()
 
 	# Iterate over every pixel in the map
 	for x in range(size.x):
@@ -248,8 +240,6 @@ func generate_splat_map(terrains: Array[TerrainType]) -> Image:
 			if terrains.size() > 3:
 				color.a = 0.0  # Weight for terrain 3 (Alpha channel)
 			image.set_pixel(x, y, color)
-
-	image.unlock()
 
 	return image
 

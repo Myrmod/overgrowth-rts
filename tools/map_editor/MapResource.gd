@@ -87,7 +87,7 @@ func resize_map(new_size: Vector2i, terrain_count: int):
 	_resize_byte_grid(collision_grid, old_size, 0)
 	_resize_float_grid(height_grid, old_size, 0.0)
 	_resize_float_grid(water_grid, old_size, 0.0)
-	_resize_splatmaps(old_size, terrain_count)
+	_resize_splatmaps(terrain_count)
 
 	_remove_out_of_bounds_placements()
 
@@ -122,7 +122,7 @@ func _resize_float_grid(grid: PackedFloat32Array, old_size: Vector2i, default_va
 	grid = new_grid
 
 
-func _resize_splatmaps(old_size: Vector2i, terrain_count: int):
+func _resize_splatmaps(terrain_count: int):
 	var splat_count = int(ceil(terrain_count / 4.0))
 	var new_maps: Array[Image] = []
 
@@ -132,15 +132,10 @@ func _resize_splatmaps(old_size: Vector2i, terrain_count: int):
 
 		if i < splatmaps.size():
 			var old_img = splatmaps[i]
-			old_img.lock()
-			new_img.lock()
 
 			for y in range(min(old_img.get_height(), size.y)):
 				for x in range(min(old_img.get_width(), size.x)):
 					new_img.set_pixel(x, y, old_img.get_pixel(x, y))
-
-			old_img.unlock()
-			new_img.unlock()
 
 		new_maps.append(new_img)
 
