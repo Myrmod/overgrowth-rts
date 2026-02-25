@@ -195,7 +195,7 @@ func _on_palette_entity_selected(scene_path: String):
 
 
 func _on_palette_texture_selected_as_base_layer(terrain: TerrainType):
-	terrain_system.base_layer = terrain
+	terrain_system.apply_base_layer(terrain)
 
 
 func _on_palette_texture_selected(terrain: TerrainType):
@@ -522,12 +522,12 @@ func set_symmetry_mode(mode: SymmetrySystem.Mode):
 	symmetry_system.set_mode(mode)
 
 
-func new_map(size: Vector2i):
+func new_map(_size: Vector2i):
 	"""Create a new map"""
 	current_map = MapResource.new()
-	current_map.size = size
+	current_map.size = _size
 	current_map._initialize_collision_grid()
-	symmetry_system.set_map_size(size)
+	symmetry_system.set_map_size(_size)
 	command_stack.clear()
 	_refresh_view()
 

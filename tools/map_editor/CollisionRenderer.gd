@@ -69,13 +69,13 @@ func _setup_multimesh():
 			var collision_value = map_resource.get_collision_at(pos)
 
 			# Position
-			var transform = Transform3D()
-			transform.origin = Vector3(
+			var _transform = Transform3D()
+			_transform.origin = Vector3(
 				x * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0,
 				0.1,
 				y * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0
 			)
-			multimesh.set_instance_transform(index, transform)
+			multimesh.set_instance_transform(index, _transform)
 
 			# Color based on collision state
 			var color = COLOR_WALKABLE if collision_value == 0 else COLOR_BLOCKED

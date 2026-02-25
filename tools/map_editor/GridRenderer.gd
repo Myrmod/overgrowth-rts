@@ -43,13 +43,13 @@ func _setup_multimesh():
 	for y in range(grid_size.y):
 		for x in range(grid_size.x):
 			var index = y * grid_size.x + x
-			var transform = Transform3D()
-			transform.origin = Vector3(
+			var _transform = Transform3D()
+			_transform.origin = Vector3(
 				x * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0,
 				0.01,
 				y * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0
 			)
-			multimesh.set_instance_transform(index, transform)
+			multimesh.set_instance_transform(index, _transform)
 
 	# Create and add the multimesh instance
 	_multimesh_instance = MultiMeshInstance3D.new()

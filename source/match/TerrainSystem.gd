@@ -2,10 +2,7 @@ class_name TerrainSystem
 
 extends Node3D
 
-@export var base_layer: TerrainType:
-	set(value):
-		base_layer = value
-		_apply_base_layer()
+@export var base_layer: TerrainType = Globals.terrain_types.front()
 
 var size: Vector2i
 var map: MapResource
@@ -13,11 +10,8 @@ var splat_images: Array[Image] = []
 var splat_textures: Array[Texture2D] = []
 
 
-func _ready() -> void:
-	_apply_base_layer()
-
-
 func set_map(_map: MapResource):
+	print("set_map")
 	map = _map
 	size = map.size
 
@@ -39,7 +33,6 @@ func set_map(_map: MapResource):
 		# we need to properly set the position of the created mesh
 		$WaterMesh.position = Vector3(map.size.x / 2.0, 0, map.size.y / 2.0)
 
-	print("initialize_splatmaps", map.splatmaps)
 	if map.splatmaps.is_empty():
 		map.initialize_splatmaps(Globals.terrain_types.size())
 
@@ -48,12 +41,10 @@ func set_map(_map: MapResource):
 	_upload_terrain_textures()
 
 
-func _apply_base_layer():
-	if not base_layer:
-		base_layer = Globals.terrain_types.front()
-
+func apply_base_layer(terrain: TerrainType):
 	if not map:
 		return
+	base_layer = terrain
 
 	var terrain_id = base_layer.id
 	var splat_index = terrain_id / 4

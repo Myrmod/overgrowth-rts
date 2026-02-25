@@ -20,7 +20,7 @@ func _init(
 	command_stack = cmd_stack
 
 
-func apply(cell_pos: Vector2i):
+func apply(_cell_pos: Vector2i):
 	"""Apply brush at the given cell position. Override in subclasses."""
 	push_error("EditorBrush.apply() must be overridden")
 
