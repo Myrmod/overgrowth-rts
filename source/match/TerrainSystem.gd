@@ -13,6 +13,10 @@ var splat_images: Array[Image] = []
 var splat_textures: Array[Texture2D] = []
 
 
+func _ready() -> void:
+	_apply_base_layer()
+
+
 func set_map(_map: MapResource):
 	map = _map
 	size = map.size
@@ -142,6 +146,7 @@ func _upload_terrain_textures():
 	mat.set_shader_parameter("height_tex", height_array)
 
 	mat.set_shader_parameter("terrain_count", terrains.size())
+
 
 func rebuild_terrain_index_texture():
 	var img = Image.create(map.size.x, map.size.y, false, Image.FORMAT_R8)

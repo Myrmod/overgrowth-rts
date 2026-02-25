@@ -72,7 +72,6 @@ func _ready():
 	_setup_dialogs()
 
 	# Set up UI connections
-	print("Setting up UI connections...")
 	_setup_ui_connections()
 
 	# Initialize camera target before setting up 3D scene
@@ -80,8 +79,6 @@ func _ready():
 
 	# Set up 3D scene
 	_setup_3d_scene()
-
-	print("Map Editor initialized - Map size: ", current_map.size)
 
 
 func _setup_dialogs():
@@ -115,14 +112,6 @@ func _setup_ui_connections():
 	)
 	status_label = get_node_or_null("VBoxContainer/StatusBar/StatusLabel")
 
-	print(
-		"Setting up UI connections - Toolbar: ",
-		toolbar,
-		" PaletteSelect: ",
-		palette_select,
-		"TextureSelect:",
-		texture_select,
-	)
 	# Connect entity palette signals
 	if palette_select:
 		palette_select.entity_selected.connect(_on_palette_entity_selected)
@@ -188,10 +177,8 @@ func _on_view_menu_item_selected(id: int, _popup):
 func _toggle_view_mode():
 	# Toggle view mode
 	if view_mode == ViewMode.GAME_VIEW:
-		print("viewmode to collision")
 		set_view_mode(ViewMode.COLLISION_VIEW)
 	else:
-		print("viewmode to game")
 		set_view_mode(ViewMode.GAME_VIEW)
 
 
@@ -214,12 +201,11 @@ func _on_palette_texture_selected_as_base_layer(terrain: TerrainType):
 func _on_palette_texture_selected(terrain: TerrainType):
 	"""Handle entity selection from palette"""
 	_create_brush(BrushType.PAINT_TEXTURE)
-	print(current_brush, terrain)
 	current_brush.set_texture(terrain)
 
 	# Update brush info
 	var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
-	print("Updating brush info label: ", brush_info)
+
 	if brush_info and current_brush:
 		brush_info.text = current_brush.get_brush_name()
 
@@ -288,7 +274,6 @@ func _setup_3d_scene():
 	viewport_3d.add_child(world_env)
 
 	# setup TerrainSystem
-	print("terrainSystem: ", terrain_system)
 	terrain_system.set_map(current_map)
 	# Example: initialize textures or heights
 	# terrain_system.setup_textures(current_map.texture_data)
@@ -353,7 +338,6 @@ func _create_brush(brush_type: BrushType):
 			)
 
 	# Connect brush signals
-	print("trying to apply brush:", current_brush)
 	if current_brush and current_brush.brush_applied.is_connected(_on_brush_applied):
 		current_brush.brush_applied.disconnect(_on_brush_applied)
 	if current_brush:
@@ -366,7 +350,6 @@ func _create_brush(brush_type: BrushType):
 
 
 func _on_brush_applied(positions: Array[Vector2i]):
-	print("Brush applied at positions: ", positions)
 	"""Handle brush application - update visuals"""
 	if collision_renderer and current_brush_type == BrushType.PAINT_COLLISION:
 		collision_renderer.update_cells(positions)
@@ -531,7 +514,7 @@ func set_view_mode(mode: ViewMode):
 		visual_layer.visible = (mode == ViewMode.GAME_VIEW)
 		collision_layer.visible = (mode == ViewMode.COLLISION_VIEW)
 	else:
-		print("Warning: Visual or collision layer not found for view mode toggle")
+		push_warning("Warning: Visual or collision layer not found for view mode toggle")
 
 
 func set_symmetry_mode(mode: SymmetrySystem.Mode):
@@ -559,7 +542,6 @@ func save_map(path: String):
 
 	var result = ResourceSaver.save(current_map, path)
 	if result == OK:
-		print("Map saved to: " + path)
 		if status_label:
 			status_label.text = "Map saved successfully"
 	else:
@@ -576,7 +558,6 @@ func load_map(path: String):
 		symmetry_system.set_map_size(current_map.size)
 		command_stack.clear()
 		_refresh_view()
-		print("Map loaded from: " + path)
 		if status_label:
 			status_label.text = "Map loaded: " + path.get_file()
 	else:
@@ -597,7 +578,6 @@ func export_map(path: String):
 
 	var result = ResourceSaver.save(runtime_map, path)
 	if result == OK:
-		print("Map exported to: " + path)
 		if status_label:
 			status_label.text = "Map exported successfully"
 	else:

@@ -7,8 +7,6 @@ extends VBoxContainer
 signal texture_selected(texture: TerrainType)
 signal texture_selected_as_base_layer(texture: TerrainType)
 
-var base_layer_button: TextureButton = null
-
 # Faction container
 @onready var texture_container = $GridContainer
 
@@ -25,7 +23,7 @@ func populate_textures():
 	# Clear existing buttons if reloading
 	for c in texture_container.get_children():
 		c.queue_free()
-	print("Globals.terrain_library", Globals.terrain_library.terrain_types)
+
 	for t in Globals.terrain_library.terrain_types:
 		create_scene_button(t, texture_container)
 
@@ -52,19 +50,17 @@ func _on_scene_button_pressed(texture: TerrainType):
 func _on_TextureButton_gui_input(event, texture: TerrainType, btn: TextureButton):
 	if event is InputEventMouseButton and event.pressed:
 		if event.button_index == MOUSE_BUTTON_RIGHT:
-			# Remove highlight from previous
-			if base_layer_button:
-				base_layer_button.modulate = Color.WHITE
-				if base_layer_button.has_node("BaseLabel"):
-					base_layer_button.get_node("BaseLabel").queue_free()
-
-			base_layer_button = btn
+			# Remove highlight from all buttons
+			for button in texture_container.get_children():
+				button.modulate = Color.WHITE
+				if button.get_children().size():
+					for button_child in button.get_children():
+						button.remove_child(button_child)
 
 			# Add visual feedback
 			btn.modulate = Color(1.2, 1.2, 0.7)  # slight yellow tint
 
 			var label := Label.new()
-			label.name = "BaseLabel"
 			label.text = "BASE"
 			label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 			label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER

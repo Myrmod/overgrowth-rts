@@ -21,7 +21,6 @@ func _ready():
 		push_error("Failed to load TerrainLibrary")
 		return
 
-	print("Loaded terrain types:", terrain_library.terrain_types.size())
 	terrain_types = terrain_library.terrain_types
 
 
