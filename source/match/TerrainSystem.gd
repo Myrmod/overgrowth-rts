@@ -157,6 +157,9 @@ func _upload_terrain_textures():
 
 	mat.set_shader_parameter("terrain_count", terrains.size())
 
+	# this makes the picture repeat itself so we don't have one big picture covering the entire map
+	mat.set_shader_parameter("uv_scale", 16.0)
+
 
 func rebuild_terrain_index_texture():
 	var img = Image.create(map.size.x, map.size.y, false, Image.FORMAT_R8)
