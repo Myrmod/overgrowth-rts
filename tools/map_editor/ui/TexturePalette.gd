@@ -43,7 +43,7 @@ func create_scene_button(texture: TerrainType, container: Node, _is_first = fals
 	btn.custom_minimum_size = Vector2(138, 138)
 	btn.gui_input.connect(_on_TextureButton_gui_input.bind(texture, btn))
 
-	btn.pressed.connect(_on_scene_button_pressed.bind(texture))
+	btn.pressed.connect(_on_scene_button_pressed.bind(texture, btn))
 
 	if _is_first:
 		_add_base_label_to_button(btn)
@@ -53,7 +53,10 @@ func create_scene_button(texture: TerrainType, container: Node, _is_first = fals
 	container.add_child(btn)
 
 
-func _on_scene_button_pressed(texture: TerrainType):
+func _on_scene_button_pressed(texture: TerrainType, btn: TextureButton):
+	for button in texture_container.get_children():
+		button.modulate = Color.WHITE
+	btn.modulate = Color(1.2, 1.2, 0.7)  # slight yellow tint
 	texture_selected.emit(texture)
 
 
@@ -63,7 +66,6 @@ func _on_TextureButton_gui_input(event, texture: TerrainType, btn: TextureButton
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			# Remove highlight from all buttons
 			for button in texture_container.get_children():
-				button.modulate = Color.WHITE
 				if button.get_children().size():
 					for button_child in button.get_children():
 						button.remove_child(button_child)
@@ -75,7 +77,6 @@ func _on_TextureButton_gui_input(event, texture: TerrainType, btn: TextureButton
 
 func _add_base_label_to_button(btn: TextureButton):
 	# Add visual feedback
-	btn.modulate = Color(1.2, 1.2, 0.7)  # slight yellow tint
 
 	var label := Label.new()
 	label.text = "BASE"

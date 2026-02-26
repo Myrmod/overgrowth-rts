@@ -373,11 +373,14 @@ func _process(delta):
 		pan_dir.x += 1
 
 	if pan_dir != Vector3.ZERO:
-		camera_target += pan_dir.normalized() * camera_pan_speed * delta
-		# Clamp to map bounds with some margin
-		camera_target.x = clampf(camera_target.x, -5.0, current_map.size.x + 5.0)
-		camera_target.z = clampf(camera_target.z, -5.0, current_map.size.y + 5.0)
-		_update_camera_position()
+		pan_dir = pan_dir.normalized()
+
+		var yaw_basis = Basis(Vector3.UP, deg_to_rad(camera_yaw))
+		var move_dir = yaw_basis * Vector3(pan_dir.x, 0, pan_dir.z)
+
+		camera_target += move_dir * camera_pan_speed * delta
+
+	_update_camera_position()
 
 
 func _input(event):
