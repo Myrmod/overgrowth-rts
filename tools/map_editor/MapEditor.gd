@@ -356,7 +356,8 @@ func _on_brush_applied(positions: Array[Vector2i]):
 	if current_brush_type == BrushType.PLACE_ENTITY:
 		_refresh_entity_previews()
 	if current_brush_type == BrushType.PAINT_TEXTURE:
-		print("TODO")
+		if terrain_system:
+			terrain_system.apply_texture_brush(positions)
 
 
 func _process(delta):
@@ -477,7 +478,7 @@ func _refresh_view():
 	if collision_renderer:
 		collision_renderer.refresh()
 	_refresh_entity_previews()
-	terrain_system.set_map(current_map)
+	terrain_system._ensure_splat_textures()
 
 
 # --- Entity preview rendering ---

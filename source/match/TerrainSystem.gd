@@ -171,66 +171,56 @@ func rebuild_terrain_index_texture():
 			img.set_pixel(x, y, Color(value / 255.0, 0, 0))
 
 
-func apply_terrain_brush_stroke(
-	world_pos: Vector3, terrain_id: int, radius: float, strength: float
-):
-	var local = world_pos - $TerrainMesh.position
-	var center_x = int(local.x)
-	var center_y = int(local.z)
+func apply_texture_brush(positions: Array[Vector2i]):
+	if not map:
+		return
 
-	for iy in range(-radius, radius):
-		for ix in range(-radius, radius):
-			var px = center_x + ix
-			var py = center_y + iy
+	var modified_splats := {}
 
-			if px < 0 or py < 0 or px >= map.size.x or py >= map.size.y:
-				continue
+	for pos in positions:
+		var px = pos.x
+		var py = pos.y
 
-			var dist = Vector2(ix, iy).length()
-			if dist > radius:
-				continue
+		# Collect weights
+		var flat := []
 
-			var falloff = 1.0 - (dist / radius)
-			var add_weight = falloff * strength
+		for s in range(map.splatmaps.size()):
+			var c = map.splatmaps[s].get_pixel(px, py)
+			flat.append(c.r)
+			flat.append(c.g)
+			flat.append(c.b)
+			flat.append(c.a)
 
-			# Collect all terrain weights at this pixel
-			var weights = []
+		# Increase selected terrain
+		var terrain_id = base_layer.id  # or pass active terrain
+		var strength = 0.25
 
-			for s in range(map.splatmaps.size()):
-				var img = map.splatmaps[s]
-				var c = img.get_pixel(px, py)
-				weights.append([c.r, c.g, c.b, c.a])
+		flat[terrain_id] += strength
 
-			# Flatten to 1D list
-			var flat = []
-			for w in weights:
-				flat.append_array(w)
+		# Clamp
+		for i in range(flat.size()):
+			flat[i] = clamp(flat[i], 0.0, 1.0)
 
-			# Increase selected terrain
-			flat[terrain_id] += add_weight
+		# Normalize
+		var total := 0.0
+		for v in flat:
+			total += v
 
-			# Clamp
+		if total > 0.0001:
 			for i in range(flat.size()):
-				flat[i] = clamp(flat[i], 0.0, 1.0)
+				flat[i] /= total
 
-			# Normalize across ALL terrains
-			var total = 0.0
-			for v in flat:
-				total += v
+		# Write back
+		var index := 0
+		for s in range(map.splatmaps.size()):
+			var img = map.splatmaps[s]
 
-			if total > 0:
-				for i in range(flat.size()):
-					flat[i] /= total
+			var c = Color(flat[index], flat[index + 1], flat[index + 2], flat[index + 3])
 
-			# Write back
-			var index = 0
-			for s in range(map.splatmaps.size()):
-				var img = map.splatmaps[s]
+			img.set_pixel(px, py, c)
+			modified_splats[s] = true
+			index += 4
 
-				var c = Color(flat[index], flat[index + 1], flat[index + 2], flat[index + 3])
-
-				img.set_pixel(px, py, c)
-
-				splat_textures[s].update(img)
-
-				index += 4
+	# Update textures ONCE per splat
+	for s in modified_splats.keys():
+		splat_textures[s].update(map.splatmaps[s])

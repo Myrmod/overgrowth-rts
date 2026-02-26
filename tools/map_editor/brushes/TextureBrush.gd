@@ -32,6 +32,7 @@ func apply(cell_pos: Vector2i):
 
 	command_stack.push_command(cmd)
 
+	# Notify editor AFTER command executes
 	brush_applied.emit(affected_positions)
 
 
