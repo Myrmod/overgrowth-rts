@@ -26,8 +26,8 @@ void vertex() {
     if (height_strength > 0.0) {
         vec2 tiled_uv = UV * uv_scale;
 
-        float total_height = 0.0;
-        float total_weight = 0.0;
+        float max_weight = 0.0;
+        float dominant_height = 0.0;
 
         for (int s = 0; s < MAX_SPLATS; s++) {
             if (s >= splat_count) break;
@@ -39,15 +39,16 @@ void vertex() {
                 if (terrain_index >= terrain_count) break;
 
                 float weight = splat[c];
-                float h = texture(height_tex[terrain_index], tiled_uv).r;
 
-                total_height += h * weight;
-                total_weight += weight;
+                if (weight > max_weight) {
+                    max_weight = weight;
+                    dominant_height = texture(height_tex[terrain_index], tiled_uv).r;
+                }
             }
         }
 
-        if (total_weight > 0.0) {
-            VERTEX.y += (total_height / total_weight) * height_strength;
+        if (max_weight > 0.0) {
+            VERTEX.y += dominant_height * height_strength;
         }
     }
 }
