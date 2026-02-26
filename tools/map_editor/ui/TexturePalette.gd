@@ -25,7 +25,8 @@ func populate_textures():
 		c.queue_free()
 
 	var i = 0
-	for t in Globals.terrain_library.terrain_types:
+	for t in Globals.terrain_types:
+		t.id = i
 		if i == 0:
 			create_scene_button(t, texture_container, true)
 		else:

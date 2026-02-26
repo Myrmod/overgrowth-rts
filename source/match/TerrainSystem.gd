@@ -2,6 +2,9 @@ class_name TerrainSystem
 
 extends Node3D
 
+# we need to define that, since shaders can't be too dynamic
+const MAX_TERRAINS := 16
+
 @export var base_layer: TerrainType = Globals.terrain_types.front()
 
 var size: Vector2i
@@ -11,7 +14,6 @@ var splat_textures: Array[Texture2D] = []
 
 
 func set_map(_map: MapResource):
-	print("set_map")
 	map = _map
 	size = map.size
 
@@ -36,7 +38,7 @@ func set_map(_map: MapResource):
 	if map.splatmaps.is_empty():
 		map.initialize_splatmaps(Globals.terrain_types.size())
 
-	_update_splat_textures()
+	_ensure_splat_textures()
 	_upload_splats_to_shader()
 	_upload_terrain_textures()
 
@@ -63,6 +65,7 @@ func apply_base_layer(terrain: TerrainType):
 	# Fill selected terrain channel = 1
 	var base_img = map.splatmaps[splat_index]
 
+	# TODO: might cause performance issues on large maps
 	for x in range(map.size.x):
 		for y in range(map.size.y):
 			var c = Color(0, 0, 0, 0)
@@ -79,17 +82,26 @@ func apply_base_layer(terrain: TerrainType):
 
 			base_img.set_pixel(x, y, c)
 
-	_update_splat_textures()
-	_upload_splats_to_shader()
-	_upload_terrain_textures()
+	for i in range(map.splatmaps.size()):
+		splat_textures[i].update(map.splatmaps[i])
+	_ensure_splat_textures()
 
 
-func _update_splat_textures():
-	splat_textures.clear()
+func _ensure_splat_textures():
+	# If textures don't exist yet, create them
+	if splat_textures.size() != map.splatmaps.size():
+		splat_textures.clear()
 
-	for img in map.splatmaps:
-		var tex := ImageTexture.create_from_image(img)
-		splat_textures.append(tex)
+		for img in map.splatmaps:
+			var tex := ImageTexture.create_from_image(img)
+			splat_textures.append(tex)
+
+		_upload_splats_to_shader()
+		return
+
+	# Otherwise just update existing textures
+	for i in range(map.splatmaps.size()):
+		splat_textures[i].update(map.splatmaps[i])
 
 
 func _upload_splats_to_shader():
@@ -109,12 +121,11 @@ func _upload_splats_to_shader():
 func _upload_terrain_textures():
 	var mat := $TerrainMesh.get_active_material(0) as ShaderMaterial
 	if not mat:
-		push_warning("TerrainMesh has no ShaderMaterial")
+		push_warning("No ShaderMaterial")
 		return
 
 	var terrains = Globals.terrain_types
 	if terrains.is_empty():
-		push_warning("No terrain types found")
 		return
 
 	var albedo_array: Array[Texture2D] = []
@@ -123,12 +134,20 @@ func _upload_terrain_textures():
 	var ao_array: Array[Texture2D] = []
 	var height_array: Array[Texture2D] = []
 
-	for t in terrains:
-		albedo_array.append(t.albedo)
-		normal_array.append(t.normal_gl)
-		rough_array.append(t.roughness)
-		ao_array.append(t.ao)
-		height_array.append(t.displacement)
+	for i in range(MAX_TERRAINS):
+		if i < terrains.size():
+			var t = terrains[i]
+			albedo_array.append(t.albedo)
+			normal_array.append(t.normal_gl)
+			rough_array.append(t.roughness)
+			ao_array.append(t.ao)
+			height_array.append(t.displacement)
+		else:
+			albedo_array.append(null)
+			normal_array.append(null)
+			rough_array.append(null)
+			ao_array.append(null)
+			height_array.append(null)
 
 	mat.set_shader_parameter("albedo_tex", albedo_array)
 	mat.set_shader_parameter("normal_tex", normal_array)
