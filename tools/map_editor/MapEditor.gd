@@ -5,7 +5,9 @@ extends Control
 
 enum ViewMode { GAME_VIEW, COLLISION_VIEW }
 
-enum BrushType { PAINT_COLLISION, ERASE, PLACE_ENTITY, PAINT_TEXTURE, PLACE_SPAWN }
+enum BrushType {
+	PAINT_COLLISION, ERASE, PLACE_ENTITY, PAINT_TEXTURE, PLACE_SPAWN, PAINT_HEIGHT, PAINT_SLOPE
+}
 
 # Core systems
 var current_map: MapResource
@@ -37,6 +39,7 @@ var grid_layer: Node3D
 # Renderers
 var grid_renderer: GridRenderer
 var collision_renderer: CollisionRenderer
+var editor_cursor: EditorCursor
 # Entity preview nodes for editor visualization
 var entity_preview_nodes := {}
 # Spawn point preview nodes
@@ -118,6 +121,8 @@ func _setup_ui_connections():
 	if palette_select:
 		palette_select.entity_selected.connect(_on_palette_entity_selected)
 		palette_select.spawn_selected.connect(_on_palette_spawn_selected)
+		palette_select.height_level_selected.connect(_on_palette_height_selected)
+		palette_select.slope_selected.connect(_on_palette_slope_selected)
 	# Connect texture palette signals
 	if texture_select:
 		texture_select.texture_selected.connect(_on_palette_texture_selected)
@@ -223,6 +228,26 @@ func _on_palette_spawn_selected():
 		brush_info.text = current_brush.get_brush_name()
 
 
+func _on_palette_height_selected(level: int):
+	"""Handle height level selection from palette (-1=water, 0=ground, 1=high)"""
+	_create_brush(BrushType.PAINT_HEIGHT)
+	if current_brush is HeightBrush:
+		current_brush.set_level(level as HeightBrush.HeightLevel)
+
+	var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
+	if brush_info and current_brush:
+		brush_info.text = current_brush.get_brush_name()
+
+
+func _on_palette_slope_selected():
+	"""Handle slope tool selection from palette"""
+	_create_brush(BrushType.PAINT_SLOPE)
+
+	var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
+	if brush_info and current_brush:
+		brush_info.text = current_brush.get_brush_name()
+
+
 func _on_palette_texture_selected_as_base_layer(terrain: TerrainType):
 	terrain_system.apply_base_layer(terrain)
 
@@ -280,6 +305,10 @@ func _setup_3d_scene():
 
 	collision_renderer = CollisionRenderer.new(current_map)
 	collision_layer.add_child(collision_renderer)
+
+	# Brush cursor
+	editor_cursor = EditorCursor.new()
+	viewport_3d.add_child(editor_cursor)
 
 	# Add camera
 	camera = Camera3D.new()
@@ -342,6 +371,8 @@ func _on_brush_size_changed(value: float):
 	"""Handle brush size change"""
 	if current_brush:
 		current_brush.brush_size = int(value)
+	if editor_cursor:
+		editor_cursor.set_brush_radius(int(value))
 	if status_label:
 		status_label.text = "Brush size: " + str(int(value))
 
@@ -378,11 +409,20 @@ func _create_brush(brush_type: BrushType):
 			)
 		BrushType.PLACE_SPAWN:
 			current_brush = SpawnBrush.new(current_map, symmetry_system, command_stack)
+		BrushType.PAINT_HEIGHT:
+			current_brush = HeightBrush.new(current_map, symmetry_system, command_stack)
+		BrushType.PAINT_SLOPE:
+			current_brush = SlopeBrush.new(current_map, symmetry_system, command_stack)
 
 	# Restore size/shape
 	if current_brush:
 		current_brush.brush_size = prev_size
 		current_brush.brush_shape = prev_shape
+
+	# Sync cursor appearance to new brush
+	if editor_cursor and current_brush:
+		editor_cursor.set_cursor_color(current_brush.get_cursor_color())
+		editor_cursor.set_brush_radius(current_brush.brush_size)
 
 	# Connect brush signals
 	if current_brush and current_brush.brush_applied.is_connected(_on_brush_applied):
@@ -411,6 +451,12 @@ func _on_brush_applied(positions: Array[Vector2i]):
 		var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
 		if brush_info and current_brush:
 			brush_info.text = current_brush.get_brush_name()
+	if current_brush_type == BrushType.PAINT_HEIGHT or current_brush_type == BrushType.PAINT_SLOPE:
+		# Update terrain mesh heights and collision overlay
+		if terrain_system:
+			terrain_system.update_height_at(positions)
+		if collision_renderer:
+			collision_renderer.refresh()
 	if current_brush_type == BrushType.ERASE:
 		_refresh_entity_previews()
 		_refresh_spawn_previews()
@@ -476,15 +522,39 @@ func _input(event):
 			camera_angle -= event.relative.y * camera_rotate_sensitivity
 			camera_angle = clampf(camera_angle, camera_min_pitch, camera_max_pitch)
 			_update_camera_position()
-		elif is_painting:
-			_try_paint_at_mouse(event.position)
+		else:
+			_update_cursor_at_mouse(event.position)
+			if is_painting:
+				_try_paint_at_mouse(event.position)
 
 
 func _try_paint_at_mouse(mouse_pos: Vector2):
 	if not current_brush:
 		return
-	if not editor_viewport or not camera:
+	var grid_pos: Variant = _raycast_mouse_to_grid(mouse_pos)
+	if grid_pos == null:
 		return
+	current_brush.apply(grid_pos)
+
+
+func _update_cursor_at_mouse(mouse_pos: Vector2):
+	"""Move the editor cursor to the hovered grid cell."""
+	if not editor_cursor:
+		return
+	var grid_pos: Variant = _raycast_mouse_to_grid(mouse_pos)
+	if grid_pos == null:
+		editor_cursor.set_visible_cursor(false)
+		return
+	editor_cursor.set_visible_cursor(true)
+	editor_cursor.set_cursor_position(grid_pos)
+	if current_brush:
+		editor_cursor.set_affected_cells(current_brush.get_affected_positions(grid_pos))
+
+
+func _raycast_mouse_to_grid(mouse_pos: Vector2) -> Variant:
+	"""Raycast from mouse position to the ground plane. Returns Vector2i or null."""
+	if not editor_viewport or not camera:
+		return null
 
 	# Convert global mouse → SubViewport local
 	var rect = viewport_container.get_global_rect()
@@ -506,13 +576,10 @@ func _try_paint_at_mouse(mouse_pos: Vector2):
 
 	var hit = space_state.intersect_ray(query)
 	if hit.is_empty():
-		return
+		return null
 
 	var hit_pos: Vector3 = hit.position
-
-	var grid_pos = _world_to_grid(hit_pos)
-
-	current_brush.apply(grid_pos)
+	return _world_to_grid(hit_pos)
 
 
 func _world_to_grid(p: Vector3) -> Vector2i:
@@ -539,6 +606,8 @@ func _refresh_view():
 	_refresh_entity_previews()
 	_refresh_spawn_previews()
 	terrain_system._ensure_splat_textures()
+	if terrain_system:
+		terrain_system._upload_height_grid()
 
 
 # --- Entity preview rendering ---
@@ -670,6 +739,9 @@ func load_map(path: String):
 		# Reinitialize terrain system with loaded map
 		if terrain_system:
 			terrain_system.set_map(current_map)
+		# Update collision renderer to reference the new map
+		if collision_renderer:
+			collision_renderer.set_map_resource(current_map)
 		# Recreate current brush so it references the new map
 		_create_brush(current_brush_type)
 		_refresh_view()

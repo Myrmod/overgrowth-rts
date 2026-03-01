@@ -18,6 +18,16 @@ extends Resource
 # Water level or water mask per cell (0 = none, 1 = full water)
 @export var water_grid: PackedFloat32Array = PackedFloat32Array()
 
+# Cell terrain type — tracks what kind of terrain occupies each cell
+# See CellType constants below
+@export var cell_type_grid: PackedByteArray = PackedByteArray()
+
+## Cell type constants
+const CELL_GROUND := 0  ## Normal walkable ground (height level 0)
+const CELL_HIGH_GROUND := 1  ## Elevated plateau (height level 1)
+const CELL_WATER := 2  ## Water (height level -1)
+const CELL_SLOPE := 3  ## Slope / ramp between height levels
+
 # Texture blending (RGBA splatmaps, 4 terrain layers per image)
 @export var splatmaps: Array[Image] = []
 
@@ -47,6 +57,9 @@ func _init():
 	if water_grid.is_empty():
 		_initialize_water_grid()
 
+	if cell_type_grid.is_empty():
+		_initialize_cell_type_grid()
+
 
 func _initialize_collision_grid():
 	var count = size.x * size.y
@@ -64,6 +77,12 @@ func _initialize_water_grid():
 	var count = size.x * size.y
 	water_grid.resize(count)
 	water_grid.fill(0.0)
+
+
+func _initialize_cell_type_grid():
+	var count = size.x * size.y
+	cell_type_grid.resize(count)
+	cell_type_grid.fill(CELL_GROUND)
 
 
 # Called by TerrainSystem once terrain library is known
@@ -90,6 +109,7 @@ func resize_map(new_size: Vector2i, terrain_count: int):
 	_resize_byte_grid(collision_grid, old_size, 0)
 	_resize_float_grid(height_grid, old_size, 0.0)
 	_resize_float_grid(water_grid, old_size, 0.0)
+	_resize_byte_grid(cell_type_grid, old_size, CELL_GROUND)
 	_resize_splatmaps(terrain_count)
 
 	_remove_out_of_bounds_placements()
@@ -206,6 +226,42 @@ func set_collision_at(pos: Vector2i, value: int):
 
 
 # ============================================================
+# Cell Type
+# ============================================================
+
+
+func get_cell_type_at(pos: Vector2i) -> int:
+	if not _is_in_bounds(pos):
+		return CELL_GROUND
+	return cell_type_grid[pos.y * size.x + pos.x]
+
+
+func set_cell_type_at(pos: Vector2i, value: int):
+	if not _is_in_bounds(pos):
+		return
+	cell_type_grid[pos.y * size.x + pos.x] = value
+
+
+func is_height_edge(pos: Vector2i) -> bool:
+	"""Returns true if this cell borders a cell with a different height."""
+	if not _is_in_bounds(pos):
+		return false
+	var h = get_height_at(pos)
+	var neighbours := [
+		Vector2i(pos.x - 1, pos.y),
+		Vector2i(pos.x + 1, pos.y),
+		Vector2i(pos.x, pos.y - 1),
+		Vector2i(pos.x, pos.y + 1),
+	]
+	for n in neighbours:
+		if not _is_in_bounds(n):
+			continue
+		if not is_equal_approx(get_height_at(n), h):
+			return true
+	return false
+
+
+# ============================================================
 # Entities
 # ============================================================
 
@@ -262,6 +318,7 @@ func clear_all():
 	_initialize_collision_grid()
 	_initialize_height_grid()
 	_initialize_water_grid()
+	_initialize_cell_type_grid()
 	placed_entities.clear()
 	spawn_points.clear()
 

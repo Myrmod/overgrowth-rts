@@ -6,9 +6,16 @@ extends TabContainer
 
 signal entity_selected(scene_path: String)
 signal spawn_selected
+signal height_level_selected(level: int)  ## -1 = water, 0 = ground, 1 = high ground
+signal slope_selected
 
 # Environment Container
 @onready var objects_container = $Environment/EnvironmentPalette/ObjectsContainer/VBoxContainer
+@onready
+var high_ground_container = $Environment/EnvironmentPalette/HighGroundContainer/VBoxContainer
+@onready
+var normal_ground_container = $Environment/EnvironmentPalette/NormalGroundContainer/VBoxContainer
+@onready var water_container = $Environment/EnvironmentPalette/WaterContainer/VBoxContainer
 
 # Faction container
 @onready var neutral_container = $Factions/EntityPalette/NeutralContainer/VBoxContainer
@@ -19,6 +26,70 @@ func _ready():
 	populate_objects()
 	populate_neutral()
 	populate_the_amuns()
+	populate_height_levels()
+
+
+func populate_height_levels():
+	"""Populate the Environment tab height containers with real buttons."""
+	_populate_high_ground()
+	_populate_normal_ground()
+	_populate_water()
+
+
+func _populate_high_ground():
+	if not high_ground_container:
+		push_warning("HighGroundContainer VBoxContainer not found")
+		return
+
+	# Clear placeholder buttons
+	for c in high_ground_container.get_children():
+		c.queue_free()
+
+	# Paint high ground button
+	var paint_btn := Button.new()
+	paint_btn.text = "▲ Paint High Ground"
+	paint_btn.set_text_alignment(HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT)
+	paint_btn.pressed.connect(func(): height_level_selected.emit(1))
+	high_ground_container.add_child(paint_btn)
+
+	# Slope button
+	var slope_btn := Button.new()
+	slope_btn.text = "⟋ Slope"
+	slope_btn.set_text_alignment(HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT)
+	slope_btn.pressed.connect(func(): slope_selected.emit())
+	high_ground_container.add_child(slope_btn)
+
+
+func _populate_normal_ground():
+	if not normal_ground_container:
+		push_warning("NormalGroundContainer VBoxContainer not found")
+		return
+
+	# Clear placeholder buttons
+	for c in normal_ground_container.get_children():
+		c.queue_free()
+
+	var paint_btn := Button.new()
+	paint_btn.text = "■ Paint Normal Ground"
+	paint_btn.set_text_alignment(HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT)
+	paint_btn.pressed.connect(func(): height_level_selected.emit(0))
+	normal_ground_container.add_child(paint_btn)
+
+
+func _populate_water():
+	if not water_container:
+		push_warning("WaterContainer VBoxContainer not found")
+		return
+
+	# Clear placeholder buttons
+	for c in water_container.get_children():
+		c.queue_free()
+
+	var paint_btn := Button.new()
+	paint_btn.text = "▼ Paint Water (Framework)"
+	paint_btn.set_text_alignment(HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT)
+	paint_btn.pressed.connect(func(): height_level_selected.emit(-1))
+	water_container.add_child(paint_btn)
 
 
 func populate_objects():

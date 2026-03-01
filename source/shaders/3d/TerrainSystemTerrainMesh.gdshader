@@ -47,6 +47,12 @@ uniform float normal_layer_priority : hint_range(1.0, 8.0) = 2.5;
 // of the scene's directional / ambient light so structures stay bright).
 uniform float terrain_brightness : hint_range(0.0, 2.0) = 1.0;
 
+// --- Grid-based height displacement ---
+// A single-channel float texture (FORMAT_RF) the same size as the map grid.
+// Each texel stores the world-space height for that cell.
+uniform sampler2D grid_height_tex : filter_nearest;
+uniform float grid_height_scale : hint_range(0.0, 10.0) = 1.0;
+
 // --- Edge-only blending ---
 // Raises weights to a power then renormalizes, making dominant textures
 // occupy most of the surface with blending only at narrow transition edges.
@@ -56,6 +62,13 @@ uniform float blend_sharpness : hint_range(1.0, 32.0) = 8.0;
 uniform float height_edge_sharpness : hint_range(1.0, 64.0) = 16.0;
 
 void vertex() {
+    // --- Grid-based height (macro displacement from MapResource.height_grid) ---
+    if (grid_height_scale > 0.0) {
+        float grid_h = texture(grid_height_tex, UV).r;
+        VERTEX.y += grid_h * grid_height_scale;
+    }
+
+    // --- Texture-based micro displacement (height maps per terrain layer) ---
     if (height_strength > 0.0) {
         vec2 tiled_uv = UV * uv_scale;
 

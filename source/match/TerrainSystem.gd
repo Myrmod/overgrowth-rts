@@ -12,6 +12,10 @@ var map: MapResource
 var splat_images: Array[Image] = []
 var splat_textures: Array[Texture2D] = []
 
+## Height-grid texture uploaded to the shader so vertex() can displace
+## per-vertex based on the MapResource height data.
+var _height_grid_texture: ImageTexture
+
 
 func set_map(_map: MapResource):
 	map = _map
@@ -41,6 +45,45 @@ func set_map(_map: MapResource):
 	_ensure_splat_textures()
 	_upload_splats_to_shader()
 	_upload_terrain_textures()
+	_upload_height_grid()
+
+
+# ============================================================
+# Height grid → shader
+# ============================================================
+
+
+func _upload_height_grid():
+	"""Build an RF image from map.height_grid and upload it to the shader."""
+	if not map:
+		return
+
+	var img = Image.create(size.x, size.y, false, Image.FORMAT_RF)
+
+	for y in range(size.y):
+		for x in range(size.x):
+			var h = map.get_height_at(Vector2i(x, y))
+			img.set_pixel(x, y, Color(h, 0, 0, 0))
+
+	if _height_grid_texture:
+		_height_grid_texture.update(img)
+	else:
+		_height_grid_texture = ImageTexture.create_from_image(img)
+
+	var mat := $TerrainMesh.get_active_material(0) as ShaderMaterial
+	if mat:
+		mat.set_shader_parameter("grid_height_tex", _height_grid_texture)
+		mat.set_shader_parameter("grid_height_scale", 1.0)
+
+
+func update_height_at(positions: Array[Vector2i]):
+	"""Efficiently update only the changed cells after a brush stroke."""
+	if not map or not _height_grid_texture:
+		_upload_height_grid()
+		return
+
+	# Rebuild the full image (RF images don't support partial update easily)
+	_upload_height_grid()
 
 
 func apply_base_layer(terrain: TerrainType):

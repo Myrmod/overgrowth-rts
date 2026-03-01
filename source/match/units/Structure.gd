@@ -6,6 +6,11 @@ const UNDER_CONSTRUCTION_MATERIAL = preload(
 	"res://source/match/resources/materials/structure_under_construction.material.tres"
 )
 
+## Terrain placement rules — checked by the map editor's EntityBrush.
+## Override in subclasses or per-scene to allow placement on special terrain.
+@export var allow_slope_placement: bool = false
+@export var allow_water_placement: bool = false
+
 var _construction_progress = 1.0
 var _self_constructing = false
 var _self_construction_speed = 0.0

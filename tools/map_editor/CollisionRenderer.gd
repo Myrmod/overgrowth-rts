@@ -67,12 +67,13 @@ func _setup_multimesh():
 			var index = y * grid_size.x + x
 			var pos = Vector2i(x, y)
 			var collision_value = map_resource.get_collision_at(pos)
+			var cell_height = map_resource.get_height_at(pos)
 
-			# Position
+			# Position — lift the indicator to match the terrain height
 			var _transform = Transform3D()
 			_transform.origin = Vector3(
 				x * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0,
-				0.1,
+				0.1 + cell_height,
 				y * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0
 			)
 			multimesh.set_instance_transform(index, _transform)
@@ -96,14 +97,23 @@ func _setup_multimesh():
 
 
 func update_cell(pos: Vector2i):
-	"""Update a single cell's visualization"""
+	"""Update a single cell's visualization (color + height position)"""
 	if not _multimesh_instance or not map_resource:
 		return
 
 	var index = pos.y * grid_size.x + pos.x
 	var collision_value = map_resource.get_collision_at(pos)
+	var cell_height = map_resource.get_height_at(pos)
 	var color = COLOR_WALKABLE if collision_value == 0 else COLOR_BLOCKED
 
+	# Update position to follow the terrain height
+	var _transform = Transform3D()
+	_transform.origin = Vector3(
+		pos.x * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0,
+		0.1 + cell_height,
+		pos.y * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0
+	)
+	_multimesh_instance.multimesh.set_instance_transform(index, _transform)
 	_multimesh_instance.multimesh.set_instance_color(index, color)
 
 

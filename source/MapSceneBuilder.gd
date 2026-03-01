@@ -21,7 +21,6 @@ extends RefCounted
 ##     │    └─ entity instances …
 ##     └─ HeightFog
 
-
 const MAP_SCENE_PATH = "res://source/match/Map.tscn"
 
 
@@ -56,14 +55,21 @@ static func build(map_resource: MapResource) -> Node3D:
 	# the MapResource as metadata for deferred initialization.
 	map_node.set_meta("map_resource", map_resource)
 
+	# 6. Copy height and cell-type grids to the runtime Map so units
+	#    can query terrain height and movement restrictions.
+	if not map_resource.height_grid.is_empty():
+		map_node.height_grid = map_resource.height_grid.duplicate()
+	if not map_resource.cell_type_grid.is_empty():
+		map_node.cell_type_grid = map_resource.cell_type_grid.duplicate()
+
+	# 7. Build cliff collision walls so the navmesh is carved at cliff edges
+	#    and units physically cannot clip through.
+	map_node.build_cliff_collision()
+
 	return map_node
 
 
-static func _add_spawn_points(
-	map_resource: MapResource,
-	parent: Node3D,
-	owner_node: Node3D
-):
+static func _add_spawn_points(map_resource: MapResource, parent: Node3D, owner_node: Node3D):
 	var map_center = Vector2(map_resource.size) / 2.0
 
 	for i in range(map_resource.spawn_points.size()):
@@ -75,10 +81,7 @@ static func _add_spawn_points(
 		var dir = map_center - Vector2(pos)
 		var angle = atan2(dir.x, dir.y)
 
-		marker.transform = Transform3D(
-			Basis(Vector3.UP, angle),
-			Vector3(pos.x, 0, pos.y)
-		)
+		marker.transform = Transform3D(Basis(Vector3.UP, angle), Vector3(pos.x, 0, pos.y))
 
 		parent.add_child(marker)
 		marker.owner = owner_node
@@ -103,10 +106,7 @@ static func _add_entities(
 		var inst = scene.instantiate()
 		var pos: Vector2i = entity.get("pos", Vector2i.ZERO)
 		var rot: float = entity.get("rotation", 0.0)
-		inst.transform = Transform3D(
-			Basis(Vector3.UP, rot),
-			Vector3(pos.x, 0, pos.y)
-		)
+		inst.transform = Transform3D(Basis(Vector3.UP, rot), Vector3(pos.x, 0, pos.y))
 
 		# Decide parent: resource nodes go under Resources, everything else under Decorations
 		if "ResourceNode" in scene_path or "resource" in scene_path.to_lower():
