@@ -18,7 +18,7 @@ func _ready():
 
 	_label.text = tr("LOADING_STEP_LOADING_MAP")
 	await get_tree().physics_frame
-	var map = load(map_path).instantiate()
+	var map = _load_map(map_path)
 	_progress_bar.value = 0.4
 
 	_label.text = tr("LOADING_STEP_LOADING_MATCH")
@@ -60,6 +60,11 @@ func _ready():
 	_label.text = tr("LOADING_STEP_STARTING_MATCH")
 	await get_tree().physics_frame
 	get_parent().add_child(a_match)
+
+	# If the map was built from a MapResource, initialize TerrainSystem splatmaps
+	# now that the scene tree is ready.
+	MapSceneBuilder.initialize_terrain_from_meta(map)
+
 	get_tree().current_scene = a_match
 	queue_free()
 
@@ -70,3 +75,18 @@ func _preload_scenes():
 	scene_paths += UnitConstants.STRUCTURE_BLUEPRINTS.keys()
 	for scene_path in scene_paths:
 		Globals.cache[scene_path] = load(scene_path)
+
+
+func _load_map(path: String) -> Node3D:
+	"""Load a map from either a .tscn scene or a .tres MapResource."""
+	var res = load(path)
+	if res == null:
+		push_error("Loading: failed to load map at %s" % path)
+		return null
+
+	if res is MapResource:
+		# Editor-created map — build scene from resource data
+		return MapSceneBuilder.build(res)
+	else:
+		# Traditional scene-based map (BigArena, PlainAndSimple, etc.)
+		return res.instantiate()

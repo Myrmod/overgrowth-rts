@@ -28,7 +28,9 @@ func apply(cell_pos: Vector2i):
 
 	var affected_positions = get_affected_positions(cell_pos)
 
-	var cmd = PlaceTextureCommand.new(map_resource, affected_positions, texture, rotation)
+	var cmd = PlaceTextureCommand.new(
+		map_resource, affected_positions, texture, rotation, cell_pos, self
+	)
 
 	command_stack.push_command(cmd)
 

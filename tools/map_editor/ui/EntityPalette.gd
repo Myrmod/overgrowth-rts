@@ -5,6 +5,7 @@ extends TabContainer
 ## Automatically generates and manages the entity palette for the map editor
 
 signal entity_selected(scene_path: String)
+signal spawn_selected
 
 # Environment Container
 @onready var objects_container = $Environment/EnvironmentPalette/ObjectsContainer/VBoxContainer
@@ -40,6 +41,13 @@ func populate_neutral():
 	# Clear existing buttons if reloading
 	for c in neutral_container.get_children():
 		c.queue_free()
+
+	# Add spawn point button at the top
+	var spawn_btn := Button.new()
+	spawn_btn.text = "⚑ Spawn Point"
+	spawn_btn.set_text_alignment(HorizontalAlignment.HORIZONTAL_ALIGNMENT_LEFT)
+	spawn_btn.pressed.connect(_on_spawn_button_pressed)
+	neutral_container.add_child(spawn_btn)
 
 	populate_container_with_scenes(
 		"res://source/factions/neutral/structures/ResourceNode/", neutral_container
@@ -98,3 +106,7 @@ func create_scene_button(file_name: String, scenes_path: String, container: Node
 
 func _on_scene_button_pressed(scene_path: String):
 	entity_selected.emit(scene_path)
+
+
+func _on_spawn_button_pressed():
+	spawn_selected.emit()

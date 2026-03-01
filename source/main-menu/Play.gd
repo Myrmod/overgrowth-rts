@@ -10,6 +10,7 @@ const PlayerSettingsScene = preload("res://source/main-menu/PlayerSettings.tscn"
 const LoadingScene = preload("res://source/main-menu/Loading.tscn")
 
 var _map_paths = []
+var _map_info = {}  # path -> {name, players, size} — unified registry for built-in + custom maps
 var _num_spawns := 0
 var replay_resource = null
 
@@ -29,13 +30,57 @@ func _ready():
 
 
 func _setup_map_list():
-	var maps = Utils.Dict.items(MatchConstants.MAPS)
-	maps.sort_custom(func(map_a, map_b): return map_a[1]["players"] < map_b[1]["players"])
-	_map_paths = maps.map(func(map): return map[0])
+	# Start with built-in maps
+	_map_info = MatchConstants.MAPS.duplicate(true)
+
+	# Scan for custom editor maps (.tres MapResource files)
+	_scan_custom_maps("res://maps/")
+
+	# Sort by player count, then by name
+	var entries = Utils.Dict.items(_map_info)
+	entries.sort_custom(
+		func(a, b):
+			if a[1]["players"] != b[1]["players"]:
+				return a[1]["players"] < b[1]["players"]
+			return a[1]["name"] < b[1]["name"]
+	)
+
+	_map_paths = entries.map(func(e): return e[0])
 	_map_list.clear()
-	for map_path in _map_paths:
-		_map_list.add_item(MatchConstants.MAPS[map_path]["name"])
-	_map_list.select(0)
+	for path in _map_paths:
+		_map_list.add_item(_map_info[path]["name"])
+	if not _map_paths.is_empty():
+		_map_list.select(0)
+
+
+func _scan_custom_maps(dir_path: String):
+	"""Scan a directory for .tres MapResource files and add them to the map list."""
+	var dir = DirAccess.open(dir_path)
+	if dir == null:
+		# Directory doesn't exist yet — that's fine, user hasn't saved any custom maps
+		return
+
+	dir.list_dir_begin()
+	while true:
+		var file_name = dir.get_next()
+		if file_name == "":
+			break
+		if dir.current_is_dir():
+			continue
+		if not file_name.ends_with(".tres"):
+			continue
+
+		var full_path = dir_path + file_name
+		var res = load(full_path)
+		if res is MapResource:
+			var map_res: MapResource = res
+			_map_info[full_path] = {
+				"name":
+				map_res.map_name if not map_res.map_name.is_empty() else file_name.get_basename(),
+				"players": map_res.get_max_players(),
+				"size": map_res.size,
+			}
+	dir.list_dir_end()
 
 
 func _configure_team_options(team_select: OptionButton, num_teams: int):
@@ -93,6 +138,7 @@ func _on_start_button_pressed():
 	get_tree().current_scene = new_scene
 	queue_free()
 
+
 func _on_back_button_pressed():
 	get_tree().change_scene_to_file("res://source/main-menu/Main.tscn")
 
@@ -101,30 +147,30 @@ func _align_player_controls_visibility_to_map(map):
 	var grid_container = find_child("GridContainer")
 	var num_players = map["players"]
 	_num_spawns = num_players
-	
+
 	# Clear existing player settings
 	for child in grid_container.get_children():
 		child.queue_free()
-	
+
 	# Create new player settings for each spawn point
 	for player_index in range(num_players):
 		var player_settings_instance = PlayerSettingsScene.instantiate()
 		grid_container.add_child(player_settings_instance)
-		
+
 		# Configure team select to only show teams matching spawn points
 		var team_select = player_settings_instance.find_child("TeamSelect")
 		_configure_team_options(team_select, num_players)
 		team_select.selected = player_index
-		
+
 		# Configure spawn select
 		var spawn_select = player_settings_instance.find_child("SpawnSelect")
 		_populate_spawn_select(spawn_select, num_players)
 		spawn_select.item_selected.connect(_on_spawn_selected.bind(player_index))
-		
+
 		# Set default color
 		var color_picker = player_settings_instance.find_child("ColorPickerButton")
 		color_picker.color = Constants.COLORS[player_index % Constants.COLORS.size()]
-		
+
 		# Set default controller type
 		var play_select = player_settings_instance.find_child("PlaySelect")
 		if player_index == 0:
@@ -155,7 +201,8 @@ func _on_player_selected(selected_option_id, selected_player_id):
 
 
 func _on_map_list_item_selected(index):
-	var map = MatchConstants.MAPS[_map_paths[index]]
+	var map_path = _map_paths[index]
+	var map = _map_info[map_path]
 
 	# set the map description text
 	_map_details.text = "[u]Players:[/u] {0}\n[u]Size:[/u] {1}x{2}".format(
@@ -163,11 +210,14 @@ func _on_map_list_item_selected(index):
 	)
 
 	# Update map preview
-	_map_preview.set_map_data(_map_paths[index])
+	if map_path.ends_with(".tres"):
+		_map_preview.set_map_data_from_resource(map_path)
+	else:
+		_map_preview.set_map_data(map_path)
 
 	# Generate player settings for each spawn point
 	_align_player_controls_visibility_to_map(map)
-	
+
 	# Reset start button state
 	_start_button.disabled = false
 

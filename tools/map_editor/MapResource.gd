@@ -24,6 +24,9 @@ extends Resource
 # Entity placements
 @export var placed_entities: Array[Dictionary] = []
 
+# Spawn points for players  (order = spawn index)
+@export var spawn_points: Array[Vector2i] = []
+
 # Metadata
 @export var map_name: String = "Untitled Map"
 @export var author: String = ""
@@ -234,9 +237,18 @@ func validate() -> Array[String]:
 	if size.x > 512 or size.y > 512:
 		errors.append("Map size is too large (maximum 512x512)")
 
+	if spawn_points.is_empty():
+		errors.append("Map has no spawn points — at least 2 are needed")
+	elif spawn_points.size() < 2:
+		errors.append("Map needs at least 2 spawn points")
+
 	for entity in placed_entities:
 		if not _is_in_bounds(entity.pos):
 			errors.append("Entity at %s is outside map bounds" % entity.pos)
+
+	for sp in spawn_points:
+		if not _is_in_bounds(sp):
+			errors.append("Spawn point at %s is outside map bounds" % sp)
 
 	return errors
 
@@ -251,3 +263,41 @@ func clear_all():
 	_initialize_height_grid()
 	_initialize_water_grid()
 	placed_entities.clear()
+	spawn_points.clear()
+
+
+# ============================================================
+# Spawn Points
+# ============================================================
+
+
+func add_spawn_point(pos: Vector2i):
+	"""Add a spawn point. Returns the spawn index (0-based)."""
+	if not _is_in_bounds(pos):
+		return -1
+	# Don't duplicate
+	if spawn_points.has(pos):
+		return spawn_points.find(pos)
+	spawn_points.append(pos)
+	return spawn_points.size() - 1
+
+
+func remove_spawn_point(pos: Vector2i):
+	"""Remove the spawn point at the given position if one exists."""
+	var idx = spawn_points.find(pos)
+	if idx >= 0:
+		spawn_points.remove_at(idx)
+
+
+func remove_spawn_point_at_index(idx: int):
+	if idx >= 0 and idx < spawn_points.size():
+		spawn_points.remove_at(idx)
+
+
+func get_spawn_index_at(pos: Vector2i) -> int:
+	"""Return the spawn index at pos, or -1 if none."""
+	return spawn_points.find(pos)
+
+
+func get_max_players() -> int:
+	return spawn_points.size()

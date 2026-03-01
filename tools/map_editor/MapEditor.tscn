@@ -5,7 +5,26 @@
 [ext_resource type="Script" uid="uid://dueeo8aayojqe" path="res://tools/map_editor/ui/TexturePalette.gd" id="3_c1img"]
 [ext_resource type="PackedScene" uid="uid://bxe2bwqo30j5o" path="res://source/match/TerrainSystem.tscn" id="5_afdhn"]
 
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_gsndc"]
+
+[sub_resource type="Sky" id="Sky_afdhn"]
+sky_material = SubResource("PhysicalSkyMaterial_gsndc")
+
+[sub_resource type="Environment" id="Environment_gsndc"]
+sky = SubResource("Sky_afdhn")
+ambient_light_source = 2
+ambient_light_color = Color(0.8630173, 0.950432, 0.9999998, 1)
+ambient_light_sky_contribution = 0.5
+ambient_light_energy = 0.5
+reflected_light_source = 2
+ssao_enabled = true
+ssao_radius = 0.5
+ssao_intensity = 0.7
+fog_enabled = true
+fog_density = 0.001
+
 [sub_resource type="World3D" id="World3D_6yib5"]
+environment = SubResource("Environment_gsndc")
 
 [node name="MapEditor" type="Control" unique_id=1115945208]
 layout_mode = 3
@@ -274,6 +293,7 @@ popup/item_1/id = 1
 
 [node name="BrushSize" type="SpinBox" parent="VBoxContainer/MainArea/LeftPalette/Brushsettings/MarginContainer/VBoxContainer" unique_id=764435510]
 layout_mode = 2
+value = 5.0
 prefix = "Brush size:"
 
 [node name="ViewportArea" type="PanelContainer" parent="VBoxContainer/MainArea" unique_id=606799797]
@@ -298,6 +318,20 @@ render_target_update_mode = 4
 [node name="VisualLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=1173281011]
 
 [node name="TerrainSystem" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport/VisualLayer" unique_id=1246279829 instance=ExtResource("5_afdhn")]
+
+[node name="Sun" type="DirectionalLight3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport/VisualLayer" unique_id=738210997]
+transform = Transform3D(0.7071068, -0.54640514, 0.4488223, 0, 0.6347305, 0.77273357, -0.7071068, -0.54640514, 0.4488223, 0, 0, 0)
+light_color = Color(1, 0.94509804, 0.8392157, 1)
+light_energy = 2.0
+light_specular = 0.5
+shadow_enabled = true
+shadow_bias = 0.2
+shadow_blur = 0.2
+directional_shadow_split_1 = 0.45
+directional_shadow_split_2 = 0.5
+directional_shadow_split_3 = 0.55
+directional_shadow_blend_splits = true
+directional_shadow_pancake_size = 100.0
 
 [node name="CollisionLayer" type="Node3D" parent="VBoxContainer/MainArea/ViewportArea/MarginContainer/ViewportContainer/EditorViewport" unique_id=2102924395]
 visible = false

@@ -145,9 +145,19 @@ func _draw() -> void:
 		draw_circle(preview_pos, SPAWN_CIRCLE_RADIUS, SPAWN_CIRCLE_COLOR)
 		# Number
 		var label_text = str(i + 1)
-		var text_size_v = font.get_string_size(label_text, HORIZONTAL_ALIGNMENT_CENTER, -1, SPAWN_FONT_SIZE)
+		var text_size_v = font.get_string_size(
+			label_text, HORIZONTAL_ALIGNMENT_CENTER, -1, SPAWN_FONT_SIZE
+		)
 		var text_pos = preview_pos - text_size_v * 0.5 + Vector2(0, text_size_v.y * 0.75)
-		draw_string(font, text_pos, label_text, HORIZONTAL_ALIGNMENT_CENTER, -1, SPAWN_FONT_SIZE, SPAWN_LABEL_COLOR)
+		draw_string(
+			font,
+			text_pos,
+			label_text,
+			HORIZONTAL_ALIGNMENT_CENTER,
+			-1,
+			SPAWN_FONT_SIZE,
+			SPAWN_LABEL_COLOR
+		)
 
 
 func _strip_gameplay_nodes(node: Node) -> void:
@@ -158,3 +168,68 @@ func _strip_gameplay_nodes(node: Node) -> void:
 		var child = node.get_child(i)
 		_strip_gameplay_nodes(child)
 	node.set_script(null)
+
+
+func set_map_data_from_resource(resource_path: String) -> void:
+	"""Preview a custom map built from a MapResource .tres file."""
+	# Clean up previous viewport contents
+	if _map_instance and is_instance_valid(_map_instance):
+		_map_instance.queue_free()
+		_map_instance = null
+	if _camera and is_instance_valid(_camera):
+		_camera.queue_free()
+		_camera = null
+
+	_spawn_positions = []
+	_map_size = Vector2.ZERO
+
+	var res = load(resource_path)
+	if res == null or not (res is MapResource):
+		queue_redraw()
+		return
+
+	var map_resource: MapResource = res
+	_map_size = Vector2(map_resource.size)
+
+	# Read spawn positions from MapResource
+	for sp in map_resource.spawn_points:
+		_spawn_positions.append(Vector3(sp.x, 0, sp.y))
+
+	# Build the map scene from the resource
+	_map_instance = MapSceneBuilder.build(map_resource)
+	if _map_instance == null:
+		queue_redraw()
+		return
+
+	_strip_gameplay_nodes(_map_instance)
+	_viewport.add_child(_map_instance)
+
+	# Initialize terrain splatmaps
+	MapSceneBuilder.initialize_terrain_from_meta(_map_instance)
+
+	# Set viewport aspect
+	var aspect = _map_size.x / _map_size.y
+	if aspect >= 1.0:
+		_viewport.size = Vector2i(VIEWPORT_RESOLUTION, int(VIEWPORT_RESOLUTION / aspect))
+	else:
+		_viewport.size = Vector2i(int(VIEWPORT_RESOLUTION * aspect), VIEWPORT_RESOLUTION)
+
+	# Orthographic camera
+	_camera = Camera3D.new()
+	_camera.projection = Camera3D.PROJECTION_ORTHOGONAL
+	var center = Vector3(_map_size.x * 0.5, 50.0, _map_size.y * 0.5)
+	_camera.global_transform = Transform3D(Basis(), center)
+	_camera.rotate_x(-PI / 2.0)
+	_camera.size = max(_map_size.x, _map_size.y)
+	_camera.near = 0.1
+	_camera.far = 200.0
+	_viewport.add_child(_camera)
+
+	_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	_texture_rect.texture = _viewport.get_texture()
+	await get_tree().process_frame
+	await get_tree().process_frame
+	await get_tree().process_frame
+	_viewport.render_target_update_mode = SubViewport.UPDATE_DISABLED
+
+	queue_redraw()

@@ -17,14 +17,12 @@ func apply(cell_pos: Vector2i):
 
 
 func _erase_at_position(pos: Vector2i):
-	"""Remove any entities at the given position"""
-	# Remove structures
-	map_resource.placed_entities = map_resource.placed_structures.filter(
-		func(s): return s.pos != pos
-	)
+	"""Remove any entities and spawn points at the given position"""
+	# Remove entities
+	map_resource.placed_entities = map_resource.placed_entities.filter(func(s): return s.pos != pos)
 
-	# Remove cosmetics
-	map_resource.placed_textures = map_resource.placed_textures.filter(func(c): return c.pos != pos)
+	# Remove spawn point at this position
+	map_resource.remove_spawn_point(pos)
 
 
 func get_brush_name() -> String:

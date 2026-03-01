@@ -5,7 +5,7 @@ extends Control
 
 enum ViewMode { GAME_VIEW, COLLISION_VIEW }
 
-enum BrushType { PAINT_COLLISION, ERASE, PLACE_ENTITY, PAINT_TEXTURE }
+enum BrushType { PAINT_COLLISION, ERASE, PLACE_ENTITY, PAINT_TEXTURE, PLACE_SPAWN }
 
 # Core systems
 var current_map: MapResource
@@ -39,6 +39,8 @@ var grid_renderer: GridRenderer
 var collision_renderer: CollisionRenderer
 # Entity preview nodes for editor visualization
 var entity_preview_nodes := {}
+# Spawn point preview nodes
+var spawn_preview_nodes: Array[Node3D] = []
 
 # Camera control
 var camera: Camera3D
@@ -115,6 +117,7 @@ func _setup_ui_connections():
 	# Connect entity palette signals
 	if palette_select:
 		palette_select.entity_selected.connect(_on_palette_entity_selected)
+		palette_select.spawn_selected.connect(_on_palette_spawn_selected)
 	# Connect texture palette signals
 	if texture_select:
 		texture_select.texture_selected.connect(_on_palette_texture_selected)
@@ -149,6 +152,23 @@ func _setup_ui_connections():
 		if view_menu:
 			var popup = view_menu.get_popup()
 			popup.id_pressed.connect(_on_view_menu_item_selected.bind(popup))
+
+	# Brush settings
+	var brush_settings = get_node_or_null("VBoxContainer/MainArea/LeftPalette/Brushsettings")
+	if brush_settings:
+		var brush_form = brush_settings.get_node_or_null("MarginContainer/VBoxContainer/BrushForm")
+		var brush_size_spin = brush_settings.get_node_or_null(
+			"MarginContainer/VBoxContainer/BrushSize"
+		)
+
+		if brush_form:
+			brush_form.item_selected.connect(_on_brush_form_changed)
+		if brush_size_spin:
+			brush_size_spin.min_value = 0
+			brush_size_spin.max_value = 10
+			brush_size_spin.step = 1
+			brush_size_spin.value = 1
+			brush_size_spin.value_changed.connect(_on_brush_size_changed)
 
 
 func _on_file_menu_item_selected(id: int):
@@ -189,6 +209,15 @@ func _on_palette_entity_selected(scene_path: String):
 		current_brush.set_entity(scene_path)
 
 	# Update brush info
+	var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
+	if brush_info and current_brush:
+		brush_info.text = current_brush.get_brush_name()
+
+
+func _on_palette_spawn_selected():
+	"""Handle spawn point tool selection from palette"""
+	_create_brush(BrushType.PLACE_SPAWN)
+
 	var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
 	if brush_info and current_brush:
 		brush_info.text = current_brush.get_brush_name()
@@ -258,20 +287,8 @@ func _setup_3d_scene():
 	viewport_3d.add_child(camera)
 	_update_camera_position()
 
-	# Add directional light
-	var light = DirectionalLight3D.new()
-	light.name = "Light"
-	light.rotation_degrees = Vector3(-45, 30, 0)
-	light.light_energy = 0.8
-	viewport_3d.add_child(light)
-
-	# Add ambient light
-	var env = Environment.new()
-	env.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
-	env.ambient_light_color = Color(0.5, 0.5, 0.5)
-	var world_env = WorldEnvironment.new()
-	world_env.environment = env
-	viewport_3d.add_child(world_env)
+	# The scene already has a DirectionalLight3D ("Sun") and an
+	# Environment configured in the .tscn — no need to create them here.
 
 	# setup TerrainSystem
 	terrain_system.set_map(current_map)
@@ -313,8 +330,31 @@ func _on_symmetry_changed(index: int):
 		status_label.text = "Symmetry: " + symmetry_system.get_mode_name(mode)
 
 
+func _on_brush_form_changed(index: int):
+	"""Handle brush shape toggle (0 = Circle, 1 = Square)"""
+	if current_brush:
+		current_brush.brush_shape = index as EditorBrush.BrushShape
+	if status_label:
+		status_label.text = "Brush shape: " + ("Circle" if index == 0 else "Square")
+
+
+func _on_brush_size_changed(value: float):
+	"""Handle brush size change"""
+	if current_brush:
+		current_brush.brush_size = int(value)
+	if status_label:
+		status_label.text = "Brush size: " + str(int(value))
+
+
 func _create_brush(brush_type: BrushType):
 	"""Create and set the current brush"""
+	# Preserve current size/shape settings across brush switches
+	var prev_size := 1
+	var prev_shape := EditorBrush.BrushShape.CIRCLE
+	if current_brush:
+		prev_size = current_brush.brush_size
+		prev_shape = current_brush.brush_shape
+
 	current_brush_type = brush_type
 
 	match brush_type:
@@ -336,6 +376,13 @@ func _create_brush(brush_type: BrushType):
 					null,
 				)
 			)
+		BrushType.PLACE_SPAWN:
+			current_brush = SpawnBrush.new(current_map, symmetry_system, command_stack)
+
+	# Restore size/shape
+	if current_brush:
+		current_brush.brush_size = prev_size
+		current_brush.brush_shape = prev_shape
 
 	# Connect brush signals
 	if current_brush and current_brush.brush_applied.is_connected(_on_brush_applied):
@@ -358,6 +405,15 @@ func _on_brush_applied(positions: Array[Vector2i]):
 	if current_brush_type == BrushType.PAINT_TEXTURE:
 		if terrain_system:
 			terrain_system.apply_texture_brush(positions)
+	if current_brush_type == BrushType.PLACE_SPAWN:
+		_refresh_spawn_previews()
+		# Update brush name to reflect count
+		var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
+		if brush_info and current_brush:
+			brush_info.text = current_brush.get_brush_name()
+	if current_brush_type == BrushType.ERASE:
+		_refresh_entity_previews()
+		_refresh_spawn_previews()
 
 
 func _process(delta):
@@ -481,6 +537,7 @@ func _refresh_view():
 	if collision_renderer:
 		collision_renderer.refresh()
 	_refresh_entity_previews()
+	_refresh_spawn_previews()
 	terrain_system._ensure_splat_textures()
 
 
@@ -508,6 +565,55 @@ func _refresh_entity_previews():
 			inst.rotation.y = entity.rotation
 		visual_layer.add_child(inst)
 		entity_preview_nodes[entity.pos] = inst
+
+
+# --- Spawn point preview rendering ---
+func _refresh_spawn_previews():
+	"""Rebuild the numbered spawn point markers in the 3D viewport."""
+	for node in spawn_preview_nodes:
+		if is_instance_valid(node):
+			node.queue_free()
+	spawn_preview_nodes.clear()
+
+	if not visual_layer or not current_map:
+		return
+
+	for i in range(current_map.spawn_points.size()):
+		var pos = current_map.spawn_points[i]
+		var marker_root = Node3D.new()
+		marker_root.name = "SpawnPreview_%d" % i
+		marker_root.position = Vector3(pos.x + 0.5, 0, pos.y + 0.5)
+
+		# Coloured cylinder
+		var mesh_inst = MeshInstance3D.new()
+		var cyl = CylinderMesh.new()
+		cyl.top_radius = 0.4
+		cyl.bottom_radius = 0.4
+		cyl.height = 1.5
+		mesh_inst.mesh = cyl
+		mesh_inst.position.y = cyl.height * 0.5
+		var mat = StandardMaterial3D.new()
+		mat.albedo_color = Color.YELLOW
+		mat.emission_enabled = true
+		mat.emission = Color.YELLOW
+		mat.emission_energy_multiplier = 0.3
+		mesh_inst.material_override = mat
+		marker_root.add_child(mesh_inst)
+
+		# Number label
+		var label = Label3D.new()
+		label.text = str(i + 1)
+		label.font_size = 48
+		label.pixel_size = 0.01
+		label.position.y = cyl.height + 0.3
+		label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+		label.modulate = Color.WHITE
+		label.outline_modulate = Color.BLACK
+		label.outline_size = 12
+		marker_root.add_child(label)
+
+		visual_layer.add_child(marker_root)
+		spawn_preview_nodes.append(marker_root)
 
 
 func set_view_mode(mode: ViewMode):
@@ -561,6 +667,11 @@ func load_map(path: String):
 		current_map = loaded_map
 		symmetry_system.set_map_size(current_map.size)
 		command_stack.clear()
+		# Reinitialize terrain system with loaded map
+		if terrain_system:
+			terrain_system.set_map(current_map)
+		# Recreate current brush so it references the new map
+		_create_brush(current_brush_type)
 		_refresh_view()
 		if status_label:
 			status_label.text = "Map loaded: " + path.get_file()

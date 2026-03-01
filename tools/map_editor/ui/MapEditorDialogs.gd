@@ -25,6 +25,7 @@ func _setup_dialogs():
 	_save_dialog.access = FileDialog.ACCESS_RESOURCES
 	_save_dialog.add_filter("*.tres", "Map Resource")
 	_save_dialog.title = "Save Map"
+	_save_dialog.current_dir = "res://maps"
 	_save_dialog.file_selected.connect(_on_save_file_selected)
 	add_child(_save_dialog)
 
@@ -34,6 +35,7 @@ func _setup_dialogs():
 	_load_dialog.access = FileDialog.ACCESS_RESOURCES
 	_load_dialog.add_filter("*.tres", "Map Resource")
 	_load_dialog.title = "Load Map"
+	_load_dialog.current_dir = "res://maps"
 	_load_dialog.file_selected.connect(_on_load_file_selected)
 	add_child(_load_dialog)
 

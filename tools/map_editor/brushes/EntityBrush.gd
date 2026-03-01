@@ -61,3 +61,7 @@ func get_brush_name() -> String:
 
 func get_cursor_color() -> Color:
 	return Color.CYAN
+
+
+func _build_footprint(center: Vector2i) -> Array[Vector2i]:
+	return [center]

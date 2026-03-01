@@ -7,9 +7,15 @@ extends RefCounted
 
 signal brush_applied(positions: Array[Vector2i])
 
+enum BrushShape { CIRCLE, SQUARE }
+
 var map_resource: MapResource
 var symmetry_system: SymmetrySystem
 var command_stack: CommandStack
+
+## Brush footprint settings
+var brush_size: int = 0  # radius in cells (0 = single cell, 1 = 3×3, etc.)
+var brush_shape: BrushShape = BrushShape.CIRCLE
 
 
 func _init(
@@ -37,15 +43,53 @@ func _is_in_bounds(pos: Vector2i) -> bool:
 
 
 func get_affected_positions(cell_pos: Vector2i) -> Array[Vector2i]:
-	"""Get all positions that will be affected by this brush (includes symmetry)"""
-	var positions: Array[Vector2i] = []
-	if symmetry_system:
-		positions = symmetry_system.get_symmetric_positions(cell_pos)
-	else:
-		positions = [cell_pos]
+	"""Get all positions that will be affected by this brush (includes size, shape & symmetry)"""
+	# 1. Build footprint around center based on shape & size
+	var footprint: Array[Vector2i] = _build_footprint(cell_pos)
 
-	# Filter to only in-bounds positions
-	return positions.filter(func(p): return _is_in_bounds(p))
+	# 2. Apply symmetry to every cell in the footprint
+	var all_positions: Array[Vector2i] = []
+	for pos in footprint:
+		if symmetry_system:
+			var sym_positions = symmetry_system.get_symmetric_positions(pos)
+			for sp in sym_positions:
+				if _is_in_bounds(sp) and not all_positions.has(sp):
+					all_positions.append(sp)
+		else:
+			if _is_in_bounds(pos) and not all_positions.has(pos):
+				all_positions.append(pos)
+
+	return all_positions
+
+
+func _build_footprint(center: Vector2i) -> Array[Vector2i]:
+	"""Build array of cell positions for the current brush shape and size."""
+	var positions: Array[Vector2i] = []
+
+	if brush_size <= 0:
+		positions.append(center)
+		return positions
+
+	var r = brush_size
+	for dy in range(-r, r + 1):
+		for dx in range(-r, r + 1):
+			var p = Vector2i(center.x + dx, center.y + dy)
+
+			if brush_shape == BrushShape.CIRCLE:
+				# Use Euclidean distance for circle
+				if Vector2(dx, dy).length() > float(r) + 0.5:
+					continue
+
+			# Square: all cells in the rectangle are included
+			positions.append(p)
+
+	return positions
+
+
+func get_edge_falloff(_cell_pos: Vector2i, _center: Vector2i) -> float:
+	"""Returns 1.0 for all cells — no edge falloff.
+	The shader's blend_sharpness handles smooth transitions instead."""
+	return 1.0
 
 
 func get_brush_name() -> String:

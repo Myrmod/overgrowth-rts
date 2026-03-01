@@ -32,11 +32,8 @@ static func from_editor_map(editor_map: MapResource) -> MapRuntimeResource:
 	var runtime_map = MapRuntimeResource.new()
 	runtime_map.size = editor_map.size
 
-	# Copy entity spawns (these are already in the right format)
-	runtime_map.structure_spawns = editor_map.placed_structures.duplicate(true)
+	# Copy entity spawns
 	runtime_map.entity_spawns = editor_map.placed_entities.duplicate(true)
-	runtime_map.resource_spawns = editor_map.resource_nodes.duplicate(true)
-	runtime_map.placed_textures = editor_map.played_textures.duplicate(true)
 
 	# Navigation baking would happen here in a full implementation
 	# For now, we'll just store the collision grid data
