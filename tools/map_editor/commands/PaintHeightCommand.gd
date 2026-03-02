@@ -76,11 +76,11 @@ func undo():
 func _recompute_edge_collision():
 	"""Set collision=1 on edge cells (height differs from a neighbour) that
 	are NOT slopes. Clear collision on non-edge cells (unless they are water)."""
-	for pos in _affected_region:
-		var ct = map_resource.get_cell_type_at(pos)
+	for pos: Vector2i in _affected_region:
+		var ct: int = map_resource.get_cell_type_at(pos)
 
-		# Slopes are always walkable — they are ramps
-		if ct == MapResource.CELL_SLOPE:
+		# Slopes (regular and water) are always walkable — they are ramps
+		if ct == MapResource.CELL_SLOPE or ct == MapResource.CELL_WATER_SLOPE:
 			map_resource.set_collision_at(pos, 0)
 			continue
 
@@ -99,11 +99,11 @@ func _recompute_edge_collision():
 func _compute_affected_region(painted: Array[Vector2i]) -> Array[Vector2i]:
 	"""Return the painted cells PLUS a 1-cell border so edge collision
 	can be recalculated correctly on neighbours."""
-	var region_set := {}
-	for pos in painted:
+	var region_set: Dictionary = {}
+	for pos: Vector2i in painted:
 		region_set[pos] = true
-		for offset in [Vector2i(-1, 0), Vector2i(1, 0), Vector2i(0, -1), Vector2i(0, 1)]:
-			var n = pos + offset
+		for offset: Vector2i in [Vector2i(-1, 0), Vector2i(1, 0), Vector2i(0, -1), Vector2i(0, 1)]:
+			var n: Vector2i = pos + offset
 			if n.x >= 0 and n.x < map_resource.size.x and n.y >= 0 and n.y < map_resource.size.y:
 				region_set[n] = true
 

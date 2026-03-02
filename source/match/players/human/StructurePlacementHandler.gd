@@ -28,6 +28,7 @@ var _free_placement_mode = false
 @onready var _match = find_parent("Match")
 @onready var _feedback_label = find_child("FeedbackLabel3D")
 
+
 func _ready():
 	_feedback_label.hide()
 	MatchSignals.place_structure.connect(_on_structure_placement_request)
@@ -39,7 +40,9 @@ func _unhandled_input(event):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 		_handle_lmb_down_event(event)
 	if event.is_action_pressed("rotate_structure"):
-		var rotation_step = ROTATION_BY_KEY_STEP_FREE if _free_placement_mode else ROTATION_BY_KEY_STEP_GRID
+		var rotation_step = (
+			ROTATION_BY_KEY_STEP_FREE if _free_placement_mode else ROTATION_BY_KEY_STEP_GRID
+		)
 		_try_rotating_blueprint_by(rotation_step)
 	if event.is_action_pressed("toggle_free_placement"):
 		_toggle_free_placement_mode()
@@ -101,8 +104,11 @@ func _calculate_blueprint_position_validity():
 		return BlueprintPositionValidity.OUT_OF_MAP
 	if not _player_has_enough_resources():
 		return BlueprintPositionValidity.NOT_ENOUGH_RESOURCES
-	if FeatureFlags.use_grid_based_placement and not BuildRadius.is_position_in_any_build_radius(
-		get_tree(), _active_blueprint_node.global_position, _player
+	if (
+		FeatureFlags.use_grid_based_placement
+		and not BuildRadius.is_position_in_any_build_radius(
+			get_tree(), _active_blueprint_node.global_position, _player
+		)
 	):
 		return BlueprintPositionValidity.OUTSIDE_BUILD_RADIUS
 	var placement_validity = MatchUtils.Placement.validate_agent_placement_position(
@@ -119,9 +125,9 @@ func _calculate_blueprint_position_validity():
 
 
 func _player_has_enough_resources():
-	var construction_cost = UnitConstants.DEFAULT_PROPERTIES[
-		_pending_structure_prototype.resource_path
-	]["costs"]
+	var construction_cost = (
+		UnitConstants.DEFAULT_PROPERTIES[_pending_structure_prototype.resource_path]["costs"]
+	)
 	return _player.has_resources(construction_cost)
 
 
@@ -155,13 +161,12 @@ func _start_structure_placement(structure_prototype):
 		return
 	_pending_structure_prototype = structure_prototype
 	_active_blueprint_node = (
-		load(UnitConstants.STRUCTURE_BLUEPRINTS[structure_prototype.resource_path])
-		.instantiate()
+		load(UnitConstants.STRUCTURE_BLUEPRINTS[structure_prototype.resource_path]).instantiate()
 	)
 	var blueprint_origin = Vector3(-999, 0, -999)
 	var camera_direction_yless = (
 		(get_viewport().get_camera_3d().project_ray_normal(Vector2(0, 0)) * Vector3(1, 0, 1))
-		.normalized()
+		. normalized()
 	)
 	var rotate_towards = blueprint_origin + camera_direction_yless.rotated(Vector3.UP, PI * 0.75)
 	_active_blueprint_node.global_transform = Transform3D(Basis(), blueprint_origin).looking_at(
@@ -175,8 +180,8 @@ func _start_structure_placement(structure_prototype):
 	_pending_structure_radius = temporary_structure_instance.radius
 	_pending_structure_navmap_rid = (
 		find_parent("Match")
-		.navigation
-		.get_navigation_map_rid_by_domain(temporary_structure_instance.movement_domain)
+		. navigation
+		. get_navigation_map_rid_by_domain(temporary_structure_instance.movement_domain)
 	)
 	temporary_structure_instance.free()
 	MatchSignals.structure_placement_started.emit()
@@ -184,7 +189,9 @@ func _start_structure_placement(structure_prototype):
 
 func _set_blueprint_position_based_on_mouse_pos():
 	var mouse_pos_2d = get_viewport().get_mouse_position()
-	var mouse_pos_3d = get_viewport().get_camera_3d().get_ray_intersection(mouse_pos_2d)
+	var camera = get_viewport().get_camera_3d()
+	var map = _match.map if _match != null else null
+	var mouse_pos_3d = camera.get_terrain_ray_intersection(mouse_pos_2d, map)
 	if mouse_pos_3d == null:
 		return
 	# Apply grid snapping unless free placement mode is enabled or grid placement is disabled
@@ -193,6 +200,7 @@ func _set_blueprint_position_based_on_mouse_pos():
 		target_position = _snap_to_grid(mouse_pos_3d)
 	_active_blueprint_node.global_transform.origin = target_position
 	_feedback_label.global_transform.origin = target_position
+
 
 func _update_blueprint_color(blueprint_position_is_valid):
 	var material_to_set = (
@@ -203,8 +211,6 @@ func _update_blueprint_color(blueprint_position_is_valid):
 	for child in _active_blueprint_node.find_children("*"):
 		if "material_override" in child:
 			child.material_override = material_to_set
-
-
 
 
 func _cancel_structure_placement():
@@ -222,16 +228,22 @@ func _finish_structure_placement():
 		# Resources are NOT deducted here — Match._execute_command() handles that
 		# when STRUCTURE_PLACED executes. This ensures replay determinism: the same
 		# resource deduction happens at the exact same tick during playback.
-		CommandBus.push_command({
-			"tick": Match.tick + 1,
-			"type": Enums.CommandType.STRUCTURE_PLACED,
-			"player_id": _player.id,
-			"data": {
-				"structure_prototype": _pending_structure_prototype.resource_path,
-				"transform": _active_blueprint_node.global_transform,
-				"self_constructing": true,
-			}
-		})
+		(
+			CommandBus
+			. push_command(
+				{
+					"tick": Match.tick + 1,
+					"type": Enums.CommandType.STRUCTURE_PLACED,
+					"player_id": _player.id,
+					"data":
+					{
+						"structure_prototype": _pending_structure_prototype.resource_path,
+						"transform": _active_blueprint_node.global_transform,
+						"self_constructing": true,
+					}
+				}
+			)
+		)
 	_cancel_structure_placement()
 
 
@@ -252,7 +264,9 @@ func _try_rotating_blueprint_by(degrees):
 
 func _rotate_blueprint_towards_mouse_pos():
 	var mouse_pos_2d = get_viewport().get_mouse_position()
-	var mouse_pos_3d = get_viewport().get_camera_3d().get_ray_intersection(mouse_pos_2d)
+	var camera = get_viewport().get_camera_3d()
+	var map = _match.map if _match != null else null
+	var mouse_pos_3d = camera.get_terrain_ray_intersection(mouse_pos_2d, map)
 	if mouse_pos_3d == null:
 		return
 	var mouse_pos_yless = mouse_pos_3d * Vector3(1, 0, 1)
@@ -292,7 +306,7 @@ func _snap_to_grid(position: Vector3) -> Vector3:
 
 
 func _snap_rotation_to_90_degrees():
-	# Defensive check - although callers should ensure blueprint exists, 
+	# Defensive check - although callers should ensure blueprint exists,
 	# this prevents potential issues if called incorrectly
 	if not _structure_placement_started():
 		return

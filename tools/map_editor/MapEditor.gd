@@ -123,6 +123,9 @@ func _setup_ui_connections():
 		palette_select.spawn_selected.connect(_on_palette_spawn_selected)
 		palette_select.height_level_selected.connect(_on_palette_height_selected)
 		palette_select.slope_selected.connect(_on_palette_slope_selected)
+		palette_select.water_slope_selected.connect(_on_palette_water_slope_selected)
+		palette_select.collision_selected.connect(_on_palette_collision_selected)
+		palette_select.slope_angle_changed.connect(_on_palette_slope_angle_changed)
 	# Connect texture palette signals
 	if texture_select:
 		texture_select.texture_selected.connect(_on_palette_texture_selected)
@@ -239,13 +242,46 @@ func _on_palette_height_selected(level: int):
 		brush_info.text = current_brush.get_brush_name()
 
 
-func _on_palette_slope_selected():
+func _on_palette_slope_selected() -> void:
 	"""Handle slope tool selection from palette"""
 	_create_brush(BrushType.PAINT_SLOPE)
 
-	var brush_info = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
+	var brush_info: Label = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
 	if brush_info and current_brush:
 		brush_info.text = current_brush.get_brush_name()
+
+
+func _on_palette_water_slope_selected() -> void:
+	"""Handle water slope tool selection from palette"""
+	_create_brush(BrushType.PAINT_SLOPE)
+	if current_brush is SlopeBrush:
+		current_brush.is_water_slope = true
+
+	var brush_info: Label = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
+	if brush_info and current_brush:
+		brush_info.text = current_brush.get_brush_name()
+
+
+func _on_palette_collision_selected(value: int) -> void:
+	"""Handle collision brush selection from Environment palette"""
+	_create_brush(BrushType.PAINT_COLLISION)
+	if current_brush is PaintCollisionBrush:
+		current_brush.paint_value = value
+
+	var brush_info: Label = get_node_or_null("VBoxContainer/Toolbar/BrushInfo")
+	if brush_info and current_brush:
+		brush_info.text = current_brush.get_brush_name()
+
+
+func _on_palette_slope_angle_changed(angle: float) -> void:
+	"""Handle slope angle change from palette"""
+	if current_map:
+		current_map.slope_angle = angle
+		# Refresh collision view if visible
+		if collision_renderer and view_mode == ViewMode.COLLISION_VIEW:
+			collision_renderer.refresh()
+	if status_label:
+		status_label.text = "Slope angle: %d°" % int(angle)
 
 
 func _on_palette_texture_selected_as_base_layer(terrain: TerrainType):
@@ -719,6 +755,9 @@ func save_map(path: String):
 		if status_label:
 			status_label.text = "Validation errors: " + str(errors[0])
 
+	# Generate merged collision shapes before saving
+	current_map.collision_shapes = CollisionShapeBuilder.build_all(current_map)
+
 	var result = ResourceSaver.save(current_map, path)
 	if result == OK:
 		if status_label:
@@ -755,6 +794,9 @@ func load_map(path: String):
 
 func export_map(path: String):
 	"""Export map to runtime format"""
+	# Generate merged collision shapes before export
+	current_map.collision_shapes = CollisionShapeBuilder.build_all(current_map)
+
 	var runtime_map = MapRuntimeResource.from_editor_map(current_map)
 	var errors = runtime_map.validate()
 

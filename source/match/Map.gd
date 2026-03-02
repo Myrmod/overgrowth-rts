@@ -10,6 +10,7 @@ const CELL_GROUND := 0
 const CELL_HIGH_GROUND := 1
 const CELL_WATER := 2
 const CELL_SLOPE := 3
+const CELL_WATER_SLOPE := 4
 
 @export var size = Vector2(50, 50):
 	set(a_size):
@@ -209,7 +210,7 @@ func _is_cliff_edge_pair(h_a: float, ct_a: int, h_b: float, ct_b: int) -> bool:
 	"""True when two neighbouring cells form a cliff (height gap, no slope)."""
 	if absf(h_b - h_a) <= 0.1:
 		return false
-	return ct_a != CELL_SLOPE and ct_b != CELL_SLOPE
+	return not _is_slope_cell_type(ct_a) and not _is_slope_cell_type(ct_b)
 
 
 func get_cell_type_at_cell(cell: Vector2i) -> int:
@@ -260,7 +261,12 @@ func can_unit_traverse(
 			if ct != CELL_WATER and ct != CELL_SLOPE:
 				return false
 		NavigationConstants.TerrainMoveType.LAND:
-			if ct != CELL_GROUND and ct != CELL_HIGH_GROUND and ct != CELL_SLOPE:
+			if (
+				ct != CELL_GROUND
+				and ct != CELL_HIGH_GROUND
+				and ct != CELL_SLOPE
+				and ct != CELL_WATER_SLOPE
+			):
 				return false
 		_:
 			if ct == CELL_WATER:
@@ -271,7 +277,7 @@ func can_unit_traverse(
 	if from_pos != Vector3.INF:
 		var ct_from := get_cell_type_at_world(from_pos)
 		if ct_from != ct:
-			var either_is_slope: bool = ct == CELL_SLOPE or ct_from == CELL_SLOPE
+			var either_is_slope: bool = _is_slope_cell_type(ct) or _is_slope_cell_type(ct_from)
 			if not either_is_slope:
 				# Different cell types and no slope involved — check height gap
 				var h_from := get_height_at_cell(world_to_cell(from_pos))
@@ -286,7 +292,7 @@ func can_unit_traverse(
 # Cliff collision walls
 # ============================================================
 
-const CLIFF_WALL_THICKNESS: float = 0.15
+const CLIFF_WALL_THICKNESS: float = 0.4
 const CLIFF_WALL_HEIGHT: float = 4.0
 
 
@@ -359,17 +365,24 @@ func _is_cliff_edge(cell_a: Vector2i, cell_b: Vector2i) -> bool:
 	neither cell is a slope (slopes are ramps, not cliffs)."""
 	var ct_a := get_cell_type_at_cell(cell_a)
 	var ct_b := get_cell_type_at_cell(cell_b)
-	if ct_a == CELL_SLOPE or ct_b == CELL_SLOPE:
+	if _is_slope_cell_type(ct_a) or _is_slope_cell_type(ct_b):
 		return false
 	var h_a := get_height_at_cell(cell_a)
 	var h_b := get_height_at_cell(cell_b)
 	return absf(h_b - h_a) > 0.1
 
 
+func _is_slope_cell_type(ct: int) -> bool:
+	return ct == CELL_SLOPE or ct == CELL_WATER_SLOPE
+
+
 func _add_wall_body(parent: Node3D, pos: Vector3, extents: Vector3, idx: int) -> void:
 	var body := StaticBody3D.new()
 	body.name = "CliffWall%d" % idx
 	body.transform.origin = pos
+	# Layer 2 so the terrain NavigationMesh (geometry_collision_mask) detects us
+	body.collision_layer = 2
+	body.collision_mask = 0
 	body.add_to_group("terrain_navigation_input")
 
 	var shape := BoxShape3D.new()

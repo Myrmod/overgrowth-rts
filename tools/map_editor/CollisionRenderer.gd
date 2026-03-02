@@ -2,122 +2,160 @@ class_name CollisionRenderer
 
 extends Node3D
 
-## Renders collision visualization using MultiMeshInstance3D
-## Shows blocked/walkable cells with different colors
+## Renders collision visualization using merged shapes from CollisionShapeBuilder.
+## Shows height blocks, cliff walls, tilted slopes, and manual collision
+## with distinct colours per group.
 
-# Colors for different collision states
-const COLOR_WALKABLE = Color(0.2, 0.8, 0.2, 0.5)  # Green
-const COLOR_BLOCKED = Color(0.8, 0.2, 0.2, 0.5)  # Red
+# Colours keyed by collision group
+const GROUP_COLORS := {
+	CollisionShapeBuilder.GROUP_GROUND: Color(0.3, 0.7, 0.3, 0.25),
+	CollisionShapeBuilder.GROUP_HIGH_GROUND: Color(0.7, 0.5, 0.2, 0.5),
+	CollisionShapeBuilder.GROUP_WATER: Color(0.2, 0.4, 0.9, 0.5),
+	CollisionShapeBuilder.GROUP_CLIFF: Color(0.9, 0.2, 0.2, 0.6),
+	CollisionShapeBuilder.GROUP_SLOPE: Color(0.9, 0.7, 0.2, 0.5),
+	CollisionShapeBuilder.GROUP_WATER_SLOPE: Color(0.2, 0.8, 0.8, 0.5),
+	CollisionShapeBuilder.GROUP_MANUAL: Color(0.8, 0.2, 0.2, 0.5),
+}
 
 var map_resource: MapResource
 var grid_size: Vector2i = Vector2i(50, 50)
 
-var _multimesh_instance: MultiMeshInstance3D
-var _cell_mesh: BoxMesh
+# Keep references so we can free them on rebuild
+var _shape_nodes: Array[Node3D] = []
+
+# Cache materials per group to reduce allocations
+var _material_cache: Dictionary = {}
 
 
-func _init(map_res: MapResource = null):
+func _init(map_res: MapResource = null) -> void:
 	map_resource = map_res
 	if map_res:
 		grid_size = map_res.size
 
 
-func _ready():
+func _ready() -> void:
 	if map_resource:
 		refresh()
 
 
-func set_map_resource(map_res: MapResource):
+func set_map_resource(map_res: MapResource) -> void:
 	"""Set the map resource and refresh visualization"""
 	map_resource = map_res
 	grid_size = map_res.size
 	refresh()
 
 
-func refresh():
-	"""Rebuild the collision visualization from map data"""
-	if _multimesh_instance:
-		_multimesh_instance.queue_free()
-		_multimesh_instance = null
+func refresh() -> void:
+	"""Rebuild the collision visualization from the merged shape data."""
+	_clear_shapes()
 
 	if not map_resource:
 		return
 
-	_setup_multimesh()
+	var shapes: Array[Dictionary] = CollisionShapeBuilder.build_all(map_resource)
+	for shape: Dictionary in shapes:
+		_create_shape_visual(shape)
 
 
-func _setup_multimesh():
-	"""Create and configure the multimesh for collision rendering"""
-	# Create the cell mesh (small box)
-	_cell_mesh = BoxMesh.new()
-	_cell_mesh.size = Vector3(
-		FeatureFlags.grid_cell_size * 0.9, 0.2, FeatureFlags.grid_cell_size * 0.9
-	)
-
-	# Create multimesh
-	var multimesh = MultiMesh.new()
-	multimesh.transform_format = MultiMesh.TRANSFORM_3D
-	multimesh.use_colors = true
-	multimesh.mesh = _cell_mesh
-	multimesh.instance_count = grid_size.x * grid_size.y
-
-	# Set up each cell based on collision data
-	for y in range(grid_size.y):
-		for x in range(grid_size.x):
-			var index = y * grid_size.x + x
-			var pos = Vector2i(x, y)
-			var collision_value = map_resource.get_collision_at(pos)
-			var cell_height = map_resource.get_height_at(pos)
-
-			# Position — lift the indicator to match the terrain height
-			var _transform = Transform3D()
-			_transform.origin = Vector3(
-				x * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0,
-				0.1 + cell_height,
-				y * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0
-			)
-			multimesh.set_instance_transform(index, _transform)
-
-			# Color based on collision state
-			var color = COLOR_WALKABLE if collision_value == 0 else COLOR_BLOCKED
-			multimesh.set_instance_color(index, color)
-
-	# Create material
-	var material = StandardMaterial3D.new()
-	material.vertex_color_use_as_albedo = true
-	material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.disable_receive_shadows = true
-	_cell_mesh.material = material
-
-	# Create and add the multimesh instance
-	_multimesh_instance = MultiMeshInstance3D.new()
-	_multimesh_instance.multimesh = multimesh
-	add_child(_multimesh_instance)
+func _clear_shapes() -> void:
+	for node: Node3D in _shape_nodes:
+		if is_instance_valid(node):
+			node.queue_free()
+	_shape_nodes.clear()
 
 
-func update_cell(pos: Vector2i):
-	"""Update a single cell's visualization (color + height position)"""
-	if not _multimesh_instance or not map_resource:
-		return
-
-	var index = pos.y * grid_size.x + pos.x
-	var collision_value = map_resource.get_collision_at(pos)
-	var cell_height = map_resource.get_height_at(pos)
-	var color = COLOR_WALKABLE if collision_value == 0 else COLOR_BLOCKED
-
-	# Update position to follow the terrain height
-	var _transform = Transform3D()
-	_transform.origin = Vector3(
-		pos.x * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0,
-		0.1 + cell_height,
-		pos.y * FeatureFlags.grid_cell_size + FeatureFlags.grid_cell_size / 2.0
-	)
-	_multimesh_instance.multimesh.set_instance_transform(index, _transform)
-	_multimesh_instance.multimesh.set_instance_color(index, color)
+func _create_shape_visual(shape: Dictionary) -> void:
+	match shape.type:
+		CollisionShapeBuilder.SHAPE_BOX:
+			_create_box_visual(shape)
+		CollisionShapeBuilder.SHAPE_WALL:
+			_create_wall_visual(shape)
+		CollisionShapeBuilder.SHAPE_SLOPE:
+			_create_slope_visual(shape)
 
 
-func update_cells(positions: Array[Vector2i]):
-	"""Update multiple cells' visualization"""
-	for pos in positions:
-		update_cell(pos)
+# ------------------------------------------------------------------
+# Box (height blocks & manual collision)
+# ------------------------------------------------------------------
+func _create_box_visual(shape: Dictionary) -> void:
+	var mesh_inst: MeshInstance3D = MeshInstance3D.new()
+	var box: BoxMesh = BoxMesh.new()
+	box.size = shape.size
+	mesh_inst.mesh = box
+	mesh_inst.position = shape.position
+	mesh_inst.material_override = _get_material(shape.group)
+	add_child(mesh_inst)
+	_shape_nodes.append(mesh_inst)
+
+
+# ------------------------------------------------------------------
+# Wall (cliff edges)
+# ------------------------------------------------------------------
+func _create_wall_visual(shape: Dictionary) -> void:
+	var mesh_inst: MeshInstance3D = MeshInstance3D.new()
+	var box: BoxMesh = BoxMesh.new()
+	box.size = shape.size
+	mesh_inst.mesh = box
+	mesh_inst.position = shape.position
+	mesh_inst.material_override = _get_material(shape.group)
+	add_child(mesh_inst)
+	_shape_nodes.append(mesh_inst)
+
+
+# ------------------------------------------------------------------
+# Slope (tilted collision surface)
+# ------------------------------------------------------------------
+func _create_slope_visual(shape: Dictionary):
+	var mesh_inst: MeshInstance3D = MeshInstance3D.new()
+	var box: BoxMesh = BoxMesh.new()
+	box.size = Vector3(shape.size.x, 0.08, shape.size.z)
+	mesh_inst.mesh = box
+	mesh_inst.position = shape.position
+
+	var dir: Vector2i = shape.get("direction", Vector2i(1, 0))
+	var angle_rad: float = deg_to_rad(shape.get("angle_deg", 60.0))
+
+	# Rotate the thin box so the surface is tilted at the configured angle
+	# from horizontal, going upward in the slope direction.
+	if dir == Vector2i(1, 0):
+		mesh_inst.rotation.z = angle_rad
+	elif dir == Vector2i(-1, 0):
+		mesh_inst.rotation.z = -angle_rad
+	elif dir == Vector2i(0, 1):
+		mesh_inst.rotation.x = -angle_rad
+	elif dir == Vector2i(0, -1):
+		mesh_inst.rotation.x = angle_rad
+
+	mesh_inst.material_override = _get_material(shape.group)
+	add_child(mesh_inst)
+	_shape_nodes.append(mesh_inst)
+
+
+# ------------------------------------------------------------------
+# Material helper
+# ------------------------------------------------------------------
+func _get_material(group: String) -> StandardMaterial3D:
+	if _material_cache.has(group):
+		return _material_cache[group]
+
+	var mat: StandardMaterial3D = StandardMaterial3D.new()
+	mat.albedo_color = GROUP_COLORS.get(group, Color(0.5, 0.5, 0.5, 0.5))
+	mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	mat.disable_receive_shadows = true
+	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	_material_cache[group] = mat
+	return mat
+
+
+# ------------------------------------------------------------------
+# Compatibility methods (called by MapEditor on per-cell updates)
+# ------------------------------------------------------------------
+func update_cell(_pos: Vector2i) -> void:
+	"""A single cell changed – rebuild all shapes."""
+	refresh()
+
+
+func update_cells(_positions: Array[Vector2i]) -> void:
+	"""Multiple cells changed – rebuild all shapes."""
+	refresh()
