@@ -100,11 +100,10 @@ text = "Palette"
 
 [node name="PaletteSelect" type="TabContainer" parent="VBoxContainer/MainArea/LeftPalette" unique_id=277663447]
 layout_mode = 2
-current_tab = 2
+current_tab = 0
 script = ExtResource("2_entity_palette")
 
 [node name="Environment" type="MarginContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect" unique_id=804728807]
-visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
@@ -247,6 +246,7 @@ layout_mode = 2
 text = "Test Button"
 
 [node name="Textures" type="MarginContainer" parent="VBoxContainer/MainArea/LeftPalette/PaletteSelect" unique_id=1315734546]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
