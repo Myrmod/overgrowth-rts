@@ -2,6 +2,7 @@ class_name UnitConstants
 
 const PRODUCTION_QUEUE_LIMIT = 5
 const STRUCTURE_BLUEPRINTS = {
+	# the Amuns
 	"res://source/factions/the_amuns/structures/CommandCenter.tscn":
 	"res://source/factions/the_amuns/structures/structure-geometries/CommandCenter.tscn",
 	"res://source/factions/the_amuns/structures/VehicleFactory.tscn":
@@ -14,8 +15,18 @@ const STRUCTURE_BLUEPRINTS = {
 	"res://source/factions/the_amuns/structures/structure-geometries/AntiAirTurret.tscn",
 	"res://source/factions/the_amuns/structures/Shipyard.tscn":
 	"res://source/factions/the_amuns/structures/structure-geometries/Shipyard.tscn",
+	# the Legion
+	"res://source/factions/the_legion/structures/CommandCenter.tscn":
+	"res://source/factions/the_legion/structures/structure-geometries/CommandCenter.tscn",
+	# the Radix
+	"res://source/factions/the_radix/structures/CommandCenter.tscn":
+	"res://source/factions/the_radix/structures/structure-geometries/CommandCenter.tscn",
+	# the Remnants
+	"res://source/factions/the_remnants/structures/CommandCenter.tscn":
+	"res://source/factions/the_remnants/structures/structure-geometries/CommandCenter.tscn",
 }
 const DEFAULT_PROPERTIES = {
+	# the Amuns
 	"res://source/factions/the_amuns/units/Drone.tscn":
 	{
 		"sight_range": 10.0,
@@ -128,8 +139,66 @@ const DEFAULT_PROPERTIES = {
 		"costs": {"resource": 5},
 		"build_time": 8.0,
 	},
+	# the Legion
+	"res://source/factions/the_legion/structures/CommandCenter.tscn":
+	{
+		"sight_range": 10.0,
+		"hp": 20,
+		"hp_max": 20,
+		"costs": {"resource": 8},
+		"build_time": 10.0,
+	},
+	"res://source/factions/the_legion/units/Worker.tscn":
+	{
+		"sight_range": 5.0,
+		"hp": 6,
+		"hp_max": 6,
+		"resources_max": 500,
+		"resources_gather_rate": 250,
+		"costs": {"resource": 2},
+		"build_time": 3.0,
+	},
+	# the Radix
+	"res://source/factions/the_radix/structures/CommandCenter.tscn":
+	{
+		"sight_range": 10.0,
+		"hp": 20,
+		"hp_max": 20,
+		"costs": {"resource": 8},
+		"build_time": 10.0,
+	},
+	"res://source/factions/the_radix/units/Worker.tscn":
+	{
+		"sight_range": 5.0,
+		"hp": 6,
+		"hp_max": 6,
+		"resources_max": 500,
+		"resources_gather_rate": 250,
+		"costs": {"resource": 2},
+		"build_time": 3.0,
+	},
+	# the Remnants
+	"res://source/factions/the_remnants/structures/CommandCenter.tscn":
+	{
+		"sight_range": 10.0,
+		"hp": 20,
+		"hp_max": 20,
+		"costs": {"resource": 8},
+		"build_time": 10.0,
+	},
+	"res://source/factions/the_remnants/units/Worker.tscn":
+	{
+		"sight_range": 5.0,
+		"hp": 6,
+		"hp_max": 6,
+		"resources_max": 500,
+		"resources_gather_rate": 250,
+		"costs": {"resource": 2},
+		"build_time": 3.0,
+	},
 }
 const PROJECTILES = {
+	# the Amuns
 	"res://source/factions/the_amuns/units/Helicopter.tscn":
 	"res://source/match/units/projectiles/Rocket.tscn",
 	"res://source/factions/the_amuns/units/Tank.tscn":
