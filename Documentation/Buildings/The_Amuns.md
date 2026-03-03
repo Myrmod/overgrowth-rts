@@ -4,7 +4,7 @@
 
 ## Obelisk: 
 - Costs 1000 , 10 secs build time, produces 1 power per second 
-- Buff production speed/armor/dmg for buildings near it by 10%
+- Buff production speed/armor/dmg for buildings near it by 10% , 5 tile radius
 
 ## Harvesting obelisk:
 - costs 1000, 10 seconds build time, allows the production of altars
