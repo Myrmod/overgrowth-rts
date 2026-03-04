@@ -11,7 +11,6 @@ signal changed
 
 @export var color = Color.WHITE
 
-var _color_material = null
 var id: int
 # TEAM SYSTEM: Integer team identifier for team-based gameplay.
 # Units with the same team ID cannot attack each other. Teams also share vision - all units
@@ -19,6 +18,8 @@ var id: int
 # Default (0) is assigned by Play.gd: first player=team 0, second player=team 1, etc.
 # Custom team values can be set to create alliances or custom match configurations.
 var team: int = 0
+var faction: Enums.Faction = Enums.Faction.AMUNS
+var _color_material = null
 
 
 func _ready():

@@ -1,0 +1,270 @@
+[gd_scene format=3 uid="uid://dg5144jbydpky"]
+
+[ext_resource type="Script" uid="uid://b1hpe60t5y74n" path="res://source/match/hud/Minimap.gd" id="1_udidi"]
+[ext_resource type="Shader" uid="uid://pxfhc3ku5i4l" path="res://source/shaders/2d/white_transparent.gdshader" id="2_bfxgo"]
+[ext_resource type="Texture2D" uid="uid://15t3dswnnt5a" path="res://assets/ui/icons/repair_icon.png" id="3_7phom"]
+[ext_resource type="Texture2D" uid="uid://dhj4pn12ba34b" path="res://assets/ui/icons/structures_icon.png" id="3_iv7kb"]
+[ext_resource type="Texture2D" uid="uid://ligrahggjb7" path="res://assets/ui/icons/sell_icon.png" id="4_7jbih"]
+[ext_resource type="Texture2D" uid="uid://cpkiy2iddu1wm" path="res://assets/ui/icons/defences_icon.png" id="4_7phom"]
+[ext_resource type="Texture2D" uid="uid://3rdl35eyu4mi" path="res://assets/ui/icons/disable_icon.png" id="5_7a2ul"]
+[ext_resource type="Texture2D" uid="uid://bk733eiuruumq" path="res://assets/ui/icons/infantry_icon.png" id="5_rncgw"]
+[ext_resource type="Texture2D" uid="uid://bwepu16qqrrj5" path="res://assets/ui/icons/vehicle_icon.png" id="6_7jbih"]
+[ext_resource type="Texture2D" uid="uid://c8ooprujl2jo" path="res://assets/ui/icons/air_icon.png" id="7_7a2ul"]
+[ext_resource type="Texture2D" uid="uid://naaatm5st4hc" path="res://assets/ui/icons/ship_icon.png" id="8_h6iyy"]
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_hbjve"]
+viewport_path = NodePath("FogOfWar/CombinedViewport")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_55hgm"]
+resource_local_to_scene = true
+shader = ExtResource("2_bfxgo")
+shader_parameter/reference_texture = SubResource("ViewportTexture_hbjve")
+
+[sub_resource type="ViewportTexture" id="ViewportTexture_gka2s"]
+viewport_path = NodePath("MarginContainer/VBoxContainer/MarginContainer/Minimap/MarginContainer/MinimapViewport")
+
+[node name="HUD" type="CanvasLayer" unique_id=128907128]
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1191015136]
+anchors_preset = 11
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -270.0
+grow_horizontal = 0
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1324083492]
+layout_mode = 2
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=383631218]
+custom_minimum_size = Vector2(0, 270)
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="Minimap" type="PanelContainer" parent="MarginContainer/VBoxContainer/MarginContainer" unique_id=1088311128]
+layout_mode = 2
+script = ExtResource("1_udidi")
+
+[node name="MarginContainer" type="MarginContainer" parent="MarginContainer/VBoxContainer/MarginContainer/Minimap" unique_id=467373998]
+layout_mode = 2
+theme_override_constants/margin_left = 5
+theme_override_constants/margin_top = 5
+theme_override_constants/margin_right = 5
+theme_override_constants/margin_bottom = 5
+
+[node name="MinimapViewport" type="SubViewport" parent="MarginContainer/VBoxContainer/MarginContainer/Minimap/MarginContainer" unique_id=1945551256]
+disable_3d = true
+size = Vector2i(100, 100)
+
+[node name="Background" type="ColorRect" parent="MarginContainer/VBoxContainer/MarginContainer/Minimap/MarginContainer/MinimapViewport" unique_id=1242041766]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.351562, 0.351562, 0.351562, 1)
+
+[node name="EditorOnlyDummyUnit" type="ColorRect" parent="MarginContainer/VBoxContainer/MarginContainer/Minimap/MarginContainer/MinimapViewport" unique_id=1974771534]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -1.0
+offset_top = -1.0
+offset_right = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(1, 0, 0, 1)
+
+[node name="EditorOnlyDummyUnit2" type="ColorRect" parent="MarginContainer/VBoxContainer/MarginContainer/Minimap/MarginContainer/MinimapViewport" unique_id=283464942]
+anchors_preset = -1
+anchor_left = 0.25
+anchor_right = 0.25
+offset_left = -1.0
+offset_right = 1.0
+offset_bottom = 2.0
+grow_horizontal = 2
+color = Color(1, 0, 0, 1)
+
+[node name="FogOfWarMask" type="ColorRect" parent="MarginContainer/VBoxContainer/MarginContainer/Minimap/MarginContainer/MinimapViewport" unique_id=1940773829]
+material = SubResource("ShaderMaterial_55hgm")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 1)
+
+[node name="CameraIndicator" type="Line2D" parent="MarginContainer/VBoxContainer/MarginContainer/Minimap/MarginContainer/MinimapViewport" unique_id=1695538493]
+points = PackedVector2Array(5, 5, 5, 30, 30, 30, 30, 5, 5, 5)
+width = 1.0
+begin_cap_mode = 1
+end_cap_mode = 1
+antialiased = true
+
+[node name="MinimapTextureRect" type="TextureRect" parent="MarginContainer/VBoxContainer/MarginContainer/Minimap/MarginContainer" unique_id=391555104]
+layout_mode = 2
+texture = SubResource("ViewportTexture_gka2s")
+expand_mode = 3
+stretch_mode = 5
+
+[node name="ProductionMenuTabs" type="MarginContainer" parent="MarginContainer/VBoxContainer" unique_id=944116351]
+layout_mode = 2
+theme_override_constants/margin_left = 0
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 0
+theme_override_constants/margin_bottom = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/VBoxContainer/ProductionMenuTabs" unique_id=658838689]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer" unique_id=49085841]
+layout_mode = 2
+theme_override_constants/separation = 2
+
+[node name="RepairButton" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer" unique_id=1399628908]
+layout_mode = 2
+tooltip_text = "Repair structure (J)"
+icon = ExtResource("3_7phom")
+
+[node name="SellButton" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer" unique_id=1192113075]
+layout_mode = 2
+tooltip_text = "Sell structure (K)"
+icon = ExtResource("4_7jbih")
+
+[node name="DisableButton" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer" unique_id=2069850720]
+layout_mode = 2
+tooltip_text = "Disable structure (L)"
+icon = ExtResource("5_7a2ul")
+
+[node name="ResourcesContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer" unique_id=960581183]
+layout_mode = 2
+
+[node name="Panel" type="Panel" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer/ResourcesContainer" unique_id=1600839784]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer/ResourcesContainer/Panel" unique_id=1155211777]
+layout_mode = 0
+offset_right = 124.0
+offset_bottom = 32.0
+
+[node name="Credits" type="Label" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer/ResourcesContainer/Panel/HBoxContainer" unique_id=955760135]
+layout_mode = 2
+text = "10.000$"
+vertical_alignment = 1
+
+[node name="Divider" type="Label" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer/ResourcesContainer/Panel/HBoxContainer" unique_id=912728426]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_font_sizes/font_size = 23
+text = "l"
+
+[node name="Secondary" type="Label" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/HBoxContainer/ResourcesContainer/Panel/HBoxContainer" unique_id=2007246498]
+layout_mode = 2
+text = "10 xyz"
+vertical_alignment = 1
+
+[node name="TabBar" type="TabBar" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer" unique_id=1216559607]
+layout_mode = 2
+current_tab = 0
+max_tab_width = 20
+tab_count = 6
+tab_0/tooltip = "Structures"
+tab_0/icon = ExtResource("3_iv7kb")
+tab_1/tooltip = "Defences"
+tab_1/icon = ExtResource("4_7phom")
+tab_2/tooltip = "Infantry"
+tab_2/icon = ExtResource("5_rncgw")
+tab_3/tooltip = "Vehicles"
+tab_3/icon = ExtResource("6_7jbih")
+tab_4/tooltip = "Air units"
+tab_4/icon = ExtResource("7_7a2ul")
+tab_5/tooltip = "Ships"
+tab_5/icon = ExtResource("8_h6iyy")
+
+[node name="TabBarOverflow" type="TabBar" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer" unique_id=1371726651]
+layout_mode = 2
+current_tab = 0
+max_tab_width = 20
+tab_count = 11
+tab_0/title = "1"
+tab_1/title = "2"
+tab_2/title = "3"
+tab_3/title = "4"
+tab_4/title = "5"
+tab_5/title = "6"
+tab_6/title = "7"
+tab_7/title = "8"
+tab_8/title = "9"
+tab_9/title = "10"
+tab_10/title = "11"
+
+[node name="ProductionGrid" type="GridContainer" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer" unique_id=1823303716]
+layout_mode = 2
+theme_override_constants/h_separation = 2
+theme_override_constants/v_separation = 2
+columns = 4
+
+[node name="F1" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=1212394354]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F1"
+
+[node name="F2" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=391377278]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F2"
+
+[node name="F3" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=267880299]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F3"
+
+[node name="F4" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=2017347259]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F4"
+
+[node name="F5" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=2001861465]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F5"
+
+[node name="F6" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=851905516]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F6"
+
+[node name="F7" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=527666797]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F7"
+
+[node name="F8" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=2088842699]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F8"
+
+[node name="F9" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=784330967]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F9"
+
+[node name="F10" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=749811739]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F10"
+
+[node name="F11" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=828395311]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F11"
+
+[node name="F12" type="Button" parent="MarginContainer/VBoxContainer/ProductionMenuTabs/VBoxContainer/ProductionGrid" unique_id=1302702357]
+custom_minimum_size = Vector2(66, 66)
+layout_mode = 2
+text = "F12"

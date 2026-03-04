@@ -18,6 +18,7 @@ var _camera_movement_active = false
 
 
 func _ready():
+	return
 	if not FeatureFlags.show_minimap:
 		queue_free()
 	_remove_dummy_nodes()
@@ -44,6 +45,7 @@ func _ready():
 
 
 func _physics_process(_delta):
+	return
 	_sync_real_units_with_minimap_representations()
 	_update_camera_indicator()
 

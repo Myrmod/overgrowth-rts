@@ -48,3 +48,10 @@ enum PlacementTypes {
 }
 
 enum HeightLevel { WATER = -1, GROUND = 0, HIGH_GROUND = 1, AIR = 2 }
+
+enum Faction {
+	AMUNS,
+	LEGION,
+	RADIX,
+	REMNANTS,
+}

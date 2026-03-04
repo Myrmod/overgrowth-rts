@@ -9,10 +9,11 @@ extends Control
 const PlayerSettingsScene = preload("res://source/main-menu/PlayerSettings.tscn")
 const LoadingScene = preload("res://source/main-menu/Loading.tscn")
 
+var replay_resource = null
+
 var _map_paths = []
 var _map_info = {}  # path -> {name, players, size} — unified registry for built-in + custom maps
 var _num_spawns := 0
-var replay_resource = null
 
 @onready var _start_button = find_child("StartButton")
 @onready var _map_list = find_child("MapList")
@@ -101,15 +102,18 @@ func _create_match_settings():
 		var color_picker = player_container.find_child("ColorPickerButton")
 		var team_select = player_container.find_child("TeamSelect")
 		var spawn_select = player_container.find_child("SpawnSelect")
+		var faction_select = player_container.find_child("FactionSelect")
 
 		var player_controller = play_select.selected
 		if player_controller != Constants.PlayerType.NONE:
 			var player_settings = PlayerSettings.new()
 			player_settings.controller = player_controller
 			player_settings.color = color_picker.color
-			# TEAM ASSIGNMENT: Read from UI selection. If 0 (default), users can override team memberships for alliances.
+			# TEAM ASSIGNMENT: Read from UI selection. If 0 (default),
+			# users can override team memberships for alliances.
 			# Match.gd will use these team values when creating Player nodes.
 			player_settings.team = team_select.selected
+			player_settings.faction = faction_select.selected
 			# SPAWN: 0 = Random (-1 internally), 1+ = specific spawn point (0-indexed)
 			player_settings.spawn_index = spawn_select.selected - 1
 			match_settings.players.append(player_settings)
@@ -156,6 +160,10 @@ func _align_player_controls_visibility_to_map(map):
 	for player_index in range(num_players):
 		var player_settings_instance = PlayerSettingsScene.instantiate()
 		grid_container.add_child(player_settings_instance)
+
+		# Configure facion select
+		var faction_select = player_settings_instance.find_child("FactionSelect")
+		faction_select.item_selected.connect(_on_faction_selected.bind(player_index))
 
 		# Configure team select to only show teams matching spawn points
 		var team_select = player_settings_instance.find_child("TeamSelect")
@@ -242,6 +250,10 @@ func _on_spawn_selected(_selected_id: int, _player_index: int) -> void:
 		var other_spawn = player_settings_nodes[i].find_child("SpawnSelect")
 		if other_spawn.selected == _selected_id:
 			other_spawn.selected = 0  # reset to Random
+
+
+func _on_faction_selected(_selected_id: int, _player_index: int) -> void:
+	pass
 
 
 func _start_from_replay():

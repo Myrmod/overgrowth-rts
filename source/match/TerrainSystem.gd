@@ -118,7 +118,7 @@ func _upload_height_grid():
 		mat.set_shader_parameter("grid_height_scale", 1.0)
 
 
-func update_height_at(positions: Array[Vector2i]):
+func update_height_at(_positions: Array[Vector2i]):
 	"""Efficiently update only the changed cells after a brush stroke."""
 	if not map or not _height_grid_texture:
 		_upload_height_grid()

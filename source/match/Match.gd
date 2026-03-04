@@ -28,7 +28,14 @@ extends Node3D
 const Structure = preload("res://source/match/units/Structure.gd")
 const Human = preload("res://source/match/players/human/Human.gd")
 
-const CommandCenter = preload("res://source/factions/the_amuns/structures/CommandCenter.tscn")
+const CommandCenterAmuns = preload("res://source/factions/the_amuns/structures/CommandCenter.tscn")
+const CommandCenterLegion = preload(
+	"res://source/factions/the_legion/structures/CommandCenter.tscn"
+)
+const CommandCenterRadix = preload("res://source/factions/the_radix/structures/CommandCenter.tscn")
+const CommandCenterRemnants = preload(
+	"res://source/factions/the_remnants/structures/CommandCenter.tscn"
+)
 
 @export var settings: Resource = null
 
@@ -543,6 +550,7 @@ func _create_players_from_settings():
 		# Teams are typically auto-assigned by Play.gd (player_index 0 -> team 0, player_index 1 -> team 1, etc.)
 		# to ensure playable matches. Custom team assignments override this (for alliances, etc.)
 		player.team = player_settings.team
+		player.faction = player_settings.faction
 		_players.add_child(player)
 
 
@@ -592,9 +600,20 @@ func _setup_player_units():
 					break
 
 
+# here player starting units are defined on a per faction basis
 func _spawn_player_units(player, spawn_transform):
-	_setup_and_spawn_unit(CommandCenter.instantiate(), spawn_transform, player, false)
-	# starting units would be set here, e.g.: workers
+	print(player)
+	match player.faction:
+		Enums.Faction.AMUNS:
+			_setup_and_spawn_unit(CommandCenterAmuns.instantiate(), spawn_transform, player, false)
+		Enums.Faction.LEGION:
+			_setup_and_spawn_unit(CommandCenterLegion.instantiate(), spawn_transform, player, false)
+		Enums.Faction.RADIX:
+			_setup_and_spawn_unit(CommandCenterRadix.instantiate(), spawn_transform, player, false)
+		Enums.Faction.REMNANTS:
+			_setup_and_spawn_unit(
+				CommandCenterRemnants.instantiate(), spawn_transform, player, false
+			)
 
 
 func _setup_and_spawn_unit(unit, a_transform, player, self_constructing = false):
