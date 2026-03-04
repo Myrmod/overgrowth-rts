@@ -1,4 +1,4 @@
-extends GridHotkeys
+extends Hotkeys
 
 const WorkerUnit = preload("res://source/factions/the_amuns/units/Worker.tscn")
 const TankUnit = preload("res://source/factions/the_amuns/units/Tank.tscn")

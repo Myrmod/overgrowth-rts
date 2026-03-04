@@ -7,6 +7,8 @@
 [node name="VehicleFactoryMenu" type="GridContainer" unique_id=1972008825]
 columns = 4
 script = ExtResource("1_hxrij")
+metadata/actionContainer = "vehicleFactory"
+metadata/faction = "default"
 
 [node name="ProduceWorkerButton" type="Button" parent="." unique_id=757788076]
 layout_mode = 2

@@ -1,4 +1,4 @@
-extends GridHotkeys
+extends Hotkeys
 
 const CommandCenterUnit = preload("res://source/factions/the_amuns/structures/CommandCenter.tscn")
 const VehicleFactoryUnit = preload("res://source/factions/the_amuns/structures/VehicleFactory.tscn")

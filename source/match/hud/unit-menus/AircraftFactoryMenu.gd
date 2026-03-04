@@ -1,11 +1,10 @@
-extends GridHotkeys
+extends Hotkeys
 
 const HelicopterUnit = preload("res://source/factions/the_amuns/units/Helicopter.tscn")
 
 var unit = null
 
 @onready var _helicopter_button = find_child("ProduceHelicopterButton")
-
 
 func _ready():
 	super._ready()

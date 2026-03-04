@@ -6,6 +6,9 @@ const CommandCenter = preload("res://source/factions/the_amuns/structures/Comman
 const Shipyard = preload("res://source/factions/the_amuns/structures/Shipyard.gd")
 const Worker = preload("res://source/factions/the_amuns/units/Worker.gd")
 
+var hotkeys_name
+var hotkeys_scheme
+
 @onready var _generic_menu = find_child("GenericMenu")
 @onready var _command_center_menu = find_child("CommandCenterMenu")
 @onready var _vehicle_factory_menu = find_child("VehicleFactoryMenu")
@@ -19,6 +22,7 @@ func _ready():
 	MatchSignals.unit_selected.connect(func(_unit): _reset_menus())
 	MatchSignals.unit_deselected.connect(func(_unit): _reset_menus())
 	MatchSignals.unit_died.connect(func(_unit): _reset_menus())
+	
 
 
 func _reset_menus():

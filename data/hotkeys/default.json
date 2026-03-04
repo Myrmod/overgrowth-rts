@@ -1,0 +1,22 @@
+{
+	"version": 1,
+	"general": {
+		"AircraftFactoryMenu": {
+			"ProduceHelicopterButton": "H",
+			"ProduceDroneButton": "D"
+		},
+		"CommandCenterMenu": {
+			"ProduceWorkerButton": "W",
+		},
+		"VehicleFactoryMenu": {
+			"ProduceTankButton": "T"
+		},
+		"WorkerMenu": {
+			"PlaceAntiGroundTurretButton": "G",
+			"PlaceAntiAirTurretButton": "M",
+			"PlaceCommandCenterButton": "C",
+			"PlaceVehicleFactoryButton": "V",
+			"PlaceAircraftFactoryButton": "A"
+		}
+	}
+}
