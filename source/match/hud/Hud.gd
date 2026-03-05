@@ -61,3 +61,8 @@ func _on_repair_button_mouse_entered():
 
 func _on_repair_button_mouse_exited():
 	tooltip.toggle(false)
+
+
+func set_timer(seconds: int):
+	game_timer_richtext_label.text = "asdf"
+	game_timer_richtext_label.text = Utils.seconds_to_time(seconds)

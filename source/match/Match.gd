@@ -62,6 +62,7 @@ var map_source_path: String = ""
 @onready var _camera = $IsometricCamera3D
 @onready var _players = $Players
 @onready var _terrain = $Terrain
+@onready var hud: CanvasLayer = $HUD
 
 # Tick counter — drives deterministic command execution. Static so producers can read it.
 static var tick := 0
@@ -185,6 +186,8 @@ func _on_tick():
 	# Notify AI controllers and other tick-driven systems.
 	# This fires AFTER commands are executed, so listeners see up-to-date game state.
 	MatchSignals.tick_advanced.emit()
+	if tick % MatchConstants.TICK_RATE == 0:
+		hud.set_timer(tick / MatchConstants.TICK_RATE)
 
 
 # Fetch and execute every command for the current tick.

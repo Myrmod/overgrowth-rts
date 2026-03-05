@@ -68,7 +68,7 @@ anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
 offset_left = -20.0
-offset_right = 20.0
+offset_right = 31.0
 offset_bottom = 24.0
 grow_horizontal = 2
 alignment = 1
@@ -79,13 +79,13 @@ size_flags_horizontal = 3
 
 [node name="BoxContainer" type="BoxContainer" parent="GameTimer/Panel" unique_id=1763500247]
 layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+offset_right = 52.0
+offset_bottom = 46.0
 
 [node name="RichTextLabel" type="RichTextLabel" parent="GameTimer/Panel/BoxContainer" unique_id=742262794]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "0:12"
+text = "00:12"
 fit_content = true
 scroll_active = false
 horizontal_alignment = 1
