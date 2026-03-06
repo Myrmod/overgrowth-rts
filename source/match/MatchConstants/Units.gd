@@ -93,7 +93,7 @@ const DEFAULT_PROPERTIES = {
 	{
 		"faction": Enums.Faction.AMUNS,
 		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
-		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F5,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F4,
 		"produces": [Enums.ProductionTabType.STRUCTURE, Enums.ProductionTabType.DEFENCES],
 		"sight_range": 10.0,
 		"hp": 20,
