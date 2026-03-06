@@ -28,15 +28,6 @@ extends Node3D
 const Structure = preload("res://source/match/units/Structure.gd")
 const Human = preload("res://source/match/players/human/Human.gd")
 
-const CommandCenterAmuns = preload("res://source/factions/the_amuns/structures/CommandCenter.tscn")
-const CommandCenterLegion = preload(
-	"res://source/factions/the_legion/structures/CommandCenter.tscn"
-)
-const CommandCenterRadix = preload("res://source/factions/the_radix/structures/CommandCenter.tscn")
-const CommandCenterRemnants = preload(
-	"res://source/factions/the_remnants/structures/CommandCenter.tscn"
-)
-
 @export var settings: Resource = null
 
 var map:
@@ -103,6 +94,9 @@ func _ready():
 	if settings.visibility == settings.Visibility.FULL:
 		fog_of_war.reveal()
 	MatchSignals.match_started.emit()
+
+	hud.set_replay_mode(is_replay_mode)
+	wire_hud()
 
 	if !is_replay_mode:
 		ReplayRecorder.start_recording(self)
@@ -186,8 +180,6 @@ func _on_tick():
 	# Notify AI controllers and other tick-driven systems.
 	# This fires AFTER commands are executed, so listeners see up-to-date game state.
 	MatchSignals.tick_advanced.emit()
-	if tick % MatchConstants.TICK_RATE == 0:
-		hud.set_timer(tick / MatchConstants.TICK_RATE)
 
 
 # Fetch and execute every command for the current tick.
@@ -605,18 +597,9 @@ func _setup_player_units():
 
 # here player starting units are defined on a per faction basis
 func _spawn_player_units(player, spawn_transform):
-	print(player)
-	match player.faction:
-		Enums.Faction.AMUNS:
-			_setup_and_spawn_unit(CommandCenterAmuns.instantiate(), spawn_transform, player, false)
-		Enums.Faction.LEGION:
-			_setup_and_spawn_unit(CommandCenterLegion.instantiate(), spawn_transform, player, false)
-		Enums.Faction.RADIX:
-			_setup_and_spawn_unit(CommandCenterRadix.instantiate(), spawn_transform, player, false)
-		Enums.Faction.REMNANTS:
-			_setup_and_spawn_unit(
-				CommandCenterRemnants.instantiate(), spawn_transform, player, false
-			)
+	var faction = Factions.get_faction_by_enum(player.faction)
+
+	_setup_and_spawn_unit(faction.new().spawn_unit.instantiate(), spawn_transform, player, false)
 
 
 func _setup_and_spawn_unit(unit, a_transform, player, self_constructing = false):
@@ -693,3 +676,8 @@ func _conceal_player_units(player):
 		func(a_unit): return a_unit.player == player
 	):
 		unit.remove_from_group("revealed_units")
+
+
+## here the HUD will be wired up with everything from the match
+func wire_hud():
+	hud.set_player_settings(settings)

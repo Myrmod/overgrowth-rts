@@ -8,7 +8,6 @@ const CollectingResourcesWhileInRange = preload(
 )
 const MovingToUnit = preload("res://source/match/units/actions/MovingToUnit.gd")
 const Worker = preload("res://source/factions/the_amuns/units/Worker.gd")
-const ResourceUnit = preload("res://source/match/units/non-player/ResourceUnit.gd")
 
 var _state := State.NULL
 var _state_locked = false

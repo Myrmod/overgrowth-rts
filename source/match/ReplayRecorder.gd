@@ -115,7 +115,7 @@ func _on_match_aborted():
 	mode = Mode.OFF
 
 
-func _serialize_players(players: Array[Resource]) -> Array:
+func _serialize_players(players: Array[PlayerSettings]) -> Array:
 	# Convert player Resource objects to dictionaries for serialization
 	var serialized: Array = []
 	for player_settings in players:

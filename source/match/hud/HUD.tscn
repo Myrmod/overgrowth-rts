@@ -22,9 +22,13 @@ bg_color = Color(0, 1, 0, 1)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vwivv"]
 bg_color = Color(1, 0, 0, 1)
 
+[sub_resource type="ViewportTexture" id="ViewportTexture_hbjve"]
+viewport_path = NodePath("FogOfWar/CombinedViewport")
+
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_55hgm"]
 resource_local_to_scene = true
 shader = ExtResource("2_bfxgo")
+shader_parameter/reference_texture = SubResource("ViewportTexture_hbjve")
 
 [sub_resource type="ViewportTexture" id="ViewportTexture_gka2s"]
 viewport_path = NodePath("RightMarginContainer/HBoxContainer/RightVBoxContainer/MapMarginContainer/Minimap/MarginContainer/MinimapViewport")
@@ -81,7 +85,7 @@ offset_bottom = 46.0
 [node name="RichTextLabel" type="RichTextLabel" parent="GameTimer/Panel/BoxContainer" unique_id=742262794]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "00:12"
+text = "00:00"
 fit_content = true
 scroll_active = false
 horizontal_alignment = 1

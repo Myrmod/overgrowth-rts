@@ -8,6 +8,7 @@ var options = (
 	if ResourceLoader.exists(Constants.get_options_file_path())
 	else Options.new()
 )
+var hotkey_settings := HotkeySettings.new()
 var terrain_library: TerrainLibrary
 var terrain_types: Array[TerrainType]
 var god_mode = false
@@ -15,6 +16,7 @@ var cache = {}
 
 
 func _ready():
+	hotkey_settings.load_from_file()
 	terrain_library = TERRAIN_LIBRARY as TerrainLibrary
 
 	if terrain_library == null:

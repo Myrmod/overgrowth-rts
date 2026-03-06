@@ -29,6 +29,9 @@ const DEFAULT_PROPERTIES = {
 	# the Amuns
 	"res://source/factions/the_amuns/units/Drone.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.WATER,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
 		"sight_range": 10.0,
 		"hp": 6,
 		"hp_max": 6,
@@ -38,6 +41,9 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/units/Worker.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.VEHICLE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
 		"sight_range": 5.0,
 		"hp": 6,
 		"hp_max": 6,
@@ -48,6 +54,9 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/units/Helicopter.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.AIR,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
 		"sight_range": 8.0,
 		"hp": 10,
 		"hp_max": 10,
@@ -64,6 +73,9 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/units/Tank.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.VEHICLE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F2,
 		"sight_range": 8.0,
 		"hp": 10,
 		"hp_max": 10,
@@ -79,6 +91,10 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/structures/CommandCenter.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F5,
+		"produces": [Enums.ProductionTabType.STRUCTURE, Enums.ProductionTabType.DEFENCES],
 		"sight_range": 10.0,
 		"hp": 20,
 		"hp_max": 20,
@@ -87,6 +103,10 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/structures/VehicleFactory.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
+		"produces": [Enums.ProductionTabType.VEHICLE],
 		"sight_range": 8.0,
 		"hp": 16,
 		"hp_max": 16,
@@ -95,6 +115,10 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/structures/AircraftFactory.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F2,
+		"produces": [Enums.ProductionTabType.AIR],
 		"sight_range": 8.0,
 		"hp": 16,
 		"hp_max": 16,
@@ -103,6 +127,9 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/structures/AntiGroundTurret.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.DEFENCES,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
 		"sight_range": 8.0,
 		"hp": 8,
 		"hp_max": 8,
@@ -118,6 +145,9 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/structures/AntiAirTurret.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.DEFENCES,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F2,
 		"sight_range": 8.0,
 		"hp": 8,
 		"hp_max": 8,
@@ -133,6 +163,10 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_amuns/structures/Shipyard.tscn":
 	{
+		"faction": Enums.Faction.AMUNS,
+		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F3,
+		"produces": [Enums.ProductionTabType.WATER],
 		"sight_range": 8.0,
 		"hp": 16,
 		"hp_max": 16,
@@ -142,6 +176,10 @@ const DEFAULT_PROPERTIES = {
 	# the Legion
 	"res://source/factions/the_legion/structures/CommandCenter.tscn":
 	{
+		"faction": Enums.Faction.LEGION,
+		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
+		"produces": [Enums.ProductionTabType.STRUCTURE, Enums.ProductionTabType.DEFENCES],
 		"sight_range": 10.0,
 		"hp": 20,
 		"hp_max": 20,
@@ -150,6 +188,9 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_legion/units/Worker.tscn":
 	{
+		"faction": Enums.Faction.LEGION,
+		"production_tab_type": Enums.ProductionTabType.VEHICLE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
 		"sight_range": 5.0,
 		"hp": 6,
 		"hp_max": 6,
@@ -161,6 +202,10 @@ const DEFAULT_PROPERTIES = {
 	# the Radix
 	"res://source/factions/the_radix/structures/CommandCenter.tscn":
 	{
+		"faction": Enums.Faction.RADIX,
+		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
+		"produces": [Enums.ProductionTabType.STRUCTURE, Enums.ProductionTabType.DEFENCES],
 		"sight_range": 10.0,
 		"hp": 20,
 		"hp_max": 20,
@@ -169,6 +214,9 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_radix/units/Worker.tscn":
 	{
+		"faction": Enums.Faction.RADIX,
+		"production_tab_type": Enums.ProductionTabType.VEHICLE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
 		"sight_range": 5.0,
 		"hp": 6,
 		"hp_max": 6,
@@ -180,6 +228,10 @@ const DEFAULT_PROPERTIES = {
 	# the Remnants
 	"res://source/factions/the_remnants/structures/CommandCenter.tscn":
 	{
+		"faction": Enums.Faction.REMNANTS,
+		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
+		"produces": [Enums.ProductionTabType.STRUCTURE, Enums.ProductionTabType.DEFENCES],
 		"sight_range": 10.0,
 		"hp": 20,
 		"hp_max": 20,
@@ -188,6 +240,9 @@ const DEFAULT_PROPERTIES = {
 	},
 	"res://source/factions/the_remnants/units/Worker.tscn":
 	{
+		"faction": Enums.Faction.REMNANTS,
+		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
+		"production_tab_grid_slot": Enums.ProductionTabGridSlots.F1,
 		"sight_range": 5.0,
 		"hp": 6,
 		"hp_max": 6,

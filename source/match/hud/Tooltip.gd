@@ -7,6 +7,26 @@ const OFFSET: Vector2 = Vector2.ONE * 15.0
 var opacity_tween: Tween = null
 
 @onready var content_container = $PanelContainer/TooltipContentContainer
+@onready
+var _title_label: RichTextLabel = $PanelContainer/TooltipContentContainer/VBoxContainer/RichTextLabel
+@onready
+var _stats_grid: GridContainer = $PanelContainer/TooltipContentContainer/VBoxContainer/GridContainer
+
+
+func set_content(title: String, stats: Dictionary = {}) -> void:
+	_title_label.text = "[b]%s[/b]" % title
+	# Hide all stat labels first
+	for child in _stats_grid.get_children():
+		child.visible = false
+	# Populate stat labels with available data
+	var labels = _stats_grid.get_children()
+	var idx := 0
+	for key in stats:
+		if idx >= labels.size():
+			break
+		labels[idx].text = "%s: %s" % [key, str(stats[key])]
+		labels[idx].visible = true
+		idx += 1
 
 
 func _ready() -> void:

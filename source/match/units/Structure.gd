@@ -10,6 +10,10 @@ const UNDER_CONSTRUCTION_MATERIAL = preload(
 ## Add entries to allow placement on special terrain (WATER, SLOPE, etc.).
 @export var placement_domains: Array[Enums.PlacementTypes] = []
 
+## Which ProductionTabTypes this structure can produce units for.
+## Set from Units.DEFAULT_PROPERTIES via _setup_default_properties_from_constants().
+var produces: Array = []
+
 var _construction_progress = 1.0
 var _self_constructing = false
 var _self_construction_speed = 0.0

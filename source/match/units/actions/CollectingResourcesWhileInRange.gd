@@ -24,6 +24,7 @@ func _init(resource_unit):
 
 
 func _ready():
+	print('CollectingResourcesWhileInRange')
 	_resource_unit.tree_exited.connect(queue_free)
 	_unit_movement_trait.passive_movement_started.connect(_on_passive_movement_started)
 	_unit_movement_trait.passive_movement_finished.connect(_on_passive_movement_finished)
