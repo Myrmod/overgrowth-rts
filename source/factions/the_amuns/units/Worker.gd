@@ -1,4 +1,4 @@
-extends "res://source/match/units/Unit.gd"
+extends ResourceGatherer
 
 var resource = 0
 var resources_max = null

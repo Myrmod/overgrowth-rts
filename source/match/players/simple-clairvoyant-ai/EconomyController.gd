@@ -104,7 +104,7 @@ func _attach_worker(worker):
 
 func _attach_current_workers():
 	var workers = get_tree().get_nodes_in_group("units").filter(
-		func(unit): return unit is Worker and unit.player == _player
+		func(unit): return unit is ResourceGatherer and unit.player == _player
 	)
 	for worker in workers:
 		_attach_worker(worker)
@@ -261,7 +261,7 @@ func _on_worker_died(worker):
 func _on_unit_spawned(unit):
 	if unit.player != _player:
 		return
-	if unit is Worker:
+	if unit is ResourceGatherer:
 		if _number_of_pending_workers > 0:
 			_number_of_pending_workers -= 1
 		_attach_worker(unit)

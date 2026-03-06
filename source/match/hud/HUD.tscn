@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://dg5144jbydpky"]
+[gd_scene format=3 uid="uid://dmeg6pegd188o"]
 
 [ext_resource type="Script" uid="uid://omr4yutu0g2f" path="res://source/match/hud/Hud.gd" id="1_0twml"]
 [ext_resource type="Script" uid="uid://b1hpe60t5y74n" path="res://source/match/hud/Minimap.gd" id="1_udidi"]
@@ -12,7 +12,7 @@
 [ext_resource type="Texture2D" uid="uid://bwepu16qqrrj5" path="res://assets/ui/icons/vehicle_icon.png" id="6_7jbih"]
 [ext_resource type="Texture2D" uid="uid://c8ooprujl2jo" path="res://assets/ui/icons/air_icon.png" id="7_7a2ul"]
 [ext_resource type="Texture2D" uid="uid://naaatm5st4hc" path="res://assets/ui/icons/ship_icon.png" id="8_h6iyy"]
-[ext_resource type="Script" uid="uid://3pwkiuhj67x1" path="res://source/match/hud/UnitPortrait.gd" id="12_7a2ul"]
+[ext_resource type="Script" path="res://source/match/hud/UnitPortrait.gd" id="12_7a2ul"]
 [ext_resource type="Texture2D" uid="uid://bqp6cemj1sw4" path="res://assets/ui/icons/Tank.png" id="12_h6iyy"]
 [ext_resource type="PackedScene" uid="uid://nnsih72ih7qr" path="res://source/match/hud/ProductionQueue.tscn" id="14_vwivv"]
 

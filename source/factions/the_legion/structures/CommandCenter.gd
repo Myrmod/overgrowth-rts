@@ -1,1 +1,1 @@
-extends "res://source/match/units/Structure.gd"
+extends ResourceDropOffStructure

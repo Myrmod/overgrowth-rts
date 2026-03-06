@@ -20,7 +20,7 @@ var _sub_action = null
 # Validate construction is legal: must be Worker → uncompleted Structure, same player
 static func is_applicable(source_unit, target_unit):
 	return (
-		source_unit is Worker
+		source_unit is ResourceGatherer
 		and target_unit is Structure
 		and not target_unit.is_constructed()
 		and source_unit.player == target_unit.player

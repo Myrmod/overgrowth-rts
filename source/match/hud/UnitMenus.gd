@@ -74,7 +74,7 @@ func _try_showing_any_menu():
 		_shipyard_menu.unit = selected_controlled_units[0]
 		_shipyard_menu.show()
 		return true
-	if selected_controlled_units.size() == 1 and selected_controlled_units[0] is Worker:
+	if selected_controlled_units.size() == 1 and selected_controlled_units[0] is ResourceGatherer:
 		_worker_menu.show()
 	if selected_controlled_units.size() > 0:
 		_generic_menu.units = selected_controlled_units

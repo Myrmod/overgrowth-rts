@@ -2,7 +2,6 @@ extends "res://source/match/units/actions/Action.gd"
 
 enum State { NULL, MOVING_TO_RESOURCE, COLLECTING, MOVING_TO_CC }
 
-const CommandCenter = preload("res://source/factions/the_amuns/structures/CommandCenter.gd")
 const CollectingResourcesWhileInRange = preload(
 	"res://source/match/units/actions/CollectingResourcesWhileInRange.gd"
 )
@@ -20,15 +19,19 @@ var _sub_action = null
 
 static func is_applicable(source_unit, target_unit):
 	return (
-		(source_unit is Worker and target_unit is ResourceUnit)
-		or (source_unit is Worker and target_unit is CommandCenter and target_unit.is_constructed())
+		(source_unit is ResourceGatherer and target_unit is ResourceUnit)
+		or (
+			source_unit is ResourceGatherer
+			and target_unit is ResourceDropOffStructure
+			and target_unit.is_constructed()
+		)
 	)
 
 
 func _init(unit):
 	if unit is ResourceUnit:
 		_set_resource_unit(unit)
-	elif unit is CommandCenter:
+	elif unit is ResourceDropOffStructure:
 		_set_cc_unit(unit)
 
 
@@ -61,6 +64,7 @@ func _exit_state(_a_state):
 
 
 func _enter_state(state):
+	print(state)
 	match state:
 		State.MOVING_TO_RESOURCE:
 			if (
@@ -125,7 +129,9 @@ static func _find_cc_closest_to_unit(unit):
 	var ccs_of_the_same_player = unit.get_tree().get_nodes_in_group("units").filter(
 		func(a_unit):
 			return (
-				a_unit is CommandCenter and a_unit.player == unit.player and a_unit.is_constructed()
+				a_unit is ResourceDropOffStructure
+				and a_unit.player == unit.player
+				and a_unit.is_constructed()
 			)
 	)
 	if ccs_of_the_same_player.is_empty():

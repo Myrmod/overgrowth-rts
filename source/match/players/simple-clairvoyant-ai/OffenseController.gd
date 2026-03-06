@@ -94,7 +94,7 @@ func _provision_structure(structure_scene, resources, metadata):
 		"unexpected amount of resources"
 	)
 	var workers = get_tree().get_nodes_in_group("units").filter(
-		func(unit): return unit is Worker and unit.player == _player
+		func(unit): return unit is ResourceGatherer and unit.player == _player
 	)
 	_number_of_pending_structure_resource_requests[metadata] -= 1
 	if workers.is_empty():
@@ -187,7 +187,7 @@ func _construct_structure(structure_scene):
 		func(unit): return unit is CommandCenter and unit.player == _player
 	)
 	var workers = get_tree().get_nodes_in_group("units").filter(
-		func(unit): return unit is Worker and unit.player == _player
+		func(unit): return unit is ResourceGatherer and unit.player == _player
 	)
 	var unit_to_spawn = structure_scene.instantiate()
 	var reference_position_for_placement = (

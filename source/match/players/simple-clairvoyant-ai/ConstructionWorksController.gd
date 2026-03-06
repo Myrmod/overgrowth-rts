@@ -26,7 +26,7 @@ func _on_tick_advanced():
 
 func _on_refresh():
 	var workers = get_tree().get_nodes_in_group("units").filter(
-		func(unit): return unit is Worker and unit.player == _player
+		func(unit): return unit is ResourceGatherer and unit.player == _player
 	)
 	if workers.any(func(worker): return worker.action != null and worker.action is Constructing):
 		return

@@ -1,8 +1,5 @@
 extends "res://source/match/units/actions/Action.gd"
 
-const Worker = preload("res://source/factions/the_amuns/units/Worker.gd")
-const ResourceUnit = preload("res://source/match/units/non-player/ResourceUnit.gd")
-
 var _resource_unit = null
 var _timer = null
 
@@ -12,7 +9,7 @@ var _timer = null
 
 static func is_applicable(source_unit, target_unit):
 	return (
-		source_unit is Worker
+		source_unit is ResourceGatherer
 		and target_unit is ResourceUnit
 		and not source_unit.is_full()
 		and MatchUtils.Movement.units_adhere(source_unit, target_unit)
@@ -24,7 +21,6 @@ func _init(resource_unit):
 
 
 func _ready():
-	print('CollectingResourcesWhileInRange')
 	_resource_unit.tree_exited.connect(queue_free)
 	_unit_movement_trait.passive_movement_started.connect(_on_passive_movement_started)
 	_unit_movement_trait.passive_movement_finished.connect(_on_passive_movement_finished)

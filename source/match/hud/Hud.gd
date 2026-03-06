@@ -1,6 +1,7 @@
 extends CanvasLayer
 
-const TOOLTIP = preload("uid://c52x883bd5etq")
+const TOOLTIP = preload("res://source/utils/Tooltip.tscn")
+
 
 ## Tab-switching hotkeys: Q W E R T and the key next to T.
 ## We use physical scancodes so this adapts to layout automatically:

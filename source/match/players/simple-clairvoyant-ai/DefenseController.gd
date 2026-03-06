@@ -32,7 +32,7 @@ func setup(player):
 
 func provision(resources, metadata):
 	var workers = get_tree().get_nodes_in_group("units").filter(
-		func(unit): return unit is Worker and unit.player == _player
+		func(unit): return unit is ResourceGatherer and unit.player == _player
 	)
 	var ccs = get_tree().get_nodes_in_group("units").filter(
 		func(unit): return unit is CommandCenter and unit.player == _player
