@@ -12,6 +12,7 @@ Something in between.
     - Enrich planetary biomass.
     - Rewrite soil chemistry.
     - Prepare Earth for eventual Amun reclamation.
+    - Convert planetary energy into a stabilized, harvestable form for later Amun use.
 
 But they were incomplete.
 
@@ -46,6 +47,9 @@ The project is compromised. Earth is evolving outside intended parameters. Human
 From their perspective?
 Humans corrupted the design.
 
+To them, the Radix is not a new people. It is a mutation inside a damaged harvesting system.
+And humanity, whether pro-Vine or anti-Vine, is simply interfering local life obstructing repair.
+
 Now they must: Reassert control, Recalibrate the Vines, Or purge the planet.
 
 ## The Mutated Plant Faction
@@ -71,13 +75,17 @@ They're defending their right to exist.
 
 #### The pro vines humans:
 
-They believed that the vines are a gift, that humans are evolving, They believed that:
+They believed that the Vines are a gift, that humans are evolving. Over time this group hardens
+into the ideological core of The Legion.
+
+They believed that:
 
 The Vines are the next step in human progress, Energy crises ended because of them.
 Cities powered by Vine reactors are cleaner and richer.
 People augmented with Vine bio-tech live longer.
 
 Some even view it as spiritual that the gods have returned through these vines.
+Some go further and believe hybridization is not a side effect, but a sacrament.
 
 They think they are saving humanity through the vines.
 
@@ -90,3 +98,22 @@ They believe that the vines are an infection. They saw corporate benefit from th
 Their purpose is to destroy these vines.
 
 Both sides believe they are saving humanity.
+
+## A fifth pressure on the war
+
+Not all hostile Vine life belongs to the conscious Radix.
+Across the planet there are wild zones where the system is damaged, feral, incomplete, or acting
+without higher coordination.
+
+This neutral layer includes:
+- uncontrolled blooms
+- mutated wildlife
+- dormant Amun defenses
+- unstable Anchor sites
+- failed hybrid populations and abandoned experiments
+
+These forces are not a traditional empire. They are the world's ambient hostility.
+
+The Radix does not view them as equals.
+It views them as random growth, damaged fragments, and diseased offshoots that should be either
+integrated or contained.

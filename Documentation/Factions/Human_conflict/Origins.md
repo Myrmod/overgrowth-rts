@@ -37,13 +37,33 @@
 ## The people divided:
 - The humans instantly divided into 2 groups:
 
-### The elites and government:
-- They thought these vines were miracles here to save the planet from the total blackout, Finally a clean source of energy, they thought cities could be revived, economy regrowth.
-- They try to suppress the early disaster reports because if vines disappear the planet goes dark again.
+### The pro-Vine faithful:
+- They thought these vines were miracles here to save the planet from the total blackout, finally a clean source of energy, a path to revived cities, and a way out of civilizational collapse.
+- At first they were elites, ministries, researchers, and officers trying to keep the lights on at any cost.
+- Over time they became something more dangerous: a doctrine. They began to believe the Vines were not just useful, but sacred.
+- They suppressed early disaster reports because if the Vines disappear, the planet goes dark again.
+- They embraced controlled mutation, ritualized augmentation, and the idea that humanity must merge with Vine life rather than resist it.
 
 ### The common folks:
-- They saw the horrors happening to them, millions dead mutated , governments trying to supress them,Refugees camps forming, strange mutated forms starting to attack them.
-- They say " This is not salvation, this is an invasion a mutation to our lives"
-- They quickly side with the locked up scientist, because they were never consulted, They clearly see that they never mattered.
+- They saw the horrors happening to them, millions dead or mutated, governments trying to suppress them, refugee camps forming, and strange hostile forms starting to attack them.
+- They say "This is not salvation, this is an invasion."
+- They quickly side with the locked-up scientist, because they were never consulted and clearly saw that they never mattered.
+
+## The split that followed
+
+The pro-Vine bloc did not remain a normal government coalition for long.
+Its hardest believers fused state authority, emergency doctrine, and spiritual revelation into a
+new movement that would become The Legion.
+
+They teach that:
+- the Vines are humanity's only path out of extinction
+- mutation can be discipline rather than corruption
+- hybrids are the beginning of a stronger species
+- resistance to the Vines is resistance to humanity's future
+
+Those who rejected that creed became the Remnants: communities, deserters, refugees, and
+survivors who chose independence over transformation.
+
+#### And then a new species started to appear...
 
 #### And then a new species started to appear...

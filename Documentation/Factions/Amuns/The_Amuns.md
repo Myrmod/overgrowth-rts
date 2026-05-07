@@ -12,6 +12,10 @@ The Amuns were mistaken for gods by early humanity — in truth they were archit
 
 Long before recorded history they governed Earth in silence. When their work was complete they constructed pyramids and temples: not monuments, but **anchors** — structures that stabilized a hidden dimensional corridor and gateway network only The Amuns could access.
 
+The Vines were introduced as a planetary conversion system.
+Their purpose was not merely to grow biomass, but to convert Earth's deep energy and ecological
+potential into a form the Amuns could later stabilize, harvest, and use.
+
 Finding no further value in a world of primitive humanity and untapped potential, they withdrew. But they did not abandon Earth. They exist in a **veil state**, a partial dimensional shift, always watching, waiting for the moment Earth would once again serve a purpose.
 
 Few in number yet unmatched in advancement, The Amuns are an elite civilization of disciplined warriors and masterful technology. Their throneworld lies within Orion — a dominion once mythologized by ancient humans as the realm of the gods.
@@ -22,8 +26,15 @@ When humans prematurely activated the Vine network, they did not just wake the p
 - The terraform project is compromised.
 - Earth is evolving outside intended parameters.
 - Humanity tampered with sacred architecture.
+- The Radix is a mutation of a system that was never meant to self-govern.
 
 Their options: reassert control, recalibrate the Vines, or purge the planet.
+
+From the Amun perspective:
+- the Vines were a harvesting instrument, not a species with rights
+- the Radix is a defect that must be corrected or destroyed
+- humanity is not divided into meaningful moral camps, only obstructive local actors
+- both human factions are in the way of planetary correction
 
 ---
 

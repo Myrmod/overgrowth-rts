@@ -2,7 +2,7 @@
 
 > *"They clearly see that they never mattered."*
 
-The Remnants are the survivors and outcasts of the Ash War and the Awakening — the common people who were never consulted, never protected, and never believed. They fight with cheaper technology, faster infantry, and a pragmatic will to survive.
+The Remnants are the survivors and outcasts of the Ash War and the Awakening — the common people who were never consulted, never protected, and never believed. They fight with cheaper technology, faster infantry, and a pragmatic will to survive without surrendering themselves to Vine doctrine or forced hybridization.
 
 ---
 
@@ -12,7 +12,16 @@ The Remnants are the survivors and outcasts of the Ash War and the Awakening —
 
 The Remnants emerged from the **common people** who witnessed the horrors of the Vine awakening first-hand — millions dead, cities swallowed, governments suppressing the truth to protect their energy supply. They sided with the scientist who was imprisoned for warning against activating the Vines, because they were never consulted and they clearly saw that they never mattered to those in power.
 
-Where the Legion represents organized state power, the Remnants represent those who survived outside it: refugees, militia, former soldiers who deserted, and communities that built their own tech from whatever remained.
+Where the Legion became a pro-Vine crusade of control and transformation, the Remnants represent those who survived outside it: refugees, militia, former soldiers who deserted, and communities that built their own tech from whatever remained.
+
+They are not merely anti-government. They are anti-conversion. To them, the Legion is proof that humanity can lose itself long before it loses a war.
+
+What the Remnants are fighting for is not only survival.
+They stand for:
+- human autonomy
+- unmodified human life
+- mechanical, improvised, understandable technology
+- the right to remain human without forced transformation
 
 *(Further faction-specific lore to be filled in)*
 
@@ -24,6 +33,7 @@ Where the Legion represents organized state power, the Remnants represent those 
 - Destructive harvest doctrine — converts resources by burning ResourceVines
 - Factory-forward tech tree — production unlocks early
 - Less raw power: lower HP infantry, smaller power plant output
+- Strong visual identity around mechanical, salvaged, non-organic wargear
 
 ---
 

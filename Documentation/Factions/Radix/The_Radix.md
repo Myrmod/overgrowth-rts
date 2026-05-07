@@ -36,6 +36,21 @@ The plants did not randomly evolve; they were clearly trying to survive:
 
 The vines were tools. Tools don't disobey. When the emergent species begins blocking dimensional stabilization, altering energy signatures, and severing control pathways — The Amuns realize their system has evolved beyond command. That's not malfunction. **That's liability.**
 
+### Radix versus the Wild
+
+The Radix is not every Vine mutation on Earth.
+It is the coherent, emergent consciousness that arose from the broken network.
+
+By contrast, the Neutral wild zones are:
+- random or unrefined growth
+- severed fragments acting without higher coordination
+- mutated animals and humans shaped by chaotic exposure
+- broken subsystems, rogue blooms, and ecological violence without shared purpose
+
+The Radix sees these phenomena as disease, injury, or lost fragments.
+Where possible, it seeks to integrate them back into a coherent whole.
+Where integration fails, it treats them as dangerous instability.
+
 ---
 
 ## Strengths & Identity
@@ -44,6 +59,7 @@ The vines were tools. Tools don't disobey. When the emergent species begins bloc
 - **Creep-based territory control** — units regenerate HP on owned creep
 - Buildings must be placed on Vine-covered tiles
 - Economy scales with how much territory is under creep control
+- Aggressive toward any force that harms Radix growth or destroys Vine resources
 
 ---
 
@@ -61,6 +77,10 @@ The Radix economy is centered on the **Heart + Seedling + Linker** structure loo
 - If a started Seedling-based structure is canceled after consumption, an equivalent Seedling is restored.
 - Radix Tier 1 production structures are placed as ghosts and begin properly once a Seedling reaches the site and completes the start action.
 - Detailed behavior spec: [Radix Seedling Workflow](../../Economy/Radix_Seedling_Workflow.md).
+
+Radix resource behavior reflects its worldview.
+It does not destroy the resource base it depends on. It links to, preserves, and attempts to
+fold useful growth into itself rather than strip-mine it.
 
 | Stat | Value |
 |---|---|

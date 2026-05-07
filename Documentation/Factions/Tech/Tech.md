@@ -18,6 +18,7 @@
 ## The Legion:
 - starting building: Command Center
 - Command Center plus Power Plant enables the current Tier 1 structure line
+- conceptually this faction is a pro-Vine human theocracy using disciplined hybrid doctrine
 - Power Plant unlocks -> Barracks, Refinery, Factory, Airfield
 - Refinery provides the Harvester-based economy loop
 - Factory and Airfield are current Tier 1 production structures
