@@ -38,9 +38,43 @@ From the Amun perspective:
 
 ---
 
+## Worldview
+
+The Amuns follow a sacral-technocratic worldview built on custodial hierarchy.
+They do not believe that all life is equal, nor that freedom is inherently virtuous.
+To them, intelligence grants stewardship, stewardship grants authority, and authority includes
+the right to impose correct form on unstable worlds.
+
+Core beliefs:
+- order is morally superior to improvisation, mutation, and local self-rule
+- design creates obligation, and obligation grants custodial ownership
+- life has rank; authority must be earned through discipline and long-term control
+- harmony means correct placement within a larger system, not equal coexistence
+- the sacred and the technical are the same thing: geometry, calibration, and signal control are holy acts
+
+This is why the Amuns treat Earth as a damaged project rather than a sovereign civilization.
+Humans are not, in their eyes, peers in a political dispute. They are immature local actors who
+tampered with systems they did not understand.
+
+Mercy exists within this worldview, but only inside hierarchy.
+An Amun commander may preserve a city, spare a population, or tolerate a temporary human client
+state, but this is paternal mercy rather than recognition of equality. Compassion is permitted if
+it stabilizes the design. Sovereignty is not.
+
+This same logic defines their enemies:
+- the Legion mistakes contact for chosenness and discipline for legitimacy
+- the Radix mistakes emergent intelligence for rightful self-determination
+- the Wild represents damaged growth, failed instruction, and intolerable disorder
+
+---
+
 ## Strengths & Identity
 
-*(to be filled in)*
+- elite, low-count armies backed by superior battlefield control and precision technology
+- anchor-linked infrastructure that reads as both sacred architecture and advanced machinery
+- a calm, judicial tone rooted in certainty rather than fanatic rage
+- morally severe strategic logic: restoration, containment, calibration, or purge
+- a paternal imperial posture in which even mercy reinforces hierarchy
 
 ---
 
