@@ -1,55 +1,24 @@
 # Harvesting Mechanics
 
+## Scope
+
+This file defines shared harvesting vocabulary and constraints. Exact faction units, structures,
+drop-off rules, depletion behavior, and lore framing live in the faction overview files.
+
 ## Shared Rules
-- base resource per vine tile starts at 500
-- Amuns and Legion use gather, carry, and return loops
-- Radix Seedlings are part of the construction economy, not a direct harvester unit
-- if a cargo-based gatherer dies while carrying resources, the carried load is lost
 
-## Amuns
-- economy identity: flying gather logistics plus spawner-linked field enhancement
-- Syphon:
-  - acts as the Amuns resource drop-off structure
-  - auto-spawns a Syphon Drone on completion
-  - drone gathers resources and returns to the Syphon
-- Purifier:
-  - can only be placed above a ResourceSpawner
-  - links to that spawner and increases capacity for vines associated with it
-  - newly spawned vines from the linked spawner inherit the added capacity bonus
+- Base resource per vine tile starts at 500.
+- ResourceTiles hold the resource amount used by all economy models.
+- ResourceSpawners define the center of a resource field.
+- A resource tile can be claimed by only one active economy interaction at a time.
+- Cargo-based gatherers lose carried resources if they are destroyed before delivery.
+- Economy actions that retarget after a tile disappears should do so through deterministic command execution.
+- Faction docs define whether a model uses cargo delivery, passive linking, direct conversion, field modification, or another specialized loop.
 
-## Legion
-- economy identity: classic refinery loop
-- Refinery:
-  - deploys a Harvester vehicle
-  - serves as a valid drop-off structure
-- Harvester:
-  - gathers from the nearest field
-  - delivers to the nearest valid drop-off structure
-  - Legion command centers are not drop-off structures
+## Faction Implementations
 
-## Remnants
-- economy identity: destructive front-line conversion
-- gather units:
-  - infantry: Incinerator
-  - vehicle: Flame Tank
-- mechanic:
-  - units destroy vines as part of gathering
-  - no refinery return loop
-  - when a vine is depleted, gatherers continue to the next available resource tile automatically
-  - retargeting is issued through the deterministic command path (CommandBus -> Match command execution)
-  - if a target vine is removed before execution, command execution selects the next valid resource target
-
-## Radix
-- economy identity: Seedling-driven territorial growth and construction
-- Heart produces Seedlings
-- Linker structures generate passive credits from linked nearby ResourceTiles
-- each ResourceTile can be linked to only one Linker at a time
-- Radix passive harvesting does not reduce vine resource or destroy the tile
-- fuller linked tiles pay more than partially depleted linked tiles
-- current implementation uses a dummy-model Linker while final art is pending
-- Seedlings are consumed only when creep spread or Seedling-started construction completes successfully
-- canceling before completion preserves the Seedling, and canceling an already started Seedling-built structure restores one
-- detailed behavior spec: [Radix Seedling Workflow](Radix_Seedling_Workflow.md)
-
-
+- [The Amuns](../Factions/Amuns/The_Amuns.md#economy)
+- [The Radix](../Factions/Radix/The_Radix.md#economy)
+- [The Legion](../Factions/The_Legion/The_Legion.md#economy)
+- [The Remnants](../Factions/Remnants/The_Remnants.md#economy)
 

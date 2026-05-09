@@ -66,6 +66,56 @@ const STRUCTURES = {
 		"description": "Periodically generates resource vine growth nearby.",
 		"footprint": Vector2i(3, 3),
 	},
+	Enums.SceneId.NEUTRAL_VINE_ENERGY_PROCESSOR:
+	{
+		"scene":
+		"res://source/factions/neutral/structures/VineEnergyProcessor/VineEnergyProcessor.tscn",
+		"unit_name": "Vine Energy Processor",
+		"description": "Converts ambient vine energy into credits for the owning player.",
+		"footprint": Vector2i(2, 2),
+		"hp": 600,
+		"hp_max": 600,
+		"armor":
+		{
+			Enums.DamageTypes.CANNON: 2.0,
+			Enums.DamageTypes.CORROSIVE: 0.0,
+			Enums.DamageTypes.CRUSH: 1.0,
+			Enums.DamageTypes.EXPLOSIVE: 1.0,
+			Enums.DamageTypes.FIRE: 0.0,
+			Enums.DamageTypes.LASER: 0.0,
+			Enums.DamageTypes.MELEE: 1.0,
+			Enums.DamageTypes.PLASMA: 0.0,
+			Enums.DamageTypes.PRISM: 0.0,
+			Enums.DamageTypes.RIFLE: 1.0,
+			Enums.DamageTypes.ROCKET: 0.0,
+			Enums.DamageTypes.TESLA: 0.0,
+		},
+	},
+	Enums.SceneId.NEUTRAL_VINE_TECH_LABORATORY:
+	{
+		"scene":
+		"res://source/factions/neutral/structures/VineTechLaboratory/VineTechLaboratory.tscn",
+		"unit_name": "Vine Tech Laboratory",
+		"description": "Boosts the owning player's production speed by 10% per active laboratory.",
+		"footprint": Vector2i(2, 2),
+		"hp": 800,
+		"hp_max": 800,
+		"armor":
+		{
+			Enums.DamageTypes.CANNON: 2.0,
+			Enums.DamageTypes.CORROSIVE: 0.0,
+			Enums.DamageTypes.CRUSH: 1.0,
+			Enums.DamageTypes.EXPLOSIVE: 1.0,
+			Enums.DamageTypes.FIRE: 0.0,
+			Enums.DamageTypes.LASER: 0.0,
+			Enums.DamageTypes.MELEE: 1.0,
+			Enums.DamageTypes.PLASMA: 0.0,
+			Enums.DamageTypes.PRISM: 0.0,
+			Enums.DamageTypes.RIFLE: 1.0,
+			Enums.DamageTypes.ROCKET: 0.0,
+			Enums.DamageTypes.TESLA: 0.0,
+		},
+	},
 }
 
 const DEFENCES = {}

@@ -1,10 +1,9 @@
 [gd_scene format=3 uid="uid://cb6vx3wc7qie8"]
 
-[ext_resource type="PackedScene" uid="uid://bs2jm62cmkbrk" path="res://addons/instant-realistic-light/light_scene.tscn" id="2_8yvl2"]
 [ext_resource type="Shader" uid="uid://q5g0scilk0x0" path="res://assets/visual_effects/Explosions/FireExplosion/FireExplosionSparks.tres" id="3_11w4f"]
+[ext_resource type="Texture2D" uid="uid://ewmkgjgqixu8" path="res://assets/visual_effects/Explosions/T_cracks35.png" id="3_558fx"]
 [ext_resource type="Material" uid="uid://dpynxrxnwxokq" path="res://assets/visual_effects/Explosions/FireExplosion/FireExplosionMaterial.tres" id="3_b5bum"]
-[ext_resource type="Texture2D" uid="uid://swukls3qcmt0" path="res://assets/visual_effects/Explosions/T_cracks35.png" id="4_m778i"]
-[ext_resource type="Texture2D" uid="uid://dr8rmjbjm0nap" path="res://assets/visual_effects/Explosions/T_cracks33_E3.jpg" id="5_4m044"]
+[ext_resource type="Texture2D" uid="uid://ddo5mawtifm20" path="res://assets/visual_effects/Explosions/T_cracks33_E3.jpg" id="4_m778i"]
 [ext_resource type="AudioStream" uid="uid://c421o8f2klmfo" path="res://assets/sound_effects/explosion.mp3" id="7_4m044"]
 
 [sub_resource type="Curve" id="Curve_b5bum"]
@@ -258,41 +257,6 @@ albedo_color = Color(0.2520276, 0.25202766, 0.25202763, 1)
 [sub_resource type="PlaneMesh" id="PlaneMesh_osuyt"]
 material = SubResource("StandardMaterial3D_cp2yl")
 
-[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_gn88m"]
-ground_color = Color(0, 0, 0, 1)
-
-[sub_resource type="Sky" id="Sky_tyhie"]
-sky_material = SubResource("PhysicalSkyMaterial_gn88m")
-radiance_size = 2
-
-[sub_resource type="Environment" id="Environment_f8w8m"]
-background_mode = 2
-background_intensity = 100000.0
-sky = SubResource("Sky_tyhie")
-tonemap_mode = 3
-tonemap_white = 8.0
-ssao_enabled = true
-ssao_detail = 2.0
-sdfgi_enabled = true
-sdfgi_bounce_feedback = 0.9
-glow_enabled = true
-glow_normalized = true
-glow_bloom = 0.2
-volumetric_fog_enabled = true
-volumetric_fog_density = 0.01
-volumetric_fog_gi_inject = 1.14
-volumetric_fog_anisotropy = 0.7
-volumetric_fog_sky_affect = 0.295
-adjustment_saturation = 1.17
-
-[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_qo5hu"]
-exposure_multiplier = 3.069
-auto_exposure_scale = 0.22
-auto_exposure_speed = 0.8
-dof_blur_far_distance = 1.44
-dof_blur_near_distance = 0.01
-auto_exposure_min_sensitivity = 8.01
-
 [node name="FireExplosion" type="Node3D" unique_id=811893932]
 
 [node name="FireAndSmoke" type="GPUParticles3D" parent="." unique_id=819782192]
@@ -318,8 +282,8 @@ draw_pass_1 = SubResource("QuadMesh_8yvl2")
 
 [node name="Crack" type="Decal" parent="." unique_id=948051371]
 size = Vector3(2, 0.5, 2)
-texture_albedo = ExtResource("4_m778i")
-texture_emission = ExtResource("5_4m044")
+texture_albedo = ExtResource("3_558fx")
+texture_emission = ExtResource("4_m778i")
 emission_energy = 3.0
 modulate = Color(0.96489865, 0.61055017, 0, 1)
 albedo_mix = 0.0
@@ -335,10 +299,6 @@ libraries/ = SubResource("AnimationLibrary_a7lba")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2023037791]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
 mesh = SubResource("PlaneMesh_osuyt")
-
-[node name="WorldEnvironment" parent="." unique_id=1814438251 instance=ExtResource("2_8yvl2")]
-environment = SubResource("Environment_f8w8m")
-camera_attributes = SubResource("CameraAttributesPractical_qo5hu")
 
 [node name="ExplosionSound" type="AudioStreamPlayer3D" parent="." unique_id=918834602]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.001072228, 0, -0.08652973)

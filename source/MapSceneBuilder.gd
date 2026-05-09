@@ -162,7 +162,6 @@ static func initialize_terrain_from_meta(map_node: Node3D):
 static func _apply_lighting(map_resource: MapResource, map_node: Node3D):
 	"""Override the Map scene's DirectionalLight3D and WorldEnvironment
 	with the values stored in the MapResource (captured from the editor)."""
-
 	# --- Sun (DirectionalLight3D) ---
 	if map_resource.sun_transform != Transform3D.IDENTITY:
 		var sun = map_node.find_child("DirectionalLight3D") as DirectionalLight3D

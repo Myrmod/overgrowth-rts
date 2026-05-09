@@ -83,6 +83,9 @@ func _on_tick_advanced():
 	var effective_delta: float = MatchConstants.TICK_DELTA
 	if _unit != null and _unit.player != null and _unit.player.energy < 0:
 		effective_delta *= 0.75
+	# Tech multiplier (e.g. VineTechLaboratory grants +10% per lab).
+	if _unit != null and _unit.player != null:
+		effective_delta *= _unit.player.production_speed_multiplier
 	var finished_elements: Array = []
 	for current_queue_element in active_elements:
 		# Trickle cost: deduct proportional resources before progressing.

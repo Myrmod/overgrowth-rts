@@ -8,6 +8,8 @@ const ResourceUnit = preload("res://source/match/units/non-player/ResourceUnit.g
 const GROUND_LEVEL_PLANE = Plane(Vector3.UP, 0)
 const MINIMAP_PIXELS_PER_WORLD_METER = 2
 
+@export var max_size = 100
+
 var _unit_to_corresponding_node_mapping = {}
 var _orphaned_minimap_nodes = []
 var _camera_movement_active = false
@@ -17,8 +19,6 @@ var _camera_movement_active = false
 @onready var _viewport_background = find_child("Background")
 @onready var _texture_rect = find_child("MinimapTextureRect")
 @onready var _fog_of_war_mask = find_child("FogOfWarMask")
-
-@export var MaxSize = 100
 
 
 func _ready():
@@ -39,7 +39,7 @@ func _ready():
 
 	# Fixed display size — the TextureRect's STRETCH_KEEP_ASPECT_CENTERED
 	# fits the map inside this square; empty areas remain black.
-	var display_size = MaxSize * 2
+	var display_size = max_size * 2
 	custom_minimum_size = Vector2(display_size, display_size)
 	_texture_rect.custom_minimum_size = Vector2(display_size, display_size)
 
@@ -142,10 +142,23 @@ func _map_unit(unit):
 func _sync_unit(unit):
 	var unit_pos_3d = unit.global_transform.origin
 	var unit_pos_2d = Vector2(unit_pos_3d.x, unit_pos_3d.z) * MINIMAP_PIXELS_PER_WORLD_METER
-	_unit_to_corresponding_node_mapping[unit].position = unit_pos_2d
-	_unit_to_corresponding_node_mapping[unit].color = (
-		unit.player.color if unit is Unit else unit.color
-	)
+	var node_representing_unit: ColorRect = _unit_to_corresponding_node_mapping[unit]
+	node_representing_unit.position = unit_pos_2d
+	var resolved_color: Variant = _resolve_unit_color(unit)
+	if resolved_color != null:
+		node_representing_unit.color = resolved_color
+
+
+func _resolve_unit_color(unit) -> Variant:
+	if unit is Unit:
+		var unit_player = unit.player
+		if unit_player == null:
+			return null
+		return unit_player.color
+	var color_value: Variant = unit.get("color")
+	if color_value is Color:
+		return color_value
+	return null
 
 
 func _cleanup_mapping(unit):
@@ -167,12 +180,12 @@ func _check_orphaned_minimap_nodes():
 	for entry in _orphaned_minimap_nodes:
 		var in_vision = false
 		for revealed_unit in revealed_units:
-			if revealed_unit.is_revealing() and revealed_unit.sight_range != null:
+			if _is_active_revealer(revealed_unit):
 				var orphan_world_pos = entry["position"] / MINIMAP_PIXELS_PER_WORLD_METER
 				var unit_pos = Vector2(
 					revealed_unit.global_position.x, revealed_unit.global_position.z
 				)
-				if unit_pos.distance_to(orphan_world_pos) <= revealed_unit.sight_range + 2.0:
+				if unit_pos.distance_to(orphan_world_pos) <= _get_sight_range(revealed_unit) + 2.0:
 					in_vision = true
 					break
 		if in_vision:
@@ -180,6 +193,20 @@ func _check_orphaned_minimap_nodes():
 	for entry in to_remove:
 		entry["node"].queue_free()
 		_orphaned_minimap_nodes.erase(entry)
+
+
+func _is_active_revealer(unit) -> bool:
+	return (
+		unit != null
+		and is_instance_valid(unit)
+		and unit.has_method("is_revealing")
+		and unit.is_revealing()
+		and unit.get("sight_range") != null
+	)
+
+
+func _get_sight_range(unit) -> float:
+	return float(unit.get("sight_range"))
 
 
 func _update_camera_indicator():

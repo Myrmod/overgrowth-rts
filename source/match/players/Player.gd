@@ -16,6 +16,15 @@ signal changed
 		energy = value
 		MatchSignals.player_resource_changed.emit(self, energy, Enums.ResourceType.ENERGY)
 
+## Production speed multiplier — 1.0 = normal, 1.1 = +10%, etc.
+## Applied to all owned ProductionQueues in their tick handler.
+## Stacks additively from sources like the VineTechLaboratory (each adds +0.10).
+## Floor-clamped at 0.01 so a degenerate 0 multiplier can never freeze production.
+@export var production_speed_multiplier: float = 1.0:
+	set(value):
+		production_speed_multiplier = max(0.01, value)
+		emit_changed()
+
 @export var color = Color.WHITE
 @export var support_powers = {}
 

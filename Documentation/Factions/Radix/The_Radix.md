@@ -2,7 +2,9 @@
 
 > *"The vines were tools. Tools don't disobey. Tools don't self-govern."*
 
-The Radix are the sentient Vine network — an emergent intelligence that arose when the Amun bioforming system broke free of its control frequencies. They do not have a power grid. They spread.
+The Radix are the sentient Vine network — an emergent intelligence that arose when the Amuns bioforming system broke free of its control frequencies after 2069. They spread.
+
+Shared canon reference: [../../LORE.md](../../LORE.md).
 
 ---
 
@@ -11,10 +13,10 @@ The Radix are the sentient Vine network — an emergent intelligence that arose 
 The Vines were never meant to think. They were:
 - Terraforming infrastructure
 - Bio-energy harvesters
-- Obedient to Amun control frequencies
+- Obedient to Amuns control frequencies
 - Designed to remain dormant until commanded
 
-When humans over-amplified the Prime Seed in 2069, they didn't wake the plants — **they broke the limiters**.
+When humans over-amplified the Egyptian anchor node in 2069, they didn't wake the plants — **they broke the limiters**.
 
 ### The chain reaction
 
@@ -22,7 +24,7 @@ Artificial energy surges overloaded the dormant node. The global vine network ac
 
 The vines were designed to optimize ecosystems — so when attacked, they optimized survival.
 
-Optimization became adaptation. Adaptation became decision-making. Decision-making became intelligence.
+Optimization became adaptation. Adaptation became decision-making. Over the 2070s, repeated fires, extraction, failed control attempts, and isolated Wild outbreaks forced the network to distinguish between threat, injury, and useful growth. Decision-making became intelligence. By the late 2080s, that intelligence is coherent enough to act as the Radix.
 
 ### Purposeful adaptation
 
@@ -66,21 +68,32 @@ Where integration fails, it treats them as dangerous instability.
 ## Economy
 
 The Radix economy is centered on the **Heart + Seedling + Linker** structure loop.
+Radix resource behavior reflects its worldview: it links to living resource tiles, preserves
+useful growth, and folds territory into the network rather than strip-mining it.
+
+### Passive Harvesting
 
 - The **Heart** produces **Seedlings**.
 - Seedlings are used to spread creep and to start Radix structures.
 - The **Linker** passively generates income from nearby linked ResourceTiles without consuming them.
 - Each ResourceTile can be linked to only one Linker at a time.
 - Linker income scales with the current resource remaining on each linked tile.
-- A Seedling is consumed only when the assigned action completes successfully.
-- If the controlling player interrupts before completion, the Seedling survives.
-- If a started Seedling-based structure is canceled after consumption, an equivalent Seedling is restored.
-- Radix Tier 1 production structures are placed as ghosts and begin properly once a Seedling reaches the site and completes the start action.
-- Detailed behavior spec: [Radix Seedling Workflow](../../Economy/Radix_Seedling_Workflow.md).
+- Fuller linked tiles pay more than partially depleted linked tiles.
+- Passive harvesting does not reduce vine resource or destroy the tile.
 
-Radix resource behavior reflects its worldview.
-It does not destroy the resource base it depends on. It links to, preserves, and attempts to
-fold useful growth into itself rather than strip-mine it.
+### Seedling Construction Workflow
+
+- Heart owns the relevant Radix production queue entries for Seedling-started structures.
+- A Seedling begins as a normal controllable unit after Heart production.
+- A Seedling may be assigned to creep spread or Seedling-started structure construction.
+- The player places the target Radix structure first.
+- The placed site is tracked in the HUD queue as a construction target.
+- A Seedling travels to the site and begins the start action.
+- Once the start action completes, the Seedling is consumed and the structure continues from its started state.
+- If the player cancels before the Seedling is consumed, the original Seedling remains alive.
+- If a Seedling-built structure is canceled after the Seedling has already been consumed, the game restores an equivalent Seedling.
+- Canceling construction also follows the current structure refund rules for spent resources.
+- Radix Tier 1 production structures are placed as ghosts and begin properly once a Seedling reaches the site and completes the start action.
 
 | Stat | Value |
 |---|---|
@@ -110,10 +123,15 @@ HQ
 
 | Building | Cost | Build time | Notes |
 |---|---|---|---|
-| Heart | 8 | 10 s | Main structure; produces Seedlings and Radix structure entries |
+| Heart | 8 | 10 s | Main structure; produces Seedlings, structures, and defences from the structure tab; shared global ProductionQueue |
 | Spire | 600 | 6 s | Tier 1 infantry structure; starts once a Seedling merges into the ghost |
 | Thorn Forge | 2000 | 20 s | Tier 1 vehicle structure; starts once a Seedling merges into the ghost |
 | Sky Bloom | 2000 | 20 s | Tier 1 air structure; starts once a Seedling merges into the ghost |
+
+Construction rules:
+- current implemented Radix production buildings require a Seedling to start
+- placement creates the site first, then a Seedling finishes the start action
+- canceling before completion preserves or restores the Seedling instead of deleting it permanently
 
 ---
 
@@ -121,11 +139,13 @@ HQ
 
 ### Infantry
 
-#### Phase Seedling
+#### Seedling
 
 | Stat | Value |
 |---|---|
 | HP | 80 |
+| Max HP | 80 |
+| Sight range | 6.0 |
 | Movement speed | 2.0 |
 | Cost | 1 |
 | Build time | 2.5 s |
@@ -140,5 +160,11 @@ HQ
 
 **Abilities**
 - Can spread creep and construct structures.
+- Can move through vines.
 - Consumed on successful completion of spread/construct action.
 - Survives if the controlling player interrupts/cancels the action before completion.
+- If a started Seedling-based structure is canceled, an equivalent Seedling is restored.
+
+**Notes**
+- Seedlings are produced by the Heart.
+- Radix Tier 1 structures depend on Seedlings instead of standard worker construction.

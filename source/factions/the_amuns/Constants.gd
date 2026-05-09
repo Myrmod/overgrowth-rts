@@ -177,9 +177,9 @@ const STRUCTURES = {
 		"produces": [Enums.ProductionTabType.INFANTRY],
 		"build_time": 6.0,
 	},
-	Enums.SceneId.AMUNS_PYLON:
+	Enums.SceneId.AMUNS_SYPHON:
 	{
-		"scene": "res://source/factions/the_amuns/structures/Pylon.tscn",
+		"scene": "res://source/factions/the_amuns/structures/Syphon.tscn",
 		"unit_name": "Syphon",
 		"description": "Resource drop-off that deploys a flying Syphon Drone.",
 		"faction": Enums.Faction.AMUNS,
@@ -242,7 +242,7 @@ const STRUCTURES = {
 		"structure_requirements":
 		[
 			Enums.SceneId.AMUNS_BEKHENET,
-			Enums.SceneId.AMUNS_PYLON,
+			Enums.SceneId.AMUNS_SYPHON,
 		],
 		"build_time": 15.0,
 	},

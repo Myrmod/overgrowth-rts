@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b4s8l2d5mqwi2"
-path="res://.godot/imported/Radix_tech.drawio.svg-a8e868e8b7ed5a45b992e76f0169dbc1.ctex"
+uid="uid://ewmkgjgqixu8"
+path="res://.godot/imported/T_cracks35.png-49c6b247243dfb881ed83743532439a2.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Documentation/Tech_tree/Radix_tech.drawio.svg"
-dest_files=["res://.godot/imported/Radix_tech.drawio.svg-a8e868e8b7ed5a45b992e76f0169dbc1.ctex"]
+source_file="res://assets/visual_effects/Explosions/T_cracks35.png"
+dest_files=["res://.godot/imported/T_cracks35.png-49c6b247243dfb881ed83743532439a2.ctex"]
 
 [params]
 
@@ -38,6 +38,3 @@ process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
 detect_3d/compress_to=1
-svg/scale=1.0
-editor/scale_with_editor_scale=false
-editor/convert_colors_with_editor_theme=false

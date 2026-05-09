@@ -30,6 +30,16 @@ func _is_disabled():
 	return not visible
 
 
+func _is_active_revealer(unit) -> bool:
+	return (
+		unit != null
+		and is_instance_valid(unit)
+		and unit.has_method("is_revealing")
+		and unit.is_revealing()
+		and unit.get("sight_range") != null
+	)
+
+
 func _recalculate_unit_visibility(unit, revealed_units = null):
 	if unit.is_in_group("revealed_units") or _is_disabled():
 		_update_unit_visibility(unit, true)
@@ -41,8 +51,8 @@ func _recalculate_unit_visibility(unit, revealed_units = null):
 			func(a_unit): return a_unit.is_in_group("revealed_units")
 		)
 	for revealed_unit in revealed_units:
-		if revealed_unit.is_revealing() and revealed_unit.sight_range != null:
-			var effective_sight = revealed_unit.sight_range
+		if _is_active_revealer(revealed_unit):
+			var effective_sight = float(revealed_unit.get("sight_range"))
 			if "forest_zones_inside" in revealed_unit and revealed_unit.forest_zones_inside > 0:
 				effective_sight *= revealed_unit.forest_sight_multiplier
 			if (
@@ -117,13 +127,12 @@ func _update_resource_unit_dummies(revealed_units):
 func _is_in_vision_range(target, revealed_units):
 	for revealed_unit in revealed_units:
 		if (
-			revealed_unit.is_revealing()
-			and revealed_unit.sight_range != null
+			_is_active_revealer(revealed_unit)
 			and (
 				(revealed_unit.global_position * Vector3(1, 0, 1)).distance_to(
 					target.global_position * Vector3(1, 0, 1)
 				)
-				<= revealed_unit.sight_range + SIGHT_COMPENSATION
+				<= float(revealed_unit.get("sight_range")) + SIGHT_COMPENSATION
 			)
 		):
 			return true
@@ -138,13 +147,12 @@ func _recalcuate_orphaned_dummy_existence(orphaned_dummy, revealed_units = null)
 		)
 	for revealed_unit in revealed_units:
 		if (
-			revealed_unit.is_revealing()
-			and revealed_unit.sight_range != null
+			_is_active_revealer(revealed_unit)
 			and (
 				(revealed_unit.global_position * Vector3(1, 0, 1)).distance_to(
 					orphaned_dummy.global_position * Vector3(1, 0, 1)
 				)
-				<= revealed_unit.sight_range + SIGHT_COMPENSATION
+				<= float(revealed_unit.get("sight_range")) + SIGHT_COMPENSATION
 			)
 		):
 			should_exist = false

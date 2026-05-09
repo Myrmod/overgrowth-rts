@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://hoxb6ditcrjp"]
 
-[ext_resource type="Script" uid="uid://b4qasl5muggu0" path="res://source/factions/the_amuns/structures/Pylon.gd" id="1_rf8yf"]
+[ext_resource type="Script" uid="uid://dsyphn0gd0001" path="res://source/factions/the_amuns/structures/Syphon.gd" id="1_rf8yf"]
 [ext_resource type="Script" uid="uid://bysf721q4x37n" path="res://source/generic-scenes-and-nodes/3d/ModelHolder.gd" id="2_jim85"]
 [ext_resource type="PackedScene" uid="uid://cgsi062w5fjia" path="res://source/match/units/traits/Highlight.tscn" id="3_e8csm"]
 [ext_resource type="PackedScene" uid="uid://3c1h14nqdumt" path="res://source/match/units/traits/Selection.tscn" id="4_8wv4q"]
@@ -15,7 +15,7 @@
 margin = 0.0
 height = 0.8
 
-[node name="Pylon" type="Area3D" unique_id=1833563749]
+[node name="Syphon" type="Area3D" unique_id=1833563749]
 script = ExtResource("1_rf8yf")
 
 [node name="Geometry" type="Node3D" parent="." unique_id=955003802]

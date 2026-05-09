@@ -34,11 +34,13 @@ func _setup_map_list():
 	# Start with built-in maps
 	_map_info = MatchConstants.MAPS.duplicate(true)
 
-	# Scan for custom editor maps (.tres MapResource files)
-	_scan_custom_maps("res://maps/")
+	# Scan for user maps under res://maps/ (recursive).  Both editor-created
+	# .tres MapResources and scene-based .tscn maps (e.g. custom-mode maps
+	# like Direct Strike) are picked up.  Subfolders become categories.
+	_scan_custom_maps("res://maps/", "")
 
 	# Sort by player count, then by name
-	var entries = Utils.Dict.items(_map_info)
+	var entries: Array = Utils.Dict.items(_map_info)
 	entries.sort_custom(
 		func(a, b):
 			if a[1]["players"] != b[1]["players"]:
@@ -54,34 +56,87 @@ func _setup_map_list():
 		_map_list.select(0)
 
 
-func _scan_custom_maps(dir_path: String):
-	"""Scan a directory for .tres MapResource files and add them to the map list."""
-	var dir = DirAccess.open(dir_path)
+func _scan_custom_maps(dir_path: String, category: String) -> void:
+	"""Recursively scan `dir_path` for .tres MapResource and .tscn map files
+	and register them in `_map_info`.  `category` is the subfolder name used
+	to prefix entries in the displayed map list (empty for the root)."""
+	var dir: DirAccess = DirAccess.open(dir_path)
 	if dir == null:
 		# Directory doesn't exist yet — that's fine, user hasn't saved any custom maps
 		return
 
 	dir.list_dir_begin()
 	while true:
-		var file_name = dir.get_next()
+		var file_name: String = dir.get_next()
 		if file_name == "":
 			break
+
+		var full_path: String = dir_path + file_name
+
 		if dir.current_is_dir():
-			continue
-		if not file_name.ends_with(".tres"):
+			# Recurse into subfolders, using the folder name as the category prefix.
+			# Skip Godot import-cache and dotfiles to avoid noise.
+			if file_name.begins_with(".") or file_name == "import":
+				continue
+			_scan_custom_maps(full_path + "/", file_name)
 			continue
 
-		var full_path = dir_path + file_name
-		var res = load(full_path)
-		if res is MapResource:
-			var map_res: MapResource = res
-			_map_info[full_path] = {
-				"name":
-				map_res.map_name if not map_res.map_name.is_empty() else file_name.get_basename(),
-				"players": map_res.get_max_players(),
-				"size": map_res.size,
-			}
+		if file_name.ends_with(".tres"):
+			_register_tres_map(full_path, file_name, category)
+		elif file_name.ends_with(".tscn"):
+			_register_tscn_map(full_path, file_name, category)
 	dir.list_dir_end()
+
+
+func _register_tres_map(full_path: String, file_name: String, category: String) -> void:
+	var res: Resource = load(full_path)
+	if not (res is MapResource):
+		return
+	var map_res: MapResource = res
+	var base_name: String = (
+		map_res.map_name if not map_res.map_name.is_empty() else file_name.get_basename()
+	)
+	_map_info[full_path] = {
+		"name": _format_display_name(base_name, category),
+		"players": map_res.get_max_players(),
+		"size": map_res.size,
+	}
+
+
+func _register_tscn_map(full_path: String, file_name: String, category: String) -> void:
+	# Determine player count by counting Marker3D nodes parented to the
+	# SpawnPoints group inside the .tscn text.  This avoids instantiating the
+	# full scene at menu time.  Falls back to 2 if parsing fails.
+	var players: int = _count_spawn_points_in_tscn(full_path)
+	if players <= 0:
+		players = 2
+	_map_info[full_path] = {
+		"name": _format_display_name(file_name.get_basename(), category),
+		"players": players,
+		"size": Vector2i(50, 50),  # unknown without instantiating; cosmetic only
+	}
+
+
+func _count_spawn_points_in_tscn(scene_path: String) -> int:
+	var f: FileAccess = FileAccess.open(scene_path, FileAccess.READ)
+	if f == null:
+		return 0
+	var count: int = 0
+	while not f.eof_reached():
+		var line: String = f.get_line()
+		# Map.tscn has a `SpawnPoints` Node3D; markers placed under it use
+		# `parent="SpawnPoints"` in the saved scene text.
+		if line.begins_with("[node ") and 'parent="SpawnPoints"' in line:
+			count += 1
+	return count
+
+
+func _format_display_name(base_name: String, category: String) -> String:
+	if category.is_empty():
+		return base_name
+	# Capitalize first letter of the folder name for nicer display.
+	var pretty_category: String = category.substr(0, 1).to_upper() + category.substr(1)
+	return "[%s] %s" % [pretty_category, base_name]
 
 
 func _configure_team_options(team_select: OptionButton, num_teams: int):

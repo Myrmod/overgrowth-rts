@@ -125,4 +125,6 @@ func _on_selection_finished(topdown_polygon_2d):
 
 func _matches_nav_domain(unit, navigation_domain: NavigationConstants.Domain) -> bool:
 	"""Check if a unit belongs to the given navigation domain."""
+	if unit == null or not is_instance_valid(unit) or not unit.has_method("get_nav_domain"):
+		return false
 	return unit.get_nav_domain() == navigation_domain

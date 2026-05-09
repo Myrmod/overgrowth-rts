@@ -58,7 +58,7 @@ func _physics_process(_delta):
 	var units_synced = {}
 	var units_to_sync = get_tree().get_nodes_in_group("revealed_units")
 	for unit in units_to_sync:
-		if not unit.is_revealing():
+		if not _is_active_revealer(unit):
 			continue
 		units_synced[unit] = 1
 		if not _unit_is_mapped(unit):
@@ -71,6 +71,15 @@ func _physics_process(_delta):
 
 func reveal():
 	_revealer.show()
+
+
+func _is_active_revealer(unit) -> bool:
+	return (
+		unit != null
+		and is_instance_valid(unit)
+		and unit.has_method("is_revealing")
+		and unit.is_revealing()
+	)
 
 
 func resize(map_size: Vector2):

@@ -1,119 +1,89 @@
-# The Vines origin
+# The Vines Origin
 
-Thousands of years ago, before withdrawing, The Amuns seeded Earth with a dormant bio-terraforming organism.
+The Vines are the heart of the setting. They are not ordinary plants, and they are
+not simple alien machinery. They are a living bio-terraforming and energy-harvesting
+network created by the Amuns before recorded history.
 
-Not a plant.
-Not a machine.
-Something in between.
+Primary canon reference: [../LORE.md](../LORE.md).
 
-- The Vines were designed to:
+## Original Purpose
 
-    - Reshape atmosphere gradually.
-    - Enrich planetary biomass.
-    - Rewrite soil chemistry.
-    - Prepare Earth for eventual Amun reclamation.
-    - Convert planetary energy into a stabilized, harvestable form for later Amun use.
+The Amuns seeded Earth with the Vines to:
 
-But they were incomplete.
+- reshape atmosphere gradually
+- enrich planetary biomass
+- rewrite soil chemistry
+- prepare Earth for eventual Amun reclamation
+- convert planetary energy into a stable, harvestable form
+- remain dormant until activated through the anchor network
 
-They required time and an activation signal only The Amuns could trigger through the Anchors.
-
-And then… Humans interfered.
+The system was never meant to awaken on its own. It required calibration signals only
+The Amuns were supposed to provide.
 
 ## The Human Mistake
 
-Centuries later, in modern times:
+After the Ash War, humanity was desperate for energy. In 2069, researchers beneath an ancient Egyptian anchor site discovered a dormant Vine organism and tried to stimulate it with artificial power.
 
-Scientists researching pyramid energy anomalies discovered dormant sub-surface bio-structures.
-They tried to extract energy.
+They did not simply wake the Vines. They overloaded the anchor network and broke the limiters that kept the system obedient.
 
-They overloaded the anchor network.
-Instead of controlled activation…
-They triggered rapid growth protocols.
-The Vines awakened without Amun calibration.
+The result was the Awakening:
 
-Now they're: Expanding uncontrollably.
-Adapting to pollution and radiation.
-Mutating fauna and flora.
-Developing self-defense responses.
-The terraform system is running without its architects.
+- rapid global growth
+- adaptation to pollution, radiation, and weapons fire
+- mutation of local fauna and flora
+- self-defense responses
+- uncontrolled anchor feedback
+- the first signs of distributed intelligence
 
-## The Amuns' Perspective:
+## The Radix
 
-When The Amuns detect the activation, they don't return out of greed. They return because:
+The Vines were never intended to evolve independently, but broken activation plus human experimentation forced the system to optimize for survival. The first signs appeared during the 2069 Awakening, then intensified through the 2070s as the network adapted to fire, radiation, extraction, and failed control attempts. Optimization became adaptation. Adaptation became decision-making. Decision-making became the Radix.
 
-The project is compromised. Earth is evolving outside intended parameters. Humanity tampered with sacred architecture.
+The Radix is the coherent consciousness inside the Vine network. It is not every root, spore, animal mutation, or hostile growth on Earth. It is the part of the broken system that became aware enough to defend its own existence.
 
-From their perspective?
-Humans corrupted the design.
+## The Amuns' Perspective
 
-To them, the Radix is not a new people. It is a mutation inside a damaged harvesting system.
-And humanity, whether pro-Vine or anti-Vine, is simply interfering local life obstructing repair.
+By the late 2080s, the Amuns return because their old project is compromised. From their point of view:
 
-Now they must: Reassert control, Recalibrate the Vines, Or purge the planet.
+- humanity tampered with sacred architecture
+- Earth is evolving outside intended parameters
+- the Radix is a self-governing defect in a system that was designed to obey
+- uncontrolled Wild growth is damaged matter and failed instruction
+- both pro-Vine and anti-Vine humans are local actors obstructing repair
 
-## The Mutated Plant Faction
+Their choices are severe: reassert control, recalibrate the Vines, or purge the parts
+of Earth that can no longer be corrected.
 
-The Vines were never meant to evolve independently.
-But rapid activation + human experimentation + environmental chaos caused:
+## The Human Split
 
-Emergent sentience.
-A distributed planetary intelligence.
-Not fully conscious like humans.
-But aware.
-Protective.
-Adaptive.
+The Awakening divided humanity, but the human factions were not born fully formed in 2069.
 
-Now the Vines don't belong to The Amuns anymore.
-They belong to themselves.
-So the plant faction isn't just defending territory.
-They're defending their right to exist.
+The pro-Vine bloc became the ideological root of The Legion. During the 2070s, emergency
+energy policy hardened into doctrine: Vine reactors became sacred infrastructure, controlled
+mutation became discipline, and hybrid ascension became a promise of human survival.
 
-# The Conflict:
+The anti-Vine survivors became the Remnants over the same period. They saw homes swallowed,
+villages mutated, governments suppress disaster reports, and alien systems awaken beneath their
+feet. Refugee camps, burn crews, deserters, engineers, and local militias gradually formed a
+shared anti-conversion culture. To them, the Vines are invasion, forced conversion, and the proof
+that ordinary people never had a voice in the decisions that changed the world.
 
-### Humans were divided into 2 groups:
+By the late 2080s, both sides believe they are saving humanity.
 
-#### The pro vines humans:
+## The Wild
 
-They believed that the Vines are a gift, that humans are evolving. Over time this group hardens
-into the ideological core of The Legion.
+Not all hostile Vine life belongs to the conscious Radix. Across the planet are wild
+zones where years of broken activation, failed experiments, and severed control pathways left the
+system damaged, feral, incomplete, or acting without higher coordination.
 
-They believed that:
+The Wild includes:
 
-The Vines are the next step in human progress, Energy crises ended because of them.
-Cities powered by Vine reactors are cleaner and richer.
-People augmented with Vine bio-tech live longer.
-
-Some even view it as spiritual that the gods have returned through these vines.
-Some go further and believe hybridization is not a side effect, but a sacrament.
-
-They think they are saving humanity through the vines.
-
-#### The Anti vine group( The resistance):
-
-They saw the vines destroy homes, mutated villages, awaken an evil species, they have seen children mutated.
-
-They believe that the vines are an infection. They saw corporate benefit from the vines, aliens attacking their homeworld.
-
-Their purpose is to destroy these vines.
-
-Both sides believe they are saving humanity.
-
-## A fifth pressure on the war
-
-Not all hostile Vine life belongs to the conscious Radix.
-Across the planet there are wild zones where the system is damaged, feral, incomplete, or acting
-without higher coordination.
-
-This neutral layer includes:
 - uncontrolled blooms
 - mutated wildlife
 - dormant Amun defenses
-- unstable Anchor sites
-- failed hybrid populations and abandoned experiments
+- unstable anchor sites
+- failed hybrid populations
+- abandoned experiments and contaminated shrines
 
-These forces are not a traditional empire. They are the world's ambient hostility.
-
-The Radix does not view them as equals.
-It views them as random growth, damaged fragments, and diseased offshoots that should be either
-integrated or contained.
+This neutral layer is the world's ambient PvE hostility. The Radix may try to integrate
+parts of it, but where integration fails, the Wild remains a threat to everyone.

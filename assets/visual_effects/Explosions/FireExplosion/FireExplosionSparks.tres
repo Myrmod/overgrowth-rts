@@ -23,7 +23,7 @@ linked_parent_graph_frame = 3
 texture = ExtResource("1_ymo4y")
 
 [sub_resource type="VisualShaderNodeFrame" id="VisualShaderNodeFrame_r8bxl"]
-size = Vector2(1704.0006, 606)
+size = Vector2(1704, 606)
 title = "Shape"
 tint_color_enabled = true
 attached_nodes = PackedInt32Array(2, 4, 5, 6, 7, 8, 9)

@@ -46,6 +46,28 @@ func _handle_finish():
 	_show()
 
 
+# Public entry points to drive custom end conditions from triggers, scripted
+# objectives, or any future trigger-based system.  Safe to call from
+# deterministic tick handlers; they only show UI and emit the existing
+# match-end signals.
+func trigger_victory() -> void:
+	if visible:
+		return
+	_handle_victory()
+
+
+func trigger_defeat() -> void:
+	if visible:
+		return
+	_handle_defeat()
+
+
+func trigger_finish() -> void:
+	if visible:
+		return
+	_handle_finish()
+
+
 func _show():
 	show()
 	get_tree().paused = true

@@ -2,14 +2,16 @@
 
 > *"Not every root answers to a mind. Not every ruin remembers its masters."*
 
-The Wild is the non-playable fifth force in Overgrowth RTS.
+The Wild is the non-playable fifth force in Overgrowth.
 It is not a conventional faction with a coherent state, command structure, or campaign empire.
 It represents the world's ambient hostility: feral Vine blooms, mutated wildlife, failed hybrid
-experiments, dormant Amun defenses, and unstable Anchor sites.
+experiments, dormant Amuns defenses, and unstable Anchor sites.
+
+Shared canon reference: [../../LORE.md](../../LORE.md).
 
 ## Role In The Setting
 
-The Wild exists because the planetary system is broken in more than one way.
+The Wild exists because the planetary system has been broken for decades in more than one way.
 
 - Some Vine growth is conscious and coordinated through the Radix.
 - Some growth is damaged, feral, incomplete, or simply random.
@@ -17,6 +19,8 @@ The Wild exists because the planetary system is broken in more than one way.
 - Some human attempts to weaponize or merge with the Vines failed catastrophically.
 
 The result is a neutral PvE layer that threatens everyone.
+By the late 2080s, these are no longer isolated incidents. They are standing hazards, failed zones,
+and local ecosystems that every faction must plan around.
 
 ## What Belongs To The Wild
 
@@ -45,7 +49,6 @@ The Wild should be used to:
 - create PvE-only pressure outside standard base-vs-base warfare
 - support boss fights, survival missions, and hazardous expeditions
 - make maps feel alive and dangerous even when another faction is the main antagonist
-- separate conscious Radix civilization from uncontrolled ecological horror
 
 ## Design Rule
 

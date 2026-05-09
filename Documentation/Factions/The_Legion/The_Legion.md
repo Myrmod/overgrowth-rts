@@ -2,43 +2,21 @@
 
 > *"This is not salvation. This is an invasion."*
 
-The Vine-embracing human theocracy. The Legion began as the emergency power structure that
-tried to keep civilization alive after the Awakening. It evolved into a militant doctrine that
-believes humanity must merge with the Vines, sanctify mutation, and force the world into a new
-order before chaos consumes it.
+The Vine-embracing human theocracy. The Legion began as an emergency power structure after the 2069 Awakening. Through the 2070s, it evolved into a militant doctrine that believes humanity must merge with the Vines, sanctify mutation, and force the world into a new order before chaos consumes it.
+
+Shared canon reference: [../../LORE.md](../../LORE.md).
 
 ---
 
 ## Lore / Origins — The Human Conflict
 
-*Full shared backstory: [Human_conflict/Origins.md](../Human_conflict/Origins.md)*
+*Shared collapse timeline: [../../LORE.md](../../LORE.md#human-collapse-and-awakening)*
 
-### The Ash War (2030)
+The Legion represents what happened when emergency command structures fused with revelation. It formed from the ministries, officers, researchers, corporate authorities, and emergency coalitions that used Vine energy to keep surviving cities alive after the Awakening. At first, their argument was practical: without controlled Vine power, the world would fall back into the Long Blackout.
 
-By the late 2020s the world was mid-transition to renewable energy. Fossil fuel investment had been slashed but green infrastructure was not scaled quickly enough. In 2029, a naval confrontation in the South China Sea destroyed a major tanker, triggering panic across global markets. Energy prices surged, blackouts spread, supply chains failed.
+During the 2070s, that emergency logic became doctrine, then liturgy, then war creed. Reactor security became shrine defense. Rationing became obedience. Medical stabilization became controlled hybridization. By the late 2080s, the Legion is no longer an improvised regime. It is a mature pro-Vine order with clergy, commanders, hybrid programs, sacred infrastructure, and a theory of human destiny.
 
-A missile strike near an early-warning radar was misinterpreted as a nuclear decapitation strike. A "limited de-escalatory response" was launched. Retaliatory launches followed within minutes. By 2030 the interconnected global grid was shattered — not erased, but dismantled, leaving behind isolated power hubs, irradiated wastelands, and fractured nations built around whatever energy survived.
-
-### The Vines Discovery (2069)
-
-Approximately 40 years after the Ash War, scientists across the globe were hunting for a reliable energy source. Africa was less damaged, so solar farms rose in the Sahara. GPR technology discovered a dormant vine-like organism deep beneath an ancient Egyptian anchor site.
-
-One scientist warned that the organism was living and should not be stimulated with artificial energy. He was shut down, locked up. Desperate governments overrode the warning and applied high energy to the dormant vines.
-
-### The Awakening
-
-Energy pulses spiked in Egypt. Within hours dormant spores activated regionally. Within weeks, continental eruptions. Within a month, global overgrowth. Infrastructure was swallowed, farms demolished, millions dead or mutated.
-
-**Humanity divided:**
-
-The **elites and governments** that would become proto-Legion believed the Vines were a miracle
-- clean energy, economic regrowth, cities revived. They suppressed early disaster reports;
-if the Vines vanished, the planet goes dark again.
-
-The **common people** saw the horrors: millions dead and mutated, governments suppressing truth, refugee camps forming, strange mutated forms attacking them. They sided with the locked-up scientist: *"This is not salvation. This is an invasion."*
-
-The Legion represents what happened when emergency command structures fused with revelation.
-What began as crisis management became doctrine, then liturgy, then war creed.
+To the Legion, the Vines are not an invasion to be burned away. They are a dangerous miracle that must be disciplined, sanctified, and made human through command. The deaths and mutations of the Awakening are treated as proof that uncontrolled contact is catastrophic, not proof that the Vines should be rejected.
 
 The Legion now believes:
 - the Vines are humanity's ordained evolution
@@ -48,14 +26,11 @@ The Legion now believes:
 - all Vine life must ultimately be brought under disciplined human control
 - harvested Vine energy should be used to drive the next stage of human evolution
 
-They still field organized armies, but those armies are no longer merely conventional military
-forces. They are crusade columns, purification cadres, hybrid battalions, and ritual engineers.
+They still field organized armies, but those armies are no longer merely conventional military forces. They are crusade columns, purification cadres, hybrid battalions, and ritual engineers.
 
 ### The Amuns as rivals
 
-The Legion does not accept that The Amuns have rightful claim over the Vines.
-To Legion doctrine, any alien creators are at best false prophets and at worst jealous rivals
-trying to deny humanity its destined transformation.
+The Legion does not accept that The Amuns have rightful claim over the Vines. To Legion doctrine, any alien creators are at best false prophets and at worst jealous rivals trying to deny humanity its destined transformation.
 
 The Legion position is:
 - creation does not grant ownership
@@ -71,26 +46,23 @@ The Legion position is:
 - Ritual infrastructure layered onto a familiar power-grid backbone
 - Strong air capability once airfield is established
 - Mid-game transformation and doctrine upgrades create elite pressure
-- Higher building costs than Remnants — more capable but more fragile early on
+- Mature institutions: shrine networks, reactor authorities, hybrid programs, and doctrinal command structures
 
 ---
 
 ## Economy
 
-The Legion uses **sanctified refineries** with harvesters that cut and process Vines through
-doctrinal infrastructure. Mechanically this is still a gather-carry-return economy, but
-conceptually the faction sees harvesting as controlled communion rather than simple extraction.
+The Legion uses **sanctified refineries** with harvesters that cut and process Vines, through doctrinal infrastructure. Mechanically this is still a gather-carry-return economy, but conceptually the faction sees harvesting as controlled communion rather than simple extraction.
 
 Legion doctrine does not revere all Vine growth equally.
 It distinguishes between:
 - sanctified Vine power, which is refined, harvested, weaponized, and integrated into doctrine
 - wild or uncontrolled growth, which is heresy, waste, or dangerous impurity
 
-This is why the Legion can worship ascension through Vine power while still cutting down
-uncontrolled Vine life and hostile growth zones.
+This is why the Legion can worship ascension through Vine power while still cutting down uncontrolled Vine life and hostile growth zones.
 
-- Refinery deploys a Harvester.
-- Harvester gathers, carries, and returns resources to the nearest valid drop-off structure.
+- Refinery deploys a Harvester and serves as a valid drop-off structure.
+- Harvester gathers from the nearest field, carries cargo, and returns resources to the nearest valid drop-off structure.
 - Legion command centers are not resource drop-off structures.
 - Legion harvesting depletes and destroys ResourceVines.
 - If a Harvester is destroyed while carrying resources, the carried load is lost.
@@ -114,8 +86,7 @@ HQ
     └── Airfield
 ```
 
-Conceptually, these structures should read as doctrinal institutions rather than purely secular
-military installations.
+Conceptually, these structures should read as doctrinal institutions, rather than purely secular military installations.
 
 ---
 
@@ -123,9 +94,9 @@ military installations.
 
 | Building | Cost | Build time | Power | Notes |
 |---|---|---|---|---|
-| Command Center | 8 | 10 s | 0 | Starting structure; off-field trickle structure producer |
+| Command Center | 8 | 10 s | 0 | Main structure; produces structures and defences; off-field trickle construction; shared global ProductionQueue |
 | Power Plant | 4 | 5 s | +5 | Provides Legion energy; often framed as ritualized bio-reactor infrastructure |
-| Refinery | 2000 | 20 s | 50 | Provides a Harvester that must return cargo to deliver |
+| Refinery | 2000 | 20 s | 50 | Deploys a Harvester; Harvester cargo is delivered to the nearest valid drop-off structure |
 | Barracks | 4 | 6 s | 5 | Produces infantry |
 | Airfield | 2000 | 20 s | 50 | Produces air units |
 | Assembly | 2000 | 20 s | 50 | Produces tanks |
@@ -146,7 +117,10 @@ Visual direction:
 
 | Stat | Value |
 |---|---|
+| Role | Light line infantry |
 | HP | 5 |
+| Max HP | 5 |
+| Sight range | 8.0 |
 | Cost | 2 |
 | Build time | 3 s |
 | Armor vs Rifle | 0% |
@@ -169,7 +143,14 @@ Visual direction:
 | Stat | Value |
 |---|---|
 | HP | 600 |
+| Max HP | 600 |
 | Capacity | 500 |
 | Gather rate | 250 |
 | Cost | 2 |
 | Build time | 3 s |
+
+**Behavior**
+- deployed by the Refinery economy line
+- gathers from the nearest resource field
+- returns cargo to the nearest valid drop-off structure
+- Legion command centers are not drop-off structures

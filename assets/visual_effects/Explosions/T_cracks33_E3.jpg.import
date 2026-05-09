@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b6oyd0ub3tvxi"
-path="res://.godot/imported/amuns_gunner.png-a44f3a5346e55575047784c577cd0425.ctex"
+uid="uid://ddo5mawtifm20"
+path="res://.godot/imported/T_cracks33_E3.jpg-701346a77194e9b6d1f9a6c087738e02.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Documentation/Units/amuns_gunner.png"
-dest_files=["res://.godot/imported/amuns_gunner.png-a44f3a5346e55575047784c577cd0425.ctex"]
+source_file="res://assets/visual_effects/Explosions/T_cracks33_E3.jpg"
+dest_files=["res://.godot/imported/T_cracks33_E3.jpg-701346a77194e9b6d1f9a6c087738e02.ctex"]
 
 [params]
 
