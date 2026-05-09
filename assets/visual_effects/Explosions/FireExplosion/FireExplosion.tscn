@@ -1,0 +1,345 @@
+[gd_scene format=3 uid="uid://cb6vx3wc7qie8"]
+
+[ext_resource type="PackedScene" uid="uid://bs2jm62cmkbrk" path="res://addons/instant-realistic-light/light_scene.tscn" id="2_8yvl2"]
+[ext_resource type="Shader" uid="uid://q5g0scilk0x0" path="res://assets/visual_effects/Explosions/FireExplosion/FireExplosionSparks.tres" id="3_11w4f"]
+[ext_resource type="Material" uid="uid://dpynxrxnwxokq" path="res://assets/visual_effects/Explosions/FireExplosion/FireExplosionMaterial.tres" id="3_b5bum"]
+[ext_resource type="Texture2D" uid="uid://swukls3qcmt0" path="res://assets/visual_effects/Explosions/T_cracks35.png" id="4_m778i"]
+[ext_resource type="Texture2D" uid="uid://dr8rmjbjm0nap" path="res://assets/visual_effects/Explosions/T_cracks33_E3.jpg" id="5_4m044"]
+[ext_resource type="AudioStream" uid="uid://c421o8f2klmfo" path="res://assets/sound_effects/explosion.mp3" id="7_4m044"]
+
+[sub_resource type="Curve" id="Curve_b5bum"]
+_data = [Vector2(0.41216218, 0), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_11w4f"]
+curve = SubResource("Curve_b5bum")
+
+[sub_resource type="Gradient" id="Gradient_b5bum"]
+offsets = PackedFloat32Array(0, 0.60655737)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_11w4f"]
+gradient = SubResource("Gradient_b5bum")
+
+[sub_resource type="Curve" id="Curve_558fx"]
+
+[sub_resource type="CurveTexture" id="CurveTexture_m778i"]
+curve = SubResource("Curve_558fx")
+
+[sub_resource type="Curve" id="Curve_8yvl2"]
+_limits = [-1.0, 1.0, 0.0, 1.0]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, -1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_b5bum"]
+curve = SubResource("Curve_8yvl2")
+
+[sub_resource type="Curve" id="Curve_11w4f"]
+_data = [Vector2(0, 0.30337083), 0.0, 2.7438202, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_558fx"]
+curve = SubResource("Curve_11w4f")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_8yvl2"]
+lifetime_randomness = 0.05
+emission_shape = 1
+emission_sphere_radius = 0.5
+gravity = Vector3(0, 0, 0)
+radial_accel_min = 6.4999976
+radial_accel_max = 7.4999976
+radial_accel_curve = SubResource("CurveTexture_b5bum")
+scale_max = 1.1999999
+scale_curve = SubResource("CurveTexture_558fx")
+color_ramp = SubResource("GradientTexture1D_11w4f")
+alpha_curve = SubResource("CurveTexture_11w4f")
+emission_curve = SubResource("CurveTexture_m778i")
+
+[sub_resource type="SphereMesh" id="SphereMesh_11w4f"]
+material = ExtResource("3_b5bum")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_558fx"]
+render_priority = -1
+shader = ExtResource("3_11w4f")
+shader_parameter/SparkColor = Color(0.894118, 0.913725, 0, 1)
+
+[sub_resource type="Curve" id="Curve_4m044"]
+_data = [Vector2(0, 0), 0.0, 0.0, 0, 0, Vector2(0.24324325, 0.6629214), 0.0, 0.0, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_0v5pj"]
+curve = SubResource("Curve_4m044")
+
+[sub_resource type="Curve" id="Curve_m778i"]
+_data = [Vector2(0, 0.47191018), 0.0, 1.5382019, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_4m044"]
+curve = SubResource("Curve_m778i")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_b5bum"]
+particle_flag_align_y = true
+direction = Vector3(0, 1, 0)
+spread = 90.0
+initial_velocity_min = 0.5
+initial_velocity_max = 1.0
+gravity = Vector3(0, 0, 0)
+scale_max = 3.0
+scale_curve = SubResource("CurveTexture_4m044")
+alpha_curve = SubResource("CurveTexture_0v5pj")
+hue_variation_min = -1.0
+hue_variation_max = 0.99999994
+
+[sub_resource type="QuadMesh" id="QuadMesh_8yvl2"]
+size = Vector2(0.25, 1)
+center_offset = Vector3(0, 0.5, 0)
+
+[sub_resource type="Animation" id="Animation_x2w3k"]
+resource_name = "Init"
+length = 2.0
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FireAndSmoke:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sparks:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0.13333334),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Light:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [20.0, 0.0, 0.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Crack:emission_energy")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0.06666667, 1, 2),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [3.0, 0.0, 0.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Crack:albedo_mix")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0.06666667, 0.99, 1.99, 2),
+"transitions": PackedFloat32Array(1, 1, 1, 1),
+"update": 0,
+"values": [1.0, 1.0, 0.004999995, 0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ExplosionSound:playing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_ck6ij"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("FireAndSmoke:emitting")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("Sparks:emitting")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("Light:light_energy")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [20.0]
+}
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("Crack:emission_energy")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.0]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("Crack:albedo_mix")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [0.0]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("ExplosionSound:playing")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_a7lba"]
+_data = {
+&"Init": SubResource("Animation_x2w3k"),
+&"RESET": SubResource("Animation_ck6ij")
+}
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cp2yl"]
+albedo_color = Color(0.2520276, 0.25202766, 0.25202763, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_osuyt"]
+material = SubResource("StandardMaterial3D_cp2yl")
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_gn88m"]
+ground_color = Color(0, 0, 0, 1)
+
+[sub_resource type="Sky" id="Sky_tyhie"]
+sky_material = SubResource("PhysicalSkyMaterial_gn88m")
+radiance_size = 2
+
+[sub_resource type="Environment" id="Environment_f8w8m"]
+background_mode = 2
+background_intensity = 100000.0
+sky = SubResource("Sky_tyhie")
+tonemap_mode = 3
+tonemap_white = 8.0
+ssao_enabled = true
+ssao_detail = 2.0
+sdfgi_enabled = true
+sdfgi_bounce_feedback = 0.9
+glow_enabled = true
+glow_normalized = true
+glow_bloom = 0.2
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.01
+volumetric_fog_gi_inject = 1.14
+volumetric_fog_anisotropy = 0.7
+volumetric_fog_sky_affect = 0.295
+adjustment_saturation = 1.17
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_qo5hu"]
+exposure_multiplier = 3.069
+auto_exposure_scale = 0.22
+auto_exposure_speed = 0.8
+dof_blur_far_distance = 1.44
+dof_blur_near_distance = 0.01
+auto_exposure_min_sensitivity = 8.01
+
+[node name="FireExplosion" type="Node3D" unique_id=811893932]
+
+[node name="FireAndSmoke" type="GPUParticles3D" parent="." unique_id=819782192]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+emitting = false
+lifetime = 0.6
+one_shot = true
+explosiveness = 0.8
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_8yvl2")
+draw_pass_1 = SubResource("SphereMesh_11w4f")
+
+[node name="Sparks" type="GPUParticles3D" parent="." unique_id=124728485]
+material_override = SubResource("ShaderMaterial_558fx")
+emitting = false
+lifetime = 0.4
+one_shot = true
+explosiveness = 0.9
+randomness = 1.0
+fixed_fps = 60
+process_material = SubResource("ParticleProcessMaterial_b5bum")
+draw_pass_1 = SubResource("QuadMesh_8yvl2")
+
+[node name="Crack" type="Decal" parent="." unique_id=948051371]
+size = Vector3(2, 0.5, 2)
+texture_albedo = ExtResource("4_m778i")
+texture_emission = ExtResource("5_4m044")
+emission_energy = 3.0
+modulate = Color(0.96489865, 0.61055017, 0, 1)
+albedo_mix = 0.0
+
+[node name="Light" type="OmniLight3D" parent="." unique_id=1041534970]
+light_color = Color(0.46543926, 0.2962987, 0.15175897, 1)
+light_energy = 20.0
+omni_range = 10.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2126563605]
+libraries/ = SubResource("AnimationLibrary_a7lba")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2023037791]
+transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+mesh = SubResource("PlaneMesh_osuyt")
+
+[node name="WorldEnvironment" parent="." unique_id=1814438251 instance=ExtResource("2_8yvl2")]
+environment = SubResource("Environment_f8w8m")
+camera_attributes = SubResource("CameraAttributesPractical_qo5hu")
+
+[node name="ExplosionSound" type="AudioStreamPlayer3D" parent="." unique_id=918834602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.001072228, 0, -0.08652973)
+stream = ExtResource("7_4m044")

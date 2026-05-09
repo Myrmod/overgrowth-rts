@@ -1,0 +1,11 @@
+[gd_resource type="ShaderMaterial" format=3 uid="uid://dpynxrxnwxokq"]
+
+[ext_resource type="Shader" uid="uid://cm8i6ta4jcrm3" path="res://assets/visual_effects/Explosions/FireExplosion/FireExplosion.tres" id="1_grdrk"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_grdrk")
+shader_parameter/CloudSpeed = Vector2(0, 0.5)
+shader_parameter/CloudIntensitiy = 0.50000002375
+shader_parameter/ExplosionColor = Color(0.752941, 0.388235, 0, 1)
+shader_parameter/EmissionIntesity = 100.0
