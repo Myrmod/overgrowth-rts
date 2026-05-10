@@ -1,0 +1,182 @@
+[gd_scene format=3 uid="uid://cyble1xalklij"]
+
+[ext_resource type="Texture2D" uid="uid://ksfdvw4lsuuj" path="res://assets/visual_effects/Fire/fire_texture.png" id="1_hbgo6"]
+[ext_resource type="Texture2D" uid="uid://b1pennnk3neti" path="res://assets/visual_effects/Fire/spark_texture.png" id="2_hbgo6"]
+[ext_resource type="AudioStream" uid="uid://bmql05kml4akq" path="res://assets/sound_effects/fire_sound_effect.mp3" id="3_ofrms"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gy6uu"]
+transparency = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("1_hbgo6")
+albedo_texture_force_srgb = true
+
+[sub_resource type="Curve" id="Curve_hbgo6"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.6824325, 1), 0.047512032, 0.047512032, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 3
+
+[sub_resource type="CurveTexture" id="CurveTexture_ofrms"]
+curve = SubResource("Curve_hbgo6")
+
+[sub_resource type="Gradient" id="Gradient_gy6uu"]
+offsets = PackedFloat32Array(0, 0.47540984, 0.6803279)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_g1fyv"]
+gradient = SubResource("Gradient_gy6uu")
+
+[sub_resource type="Curve" id="Curve_g1fyv"]
+_data = [Vector2(0.0067567676, 0.49438208), 0.0, 1.4831462, 0, 0, Vector2(1, 1), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_ofcga"]
+curve = SubResource("Curve_g1fyv")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_othmf"]
+lifetime_randomness = 0.1
+particle_flag_rotate_y = true
+emission_shape = 1
+emission_sphere_radius = 0.2
+angle_min = -179.99998
+angle_max = 180.00002
+direction = Vector3(0, 1, 0)
+spread = 12.0
+initial_velocity_min = 1.0
+initial_velocity_max = 2.0
+radial_velocity_min = -2.2351742e-05
+radial_velocity_max = 0.49997765
+gravity = Vector3(0, 1, 0)
+scale_min = 1.1999999
+scale_max = 1.4
+scale_curve = SubResource("CurveTexture_ofcga")
+color = Color(0.9882353, 1, 0, 1)
+color_ramp = SubResource("GradientTexture1D_g1fyv")
+alpha_curve = SubResource("CurveTexture_ofrms")
+
+[sub_resource type="QuadMesh" id="QuadMesh_vuewm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ofrms"]
+blend_mode = 1
+shading_mode = 0
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+albedo_texture = ExtResource("2_hbgo6")
+
+[sub_resource type="Curve" id="Curve_gy6uu"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(0.2027027, 0.1685394), 0.0, 0.0, 0, 0, Vector2(0.4256757, 0.9662922), 0.0, 0.0, 0, 0, Vector2(0.5945946, 0.3146068), 0.0, 0.0, 0, 0, Vector2(0.7364865, 0.764045), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 6
+
+[sub_resource type="CurveTexture" id="CurveTexture_g1fyv"]
+curve = SubResource("Curve_gy6uu")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_ofcga"]
+lifetime_randomness = 0.1
+emission_shape = 6
+emission_ring_axis = Vector3(0, 100, 1)
+emission_ring_height = 0.8
+emission_ring_radius = 0.6
+emission_ring_inner_radius = 0.4
+emission_ring_cone_angle = 90.0
+direction = Vector3(0, 1, 0)
+initial_velocity_min = 0.5
+initial_velocity_max = 2.0
+gravity = Vector3(0, 1, 0)
+scale_min = 0.049999997
+scale_max = 0.14999999
+scale_curve = SubResource("CurveTexture_g1fyv")
+color = Color(0.95441633, 0.709166, 2.695322e-06, 1)
+
+[sub_resource type="QuadMesh" id="QuadMesh_othmf"]
+
+[sub_resource type="Animation" id="Animation_vuewm"]
+resource_name = "Init"
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OmniLight3D:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.2, 0.4168525, 0.5581888, 0.74604076, 0.9177912),
+"transitions": PackedFloat32Array(1, 1, 1, 1, 1, 1),
+"update": 0,
+"values": [3.0, 8.24, 1.0, 6.155, 2.787, 8.937]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FireSoundEffect:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [true]
+}
+
+[sub_resource type="Animation" id="Animation_3nh1a"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("OmniLight3D:light_energy")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [3.0]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("FireSoundEffect:playing")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 1,
+"values": [false]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_5fk81"]
+_data = {
+&"Init": SubResource("Animation_vuewm"),
+&"RESET": SubResource("Animation_3nh1a")
+}
+
+[node name="Fire" type="Node3D" unique_id=2087619630]
+
+[node name="Flame" type="GPUParticles3D" parent="." unique_id=1208711132]
+material_override = SubResource("StandardMaterial3D_gy6uu")
+amount = 50
+lifetime = 1.2
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_othmf")
+draw_pass_1 = SubResource("QuadMesh_vuewm")
+
+[node name="Sparks" type="GPUParticles3D" parent="." unique_id=2126116714]
+layers = 2
+material_override = SubResource("StandardMaterial3D_ofrms")
+amount = 35
+transform_align = 1
+process_material = SubResource("ParticleProcessMaterial_ofcga")
+draw_pass_1 = SubResource("QuadMesh_othmf")
+
+[node name="OmniLight3D" type="OmniLight3D" parent="." unique_id=780981656]
+light_color = Color(1, 0.8156863, 0, 1)
+light_energy = 3.0
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2035866324]
+libraries/ = SubResource("AnimationLibrary_5fk81")
+autoplay = &"Init"
+
+[node name="FireSoundEffect" type="AudioStreamPlayer3D" parent="." unique_id=417649696]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.07372999, 0, 0.1119743)
+stream = ExtResource("3_ofrms")
+autoplay = true

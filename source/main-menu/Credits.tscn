@@ -99,7 +99,8 @@ text = "• [url=https://pixabay.com/users/lordsonny-38439655/]LordSonny[/url]
 • [url=https://pixabay.com/users/floraphonic-38928062/]floraphonic[/url]  
 • [url=https://pixabay.com/users/universfield-28281460/]Universfield[/url]  
 • [url=https://pixabay.com/users/pwlpl-16464651/]Paul (PWLPL)[/url]  
-• [url=https://pixabay.com/users/sovetsky_rastov-46121007/]Sovetsky Rastov[/url]"
+• [url=https://pixabay.com/users/sovetsky_rastov-46121007/]Sovetsky Rastov[/url]
+• [url=https://pixabay.com/users/maxhammarbäck-25559203/]Max Hammarbäckv[/url]"
 fit_content = true
 
 [node name="Models" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer" unique_id=1946531122]
