@@ -1,0 +1,106 @@
+[gd_scene format=3 uid="uid://bri5nrberifwm"]
+
+[ext_resource type="PackedScene" uid="uid://bs2jm62cmkbrk" path="res://addons/instant-realistic-light/light_scene.tscn" id="1_light"]
+[ext_resource type="PackedScene" uid="uid://cyble1xalklij" path="res://assets/visual_effects/Fire/Fire.tscn" id="2_fire"]
+[ext_resource type="PackedScene" uid="uid://cb6vx3wc7qie8" path="res://assets/visual_effects/Explosions/FireExplosion/FireExplosion.tscn" id="3_explosion"]
+[ext_resource type="Script" uid="uid://c16qtiw22tdae" path="res://tests/manual/VFXTestCamera.gd" id="4_camera"]
+[ext_resource type="Script" uid="uid://ckv5ia1kym51a" path="res://tests/manual/VFXTest.gd" id="5_ui"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m44ws"]
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_u7b0i"]
+material = SubResource("StandardMaterial3D_m44ws")
+size = Vector2(100, 10)
+
+[node name="VFXTest" type="Node3D" unique_id=1111111111]
+script = ExtResource("5_ui")
+
+[node name="WorldEnvironment" parent="." unique_id=-2072745074 instance=ExtResource("1_light")]
+
+[node name="Fire" parent="." unique_id=-961633963 instance=ExtResource("2_fire")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.2582963, 0)
+
+[node name="FireExplosion" parent="." unique_id=149477148 instance=ExtResource("3_explosion")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=1260588259]
+current = true
+script = ExtResource("4_camera")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=1296486051]
+mesh = SubResource("PlaneMesh_u7b0i")
+
+[node name="HUD" type="CanvasLayer" parent="." unique_id=1805032705]
+
+[node name="Panel" type="PanelContainer" parent="HUD" unique_id=1805032706]
+anchors_preset = 9
+anchor_bottom = 1.0
+offset_right = 240.0
+
+[node name="Margin" type="MarginContainer" parent="HUD/Panel" unique_id=1805032707]
+layout_mode = 2
+theme_override_constants/margin_left = 10
+theme_override_constants/margin_top = 10
+theme_override_constants/margin_right = 10
+theme_override_constants/margin_bottom = 10
+
+[node name="OuterVBox" type="VBoxContainer" parent="HUD/Panel/Margin" unique_id=1805032708]
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Title" type="Label" parent="HUD/Panel/Margin/OuterVBox" unique_id=1805032709]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "Visual Effects"
+
+[node name="HSep" type="HSeparator" parent="HUD/Panel/Margin/OuterVBox" unique_id=1805032710]
+layout_mode = 2
+
+[node name="Scroll" type="ScrollContainer" parent="HUD/Panel/Margin/OuterVBox" unique_id=1805032711]
+layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="VBox" type="VBoxContainer" parent="HUD/Panel/Margin/OuterVBox/Scroll" unique_id=1805032712]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 4
+
+[node name="FireLabel" type="Label" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032713]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Fire"
+
+[node name="FirePlayOnce" type="Button" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032714]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "   Play Once"
+
+[node name="FireContinuous" type="CheckBox" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032715]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Continuous"
+
+[node name="FireSep" type="HSeparator" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032716]
+layout_mode = 2
+
+[node name="FireExplosionLabel" type="Label" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032717]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "FireExplosion"
+
+[node name="FireExplosionPlayOnce" type="Button" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032718]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "   Play Once"
+
+[node name="FireExplosionContinuous" type="CheckBox" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032719]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Continuous"
+
+[node name="FireExplosionSep" type="HSeparator" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032720]
+layout_mode = 2

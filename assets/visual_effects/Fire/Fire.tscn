@@ -21,7 +21,7 @@ curve = SubResource("Curve_hbgo6")
 
 [sub_resource type="Gradient" id="Gradient_gy6uu"]
 offsets = PackedFloat32Array(0, 0.47540984, 0.6803279)
-colors = PackedColorArray(1, 1, 1, 1, 1, 0, 0, 1, 0, 0, 0, 1)
+colors = PackedColorArray(1, 1, 1, 1, 1, 0.46666667, 0, 1, 0, 0, 0, 1)
 
 [sub_resource type="GradientTexture1D" id="GradientTexture1D_g1fyv"]
 gradient = SubResource("Gradient_gy6uu")

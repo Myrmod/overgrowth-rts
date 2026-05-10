@@ -296,8 +296,9 @@ omni_range = 10.0
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=2126563605]
 libraries/ = SubResource("AnimationLibrary_a7lba")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=2023037791]
+[node name="Ground_NotRequired" type="MeshInstance3D" parent="." unique_id=2023037791]
 transform = Transform3D(5, 0, 0, 0, 5, 0, 0, 0, 5, 0, 0, 0)
+visible = false
 mesh = SubResource("PlaneMesh_osuyt")
 
 [node name="ExplosionSound" type="AudioStreamPlayer3D" parent="." unique_id=918834602]
