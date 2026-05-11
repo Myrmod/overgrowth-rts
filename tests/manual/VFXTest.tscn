@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cyble1xalklij" path="res://assets/visual_effects/Fire/Fire.tscn" id="2_fire"]
 [ext_resource type="PackedScene" uid="uid://cb6vx3wc7qie8" path="res://assets/visual_effects/Explosions/FireExplosion/FireExplosion.tscn" id="3_explosion"]
 [ext_resource type="Script" uid="uid://c16qtiw22tdae" path="res://tests/manual/VFXTestCamera.gd" id="4_camera"]
+[ext_resource type="PackedScene" uid="uid://b4in1iwkv4j8e" path="res://assets/visual_effects/Gases/Smoke/Smoke.tscn" id="5_ckqk8"]
 [ext_resource type="Script" uid="uid://ckv5ia1kym51a" path="res://tests/manual/VFXTest.gd" id="5_ui"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_m44ws"]
@@ -23,6 +24,9 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0.2582963, 0)
 
 [node name="FireExplosion" parent="." unique_id=149477148 instance=ExtResource("3_explosion")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 0)
+
+[node name="Smoke" parent="." unique_id=210759241 instance=ExtResource("5_ckqk8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.522521, 0, -0.21589088)
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=1260588259]
 current = true
@@ -104,3 +108,43 @@ text = "Continuous"
 
 [node name="FireExplosionSep" type="HSeparator" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1805032720]
 layout_mode = 2
+
+[node name="SmokeLabel" type="Label" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=1405720079]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "Smoke"
+
+[node name="SmokePlayOnce" type="Button" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=2105683262]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+text = "   Play Once"
+
+[node name="SmokeContinuous" type="CheckBox" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=632824009]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Continuous"
+
+[node name="SmokeSep" type="HSeparator" parent="HUD/Panel/Margin/OuterVBox/Scroll/VBox" unique_id=215170885]
+layout_mode = 2
+
+[node name="Label3D" type="Label3D" parent="Fire" unique_id=1111111112]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+billboard = 1
+no_depth_test = true
+font_size = 64
+text = "Fire"
+
+[node name="Label3D" type="Label3D" parent="FireExplosion" unique_id=1111111113]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+billboard = 1
+no_depth_test = true
+font_size = 64
+text = "FireExplosion"
+
+[node name="Label3D" type="Label3D" parent="Smoke" unique_id=1111111114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+billboard = 1
+no_depth_test = true
+font_size = 64
+text = "Smoke"
