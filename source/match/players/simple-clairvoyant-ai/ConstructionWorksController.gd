@@ -1,7 +1,7 @@
 extends Node
 
 const Structure = preload("res://source/match/units/Structure.gd")
-const Worker = preload("res://source/factions/the_amuns/units/Worker.gd")
+const Worker = preload("res://source/factions/the_amuns/units/SiphonDrone.gd")
 const Constructing = preload("res://source/match/units/actions/Constructing.gd")
 
 # Tick-based refresh interval. At TICK_RATE 10, 5 ticks = 0.5 s.

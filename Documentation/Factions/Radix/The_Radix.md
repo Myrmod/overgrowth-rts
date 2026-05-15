@@ -58,8 +58,9 @@ Where integration fails, it treats them as dangerous instability.
 ## Strengths & Identity
 
 - **No power grid** — entirely self-sufficient from Vine spread
-- **Creep-based territory control** — units regenerate HP on owned creep
-- Buildings must be placed on Vine-covered tiles
+- **Network-based territory control** — units regenerate HP on owned creep and structures depend on connected owned growth
+- Buildings are planned to be placeable only on connected Radix-owned grass/growth tiles
+- living defenses include organic walls, gates, specialized turret growths, and network utility blooms
 - Economy scales with how much territory is under creep control
 - Aggressive toward any force that harms Radix growth or destroys Vine resources
 
@@ -86,6 +87,8 @@ useful growth, and folds territory into the network rather than strip-mining it.
 - Heart owns the relevant Radix production queue entries for Seedling-started structures.
 - A Seedling begins as a normal controllable unit after Heart production.
 - A Seedling may be assigned to creep spread or Seedling-started structure construction.
+- Planned direction: valid structure placement should depend on a continuous chain of Radix-owned grass/growth tiles connected back to a Heart or dedicated Core structure.
+- Planned direction: severing that living connection should deny further outward structure placement until the network is restored.
 - The player places the target Radix structure first.
 - The placed site is tracked in the HUD queue as a construction target.
 - A Seedling travels to the site and begins the start action.
@@ -98,6 +101,7 @@ useful growth, and folds territory into the network rather than strip-mining it.
 | Stat | Value |
 |---|---|
 | Construction model | Seedling-started on-field structures |
+| Placement authority | Connected Radix-owned grass/growth network |
 | Harvest model | Linker-exclusive tile links |
 | Depletion | ResourceTiles are not consumed by Radix harvest |
 | Delivery loop | None required |
@@ -124,14 +128,26 @@ HQ
 | Building | Cost | Build time | Notes |
 |---|---|---|---|
 | Heart | 8 | 10 s | Main structure; produces Seedlings, structures, and defences from the structure tab; shared global ProductionQueue |
+| Core | TBD | TBD | Planned expansion anchor for connected growth placement |
 | Spire | 600 | 6 s | Tier 1 infantry structure; starts once a Seedling merges into the ghost |
 | Thorn Forge | 2000 | 20 s | Tier 1 vehicle structure; starts once a Seedling merges into the ghost |
 | Sky Bloom | 2000 | 20 s | Tier 1 air structure; starts once a Seedling merges into the ghost |
+| Bulwark Growth/Gate | TBD | TBD | Planned organic wall and gate set for shaping living territory |
+| Thorn Nest | TBD | TBD | Planned anti-infantry defense against light ground pressure |
+| Root Impaler | TBD | TBD | Planned anti-vehicle defense against armor, walkers, and heavy beasts |
+| Spore Crown | TBD | TBD | Planned anti-air defense for protecting groves |
+| Synapse Watcher | TBD | TBD | Planned utility/detection defense for stealth, mines, burrowed threats, and hidden growth on owned growth |
+| Mending Bloom | TBD | TBD | Planned utility defense that accelerates healing for nearby Radix units and living structures |
 
 Construction rules:
 - current implemented Radix production buildings require a Seedling to start
+- planned feature: placement should only be valid on connected Radix-owned grass/growth tiles
+- planned feature: the connection source should trace back to a Heart or Core structure
 - placement creates the site first, then a Seedling finishes the start action
 - canceling before completion preserves or restores the Seedling instead of deleting it permanently
+- planned feature: Radix uses living walls and gates as part of the shared fortification framework
+- planned feature: Radix defenses should cover anti-infantry, anti-vehicle, anti-air, and optional utility/detection roles
+- planned feature: Rootbinder or equivalent engineer-type units can infest neutral or enemy structures to capture them
 
 ---
 
@@ -168,3 +184,11 @@ Construction rules:
 **Notes**
 - Seedlings are produced by the Heart.
 - Radix Tier 1 structures depend on Seedlings instead of standard worker construction.
+
+### Support Units
+
+#### Rootbinder
+
+- planned engineer-type unit for structure capture
+- infests neutral or enemy structures through a readable, interruptible action
+- should depend on owned growth or network access so capture still reinforces Radix territory identity

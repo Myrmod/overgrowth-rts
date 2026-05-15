@@ -133,11 +133,12 @@ func _try_ordering_selected_workers_to_construct_structure(potential_structure):
 			{
 				"selected_constructors":
 				selected_constructors.map(
-					func(unit): return {
-						"unit": unit.id,
-						"pos": unit.global_position,
-						"rot": unit.global_rotation,
-					}
+					func(unit):
+						return {
+							"unit": unit.id,
+							"pos": unit.global_position,
+							"rot": unit.global_rotation,
+						}
 				),
 				"structure": structure.id,
 				"rotation": structure.global_rotation,
@@ -168,11 +169,12 @@ func _force_attack_selected_units_on(target_unit):
 			{
 				"targets":
 				attackers.map(
-					func(unit): return {
-						"unit": unit.id,
-						"pos": unit.global_position,
-						"rot": unit.global_rotation
-					}
+					func(unit):
+						return {
+							"unit": unit.id,
+							"pos": unit.global_position,
+							"rot": unit.global_rotation
+						}
 				),
 				"target_unit": target_unit.id,
 				"force": true,
@@ -536,8 +538,9 @@ func _push_patrol_command(units: Array, target_point: Vector3, queued: bool):
 
 
 func _push_spread_command(target_point: Vector3) -> void:
-	# Pick the first selected, controlled Seedling (Seedling-only ability).
-	var seedling: Unit = null
+	# Pick a controlled, selected Seedling for the Spread ability.
+	# Priority: idle seedlings first, then closest to target_point.
+	var seedlings: Array = []
 	for u in get_tree().get_nodes_in_group("selected_units"):
 		if not u.is_in_group("controlled_units"):
 			continue
@@ -545,8 +548,10 @@ func _push_spread_command(target_point: Vector3) -> void:
 		if scene_path.is_empty() and u.get_script() != null:
 			scene_path = u.get_script().resource_path.replace(".gd", ".tscn")
 		if UnitConstants.get_scene_id(scene_path) == Enums.SceneId.RADIX_SEEDLING:
-			seedling = u
-			break
+			seedlings.append(u)
+	if seedlings.is_empty():
+		return
+	var seedling: Unit = _pick_best_seedling_for_spread(seedlings, target_point)
 	if seedling == null:
 		return
 	(
@@ -564,6 +569,30 @@ func _push_spread_command(target_point: Vector3) -> void:
 			}
 		)
 	)
+
+
+static func _pick_best_seedling_for_spread(seedlings: Array, target_point: Vector3) -> Unit:
+	# Priority 1: idle seedlings (no action, or in an idle WaitingForTargets state).
+	# Priority 2: closest to target_point.
+	var idle: Array = []
+	for s in seedlings:
+		if not is_instance_valid(s):
+			continue
+		var act = s.get("action")
+		var is_idle: bool = act == null or (act.has_method("is_idle") and act.is_idle())
+		if is_idle:
+			idle.append(s)
+	var pool: Array = idle if not idle.is_empty() else seedlings
+	var best: Unit = null
+	var best_dist: float = INF
+	for s in pool:
+		if not is_instance_valid(s):
+			continue
+		var d: float = s.global_position.distance_squared_to(target_point)
+		if d < best_dist:
+			best_dist = d
+			best = s
+	return best
 
 
 func push_stop_command():

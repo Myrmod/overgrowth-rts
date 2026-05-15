@@ -2,20 +2,20 @@ extends Node
 
 signal resources_required(resources, metadata)
 
-const Worker = preload("res://source/factions/the_amuns/units/Worker.gd")
-const CommandCenter = preload("res://source/factions/the_amuns/structures/Bekhenet.gd")
-const VehicleFactory = preload("res://source/factions/the_amuns/structures/Naucratis.gd")
+const Worker = preload("res://source/factions/the_amuns/units/SiphonDrone.gd")
+const CommandCenter = preload("res://source/factions/the_amuns/structures/CommandAnchor.gd")
+const VehicleFactory = preload("res://source/factions/the_amuns/structures/InfantryGate.gd")
 const VehicleFactoryScene = preload(
-	"res://source/factions/the_amuns/structures/Naucratis.tscn"
+	"res://source/factions/the_amuns/structures/InfantryGate.tscn"
 )
-const Tank = preload("res://source/factions/the_amuns/units/Tank.gd")
-const TankScene = preload("res://source/factions/the_amuns/units/Tank.tscn")
-const AircraftFactory = preload("res://source/factions/the_amuns/structures/Nemet.gd")
+const Tank = preload("res://source/factions/the_amuns/units/CalibrationAdept.gd")
+const TankScene = preload("res://source/factions/the_amuns/units/CalibrationAdept.tscn")
+const AircraftFactory = preload("res://source/factions/the_amuns/structures/VehicleFoundry.gd")
 const AircraftFactoryScene = preload(
-	"res://source/factions/the_amuns/structures/Nemet.tscn"
+	"res://source/factions/the_amuns/structures/VehicleFoundry.tscn"
 )
-const Helicopter = preload("res://source/factions/the_amuns/units/Helicopter.gd")
-const HelicopterScene = preload("res://source/factions/the_amuns/units/Helicopter.tscn")
+const Helicopter = preload("res://source/factions/the_amuns/units/RelayDrone.gd")
+const HelicopterScene = preload("res://source/factions/the_amuns/units/RelayDrone.tscn")
 const AutoAttackingBattlegroup = preload(
 	"res://source/match/players/simple-clairvoyant-ai/AutoAttackingBattlegroup.gd"
 )

@@ -17,6 +17,8 @@ harvesting identities, units, structures, and exceptions live in the faction ove
 - Base max resource per tile is 500.
 - Multiple players can contest the same field.
 - The global ProductionQueue is a shared HUD feature for all factions.
+- It can represent both queued production and tracked on-field construction progress.
+- Queue entries expose the produced entity name on hover for quick identification.
 - Faction pages define whether a harvesting model depletes, preserves, burns, or modifies resource tiles.
 
 ## Risk and Loss Rules

@@ -930,6 +930,18 @@ func _execute_command(cmd: Dictionary):
 			unit._stopped = false
 			unit.action = Actions.Spreading.new(cmd.data.position)
 
+		Enums.CommandType.TOGGLE_AUTO_HARVEST:
+			# Toggle auto-harvest on each ResourceGatherer in data.targets.
+			for entry in cmd.data.targets:
+				var unit = _resolve_unit(entry.unit, "TOGGLE_AUTO_HARVEST")
+				if unit == null:
+					continue
+				if not _verify_unit_ownership(unit, cmd.player_id, "TOGGLE_AUTO_HARVEST"):
+					continue
+				if not (unit is ResourceGatherer):
+					continue
+				unit.auto_harvest_enabled = not unit.auto_harvest_enabled
+
 		_:
 			push_error("Match: unknown command type %s — %s" % [cmd.type, cmd])
 

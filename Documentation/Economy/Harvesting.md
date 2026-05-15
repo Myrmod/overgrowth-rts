@@ -13,6 +13,7 @@ drop-off rules, depletion behavior, and lore framing live in the faction overvie
 - A resource tile can be claimed by only one active economy interaction at a time.
 - Cargo-based gatherers lose carried resources if they are destroyed before delivery.
 - Economy actions that retarget after a tile disappears should do so through deterministic command execution.
+- Factions may expose an auto-harvest toggle on gatherer units; when enabled, idle gatherers may automatically acquire nearby valid resources.
 - Faction docs define whether a model uses cargo delivery, passive linking, direct conversion, field modification, or another specialized loop.
 
 ## Faction Implementations
@@ -21,4 +22,3 @@ drop-off rules, depletion behavior, and lore framing live in the faction overvie
 - [The Radix](../Factions/Radix/The_Radix.md#economy)
 - [The Legion](../Factions/The_Legion/The_Legion.md#economy)
 - [The Remnants](../Factions/Remnants/The_Remnants.md#economy)
-

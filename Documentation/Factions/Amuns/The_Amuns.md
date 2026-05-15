@@ -69,6 +69,8 @@ This same logic defines their enemies:
 
 - elite, low-count armies backed by superior battlefield control and precision technology
 - anchor-linked infrastructure that reads as both sacred architecture and advanced machinery
+- projected construction through airborne anchor relays rather than conventional worker lines
+- fortified anchor systems use precise walls, gates, defense beams, and utility pylons rather than improvised fortifications
 - a calm, judicial tone rooted in certainty rather than fanatic rage
 - morally severe strategic logic: restoration, containment, calibration, or purge
 - a paternal imperial posture in which even mercy reinforces hierarchy
@@ -83,20 +85,21 @@ Weaknesses to preserve:
 
 ## Economy
 
-The Amuns use a **spawner-linked enhancement plus flying gatherer** economy.
-They treat Vine fields as damaged infrastructure to reclaim, calibrate, and extract from rather
-than as an independent life form.
+The Amuns use a **field-modification plus cargo-return** economy.
+They reclaim Vine fields as damaged infrastructure, improve the field with precision support structures, then extract value through specialized gatherers.
 
-- Build a **Purifier** directly above a ResourceSpawner
-- Purifier increases vine capacity for the linked spawner field
-- Newly spawned vines from the linked spawner inherit the added capacity bonus
-- Build a **Syphon** as the local resource drop-off
-- Syphon auto-deploys a flying **Syphon Drone** to gather and return cargo
+- Build a **Resource Siphon** as the local drop-off and gathering anchor.
+- A Resource Siphon deploys a flying **Siphon Drone** to gather and return cargo.
+- Build a **Field Purifier** directly above a ResourceSpawner.
+- Field Purifier increases vine capacity for the linked spawner field.
+- The **Architect** is the Amuns' ground engineer and backup cargo gatherer.
+- Idle harvesters can use the shared auto-harvest toggle to retarget nearby resources automatically.
 
 | Stat | Value |
 |---|---|
-| Harvest model | Drone gather + return |
-| Field modifier | Purifier increases linked vine capacity |
+| Harvest model | Siphon Drone and Architect cargo return |
+| Field modifier | Field Purifier increases linked vine capacity |
+| Drop-off | Resource Siphon |
 | Depletion | Depletes and destroys ResourceVines |
 
 ---
@@ -104,11 +107,39 @@ than as an independent life form.
 ## Tech Tree — Tier 1 Build Order
 
 ```
-HQ
-└── Syphon
-    ├── Purifier + Syphon economy line
-    ├── Barracks             →  Naucratis
-    └── Nemet               →  Mni
+Command Anchor
+├── Resource Siphon
+│   └── Field Purifier
+├── Infantry Gate
+│   ├── Sentinel
+│   ├── Prism Lancer
+│   ├── Ankh Guard
+│   ├── Calibration Adept
+│   └── unlocks Vehicle Foundry / Harbor Gate pairing
+├── Sky Dock
+│   ├── Sky Cutter
+│   ├── Veil Probe
+│   ├── Relay Drone
+│   ├── Pulse Interceptor
+│   ├── Dawn Prism
+│   └── unlocks Vehicle Foundry / Harbor Gate pairing
+├── Vehicle Foundry
+│   ├── Architect
+│   ├── Tank
+│   ├── Scarab Skimmer
+│   ├── Resonance Chariot
+│   ├── Obelisk Walker
+│   └── Judicator Colossus
+├── Harbor Gate
+│   └── Aquatic Drone
+├── Obelisk
+│   └── Veil Pylon
+└── Defences
+    ├── Wall Pillar
+    ├── Plasma Turret
+    ├── Laser Turret
+    ├── Pulse Turret
+    └── Sensor Spire
 ```
 
 ---
@@ -117,14 +148,27 @@ HQ
 
 | Building | Cost | Build time | Notes |
 |---|---|---|---|
-| HQ | — | — | Starting structure |
-| Bekhenet | 2500 | 25 s | Main structure; produces structures and defences; on-field trickle construction; shared global ProductionQueue |
-| Syphon | 1200 | 10 s | Resource drop-off that auto-spawns a Syphon Drone; drones harvest and return resources to the Syphon |
-| Purifier | 1500 | 15 s | Must be placed above a ResourceSpawner; boosts linked vine capacity |
-| Kislagh | 4 | 6 s | Produces infantry; energy_required: 5 |
-| Nemet | 2000 | 20 s | Produces air units |
-| Naucratis | 2000 | 20 s | Produces vehicles |
-| Mni | 1500 | 15 s | Produces ships |
+| Command Anchor | 2500 | 25 s | Main structure. Produces structures and defences. Current anchor for the Amun construction tree. |
+| Resource Siphon | 1200 | 10 s | Resource drop-off that deploys a flying Siphon Drone. |
+| Field Purifier | 1500 | 15 s | Must be placed above a ResourceSpawner; increases linked vine capacity. Requires Resource Siphon. |
+| Infantry Gate | 4 | 6 s | Infantry production structure. Requires 5 energy. |
+| Sky Dock | 2000 | 20 s | Aircraft production structure. |
+| Vehicle Foundry | 2000 | 20 s | Ground vehicle production structure. Requires Command Anchor plus Infantry Gate or Sky Dock. |
+| Harbor Gate | 1500 | 15 s | Naval production structure. Requires Command Anchor plus Infantry Gate or Sky Dock. |
+| Obelisk | 800 | 14 s | Tech and upgrade structure; reactivates dormant systems. |
+| Wall Pillar | 50 | 5 s | Heavy defensive wall segment for precise fortification lines. |
+| Plasma Turret | 500 | 12 s | Anti-infantry turret. Rapid plasma fire for light ground pressure. |
+| Laser Turret | 2 | 5 s | Anti-vehicle turret. Heavy cannon-style defence against armored ground targets. |
+| Pulse Turret | 2 | 5 s | Anti-air turret. Rocket-based point defence versus aircraft. |
+| Sensor Spire | 500 | 10 s | Static detector. Reveals stealth, mines, burrowed, and hidden threats. |
+| Veil Pylon | 600 | 12 s | Utility defence. Projects invisibility to nearby allied structures. Requires Obelisk. |
+
+Construction rules:
+- Command Anchor currently handles structure and defence production through the shared queue systems.
+- Vehicle Foundry and Harbor Gate are mid-tier structures gated behind the initial production network.
+- Field Purifier is tied to resource infrastructure rather than general base expansion.
+- Amun defences already cover anti-infantry, anti-vehicle, anti-air, walling, and detection / concealment utility.
+- Relay Drone exists in the roster as the forward-deployment support craft for the faction's anchor theme.
 
 ---
 
@@ -132,32 +176,62 @@ HQ
 
 ### Infantry
 
-#### Soldier
+| Unit | Cost | Build time | Role |
+|---|---|---|---|
+| Sentinel | 2 | 3 s | Core light infantry armed with a laser rifle. |
+| Prism Lancer | 110 | 12 s | Anti-armor infantry with a slow, heavy prism beam. |
+| Ankh Guard | 160 | 14 s | Heavy shield infantry for frontline protection. |
+| Calibration Adept | 130 | 12 s | Support / utility infantry for cleanse, slow, reveal, and stabilization effects. |
 
-| Stat | Value |
-|---|---|
-| HP | 500 |
-| Max HP | 500 |
-| Sight range | 8.0 |
-| Cost | 2 |
-| Build time | 3 s |
+### Vehicles
 
-**Weapon — Laser Rifle**
+| Unit | Cost | Build time | Role |
+|---|---|---|---|
+| Architect | 2 | 3 s | Engineer and gatherer. Builds, repairs, and harvests. |
+| Tank | 3 | 6 s | Basic armored vehicle with autocannon fire. |
+| Scarab Skimmer | 200 | 14 s | Fast hover harassment vehicle for map control and raids. |
+| Resonance Chariot | 400 | 18 s | Mobile anti-swarm vehicle with pulse / slow area pressure. |
+| Obelisk Walker | 700 | 22 s | Siege walker for anti-structure pressure and long-range beam fire. |
+| Judicator Colossus | 900 | 28 s | Superheavy late-game walker with broad threat coverage. |
 
-| Stat | Value |
-|---|---|
-| Damage type | Laser |
-| Damage | 10 |
-| Range | 4.0 |
-| Attack speed | 0.55 |
+### Air Units
+
+| Unit | Cost | Build time | Role |
+|---|---|---|---|
+| Sky Cutter | 1 | 6 s | Versatile attack aircraft armed with rockets. |
+| Siphon Drone | 2 | 5 s | Flying gatherer used by Resource Siphon structures. |
+| Veil Probe | 250 | 14 s | Fast scout and detector aircraft. |
+| Relay Drone | 450 | 18 s | Forward-deployment support craft for anchor-linked construction themes. |
+| Pulse Interceptor | 450 | 18 s | Anti-air escort craft for hunting light aircraft. |
+| Dawn Prism | 800 | 22 s | Bomber for anti-swarm and anti-structure splash pressure. |
+| Sun Barge | 1100 | 30 s | Capital air finisher and late-game spectacle unit. |
+
+### Naval Units
+
+| Unit | Cost | Build time | Role |
+|---|---|---|---|
+| Aquatic Drone | 2 | 3 s | Light aquatic scout drone. |
 
 ### Support Units
 
-#### Syphon Drone
+#### Siphon Drone
 
-- spawned automatically by Syphon
+- deployed by Resource Siphon structures
 - role: flying resource gatherer
 - uses the standard gather, carry, and return loop
-- returns cargo to the Syphon that supports the field
+- returns cargo to the Resource Siphon that supports the field
 - not trained directly from the standard production grid
 - part of the Amuns economy line rather than the main combat roster
+
+#### Relay Drone
+
+- support unit for structure deployment rather than harvesting
+- flying unit that establishes a build radius for Amun structures
+- intended to let the Amuns teleport or project structures into a precise forward area
+- separate from the Siphon Drone economy role
+
+#### Architect
+
+- current support role for repair, construction, and cargo harvesting
+- uses the shared harvester auto-harvest toggle when left idle near resources
+- remains the faction's ground engineer while Relay Drone represents the forward anchor theme

@@ -83,13 +83,29 @@ func _try_rendering_queue():
 
 func _add_queue_element_node(queue_element, source_queue):
 	var type_path: String = queue_element.unit_prototype.resource_path
-	# Find existing stacked node for this type
-	for child in _queue_elements.get_children():
-		if child.unit_type_path == type_path:
+	# Tracking-only elements (e.g. Radix seedling-started structures built in
+	# parallel on the field) get their own button so each construction shows
+	# its own independent timer instead of being collapsed into a single stack.
+	var is_tracking_only: bool = (
+		"is_tracking_only" in queue_element and queue_element.is_tracking_only
+	)
+	if not is_tracking_only:
+		# Find existing stacked node for this type
+		for child in _queue_elements.get_children():
+			if child.unit_type_path != type_path:
+				continue
+			# Don't stack into a node that holds tracking-only elements.
+			var child_has_tracking := false
+			for ce in child.queue_elements:
+				if "is_tracking_only" in ce and ce.is_tracking_only:
+					child_has_tracking = true
+					break
+			if child_has_tracking:
+				continue
 			child.add_element(queue_element)
 			_sort_queue_element_nodes()
 			return
-	# Create new stacked node
+	# Create new (un-stacked for tracking, stacked otherwise) node
 	var queue_element_node = ProductionQueueElement.instantiate()
 	queue_element_node.element_to_source = _element_to_source
 	queue_element_node.queue_elements = [queue_element]

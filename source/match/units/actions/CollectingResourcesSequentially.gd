@@ -6,7 +6,7 @@ const CollectingResourcesWhileInRange = preload(
 	"res://source/match/units/actions/CollectingResourcesWhileInRange.gd"
 )
 const MovingToUnit = preload("res://source/match/units/actions/MovingToUnit.gd")
-const Worker = preload("res://source/factions/the_amuns/units/Worker.gd")
+const Worker = preload("res://source/factions/the_amuns/units/Architect.gd")
 
 var _state := State.NULL
 var _state_locked = false

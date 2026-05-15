@@ -4,7 +4,7 @@
 # then ConstructingWhileInRange performs the actual work.
 extends "res://source/match/units/actions/Action.gd"
 
-const Worker = preload("res://source/factions/the_amuns/units/Worker.gd")
+const Worker = preload("res://source/factions/the_amuns/units/Architect.gd")
 const Structure = preload("res://source/match/units/Structure.gd")
 const MovingToUnit = preload("res://source/match/units/actions/MovingToUnit.gd")
 const ConstructingWhileInRange = preload(

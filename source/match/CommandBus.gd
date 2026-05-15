@@ -275,6 +275,20 @@ func _validate_command_schema(cmd: Dictionary) -> bool:
 				push_error("CommandBus: SPREAD requires Vector3 data.position")
 				return false
 
+		Enums.CommandType.TOGGLE_AUTO_HARVEST:
+			# Toggle a ResourceGatherer's auto-harvest behavior.
+			# data.targets: Array[{unit:int}] - units whose flag should be toggled
+			if not cmd.data.has("targets") or typeof(cmd.data.targets) != TYPE_ARRAY:
+				push_error("CommandBus: TOGGLE_AUTO_HARVEST requires Array data.targets")
+				return false
+			for entry in cmd.data.targets:
+				if typeof(entry) != TYPE_DICTIONARY or not entry.has("unit"):
+					push_error("CommandBus: TOGGLE_AUTO_HARVEST target needs {unit:int}")
+					return false
+				if typeof(entry.unit) != TYPE_INT:
+					push_error("CommandBus: TOGGLE_AUTO_HARVEST target.unit must be int")
+					return false
+
 		_:
 			push_error("CommandBus: unknown command type %s" % cmd.type)
 			return false

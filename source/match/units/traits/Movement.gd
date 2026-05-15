@@ -247,12 +247,11 @@ func _on_tick_advanced() -> void:
 	var dist_to_final: float = to_final.length()
 	var accept_dist: float = _unit.radius * _ARRIVAL_ACCEPT_FACTOR if _unit.radius else 1.5
 	if dist_to_final < accept_dist:
-		# Only count patience ticks when we're NOT making progress
-		# toward the target (i.e. stuck circling/jittering).
-		if _near_target_prev_dist >= 0.0 and dist_to_final >= _near_target_prev_dist - 0.01:
-			_near_target_ticks += 1
-		else:
-			_near_target_ticks = 0
+		# Once the unit is firmly inside the arrival ring, count patience
+		# ticks unconditionally. Requiring "no progress" caused indefinite
+		# wiggle when avoidance steered the unit through tiny oscillations
+		# (especially around a rally point shared by multiple units).
+		_near_target_ticks += 1
 		_near_target_prev_dist = dist_to_final
 		if _near_target_ticks >= _NEAR_TARGET_PATIENCE:
 			_unit.global_transform.origin.y = real_y

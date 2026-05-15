@@ -44,6 +44,8 @@ The Legion position is:
 
 - **Militant hybrid doctrine** — disciplined human formations reinforced by controlled Vine mutation
 - Ritual infrastructure layered onto a familiar power-grid backbone
+- Forward sanctification through deployable command vehicles and manpower-assisted construction
+- fortress doctrine built around walls, gates, dedicated turret roles, and sanctioned engineer capture
 - Strong air capability once airfield is established
 - Mid-game transformation and doctrine upgrades create elite pressure
 - Mature institutions: shrine networks, reactor authorities, hybrid programs, and doctrinal command structures
@@ -100,6 +102,20 @@ Conceptually, these structures should read as doctrinal institutions, rather tha
 | Barracks | 4 | 6 s | 5 | Produces infantry |
 | Airfield | 2000 | 20 s | 50 | Produces air units |
 | Assembly | 2000 | 20 s | 50 | Produces tanks |
+| Bastion Wall/Gate | TBD | TBD | TBD | Planned Legion wall and gate set for fortified doctrine positions |
+| Sanctified Gun | TBD | TBD | TBD | Planned anti-infantry defense for light ground pressure |
+| Penitent Cannon | TBD | TBD | TBD | Planned anti-vehicle defense against armor, monsters, and heavy walkers |
+| Sky Lance | TBD | TBD | TBD | Planned anti-air defense for reactor and forward-base protection |
+| Doctrine Beacon | TBD | TBD | TBD | Planned utility defense that strengthens nearby Legion units or construction sites |
+| Vigil Chapel | TBD | TBD | TBD | Planned utility/detection defense for stealth, mines, burrowed threats, and hidden growth |
+
+Construction rules:
+- planned feature: Legion can deploy a vehicle that establishes a full local build radius for further construction
+- planned feature: standard Legion Soldiers can accelerate construction speed through manpower-assisted building
+- planned feature: Legion expansion should feel procedural and organized, with a sanctioned foothold created before full base growth begins
+- planned feature: Legion uses faction-flavored walls and gates as part of the shared fortification framework
+- planned feature: Legion defenses should cover anti-infantry, anti-vehicle, anti-air, and optional utility/detection roles
+- planned feature: Legion Field Engineers can capture neutral or enemy structures through a readable, interruptible action
 
 Visual direction:
 - armored clergy and sanctified officers
@@ -136,6 +152,17 @@ Visual direction:
 | Range | 4.0 |
 | Attack speed | 0.55 |
 
+**Planned support role**
+
+- Soldiers may contribute to speed-building once a Legion construction site or sanctioned forward build zone exists
+- this is intended to represent disciplined manpower and field fortification rather than a separate worker caste
+
+#### Field Engineer
+
+- planned engineer-type infantry for structure capture and forward setup support
+- can capture neutral or enemy structures through a readable, interruptible action
+- separate from the Soldier speed-building role so combat infantry do not handle every support job
+
 ### Vehicles
 
 #### Harvester
@@ -154,3 +181,9 @@ Visual direction:
 - gathers from the nearest resource field
 - returns cargo to the nearest valid drop-off structure
 - Legion command centers are not drop-off structures
+
+#### Forward Command Vehicle
+
+- planned deployable support vehicle for Legion expansion
+- establishes a full build radius when set up on the field
+- intended to be the anchor point for Legion forward construction and Soldier-assisted build acceleration

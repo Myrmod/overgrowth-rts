@@ -1,8 +1,6 @@
 # Factions Overview
 
-Four playable factions compete over a world overgrown by the Vines. Beyond them, a
-fifth force occupies the world itself: Neutral wild zones, feral blooms, mutated life,
-and dormant defenses that exist primarily as PvE pressure rather than a standard empire.
+Four playable factions compete over a world overgrown by the Vines. Beyond them, a fifth force occupies the world itself: Neutral wild zones, feral blooms, mutated life, and dormant defenses that exist primarily as PvE pressure rather than a standard empire.
 
 Shared canon reference: [../LORE.md](../LORE.md).
 
@@ -23,8 +21,8 @@ for years.
 
 | Faction | Type | Playstyle |
 |---|---|---|
-| [The Amuns](Amuns/The_Amuns.md) | Alien architects | Elite, advanced tech, dimensional anchors |
-| [The Radix](Radix/The_Radix.md) | Sentient vines | Creep-based, bio-economy, no power grid |
+| [The Amuns](Amuns/The_Amuns.md) | Alien architects | Elite, precision tech, anchor-linked infrastructure |
+| [The Radix](Radix/The_Radix.md) | Sentient vines | Network-based territory growth, bio-economy, no power grid |
 | [The Legion](The_Legion/The_Legion.md) | Vine-embracing human theocracy | Hybrid infantry, doctrine, ritual infrastructure |
 | [The Remnants](Remnants/The_Remnants.md) | Human survivors | Salvage, burn-clearing, local autonomy |
 

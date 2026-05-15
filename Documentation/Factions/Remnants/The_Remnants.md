@@ -43,6 +43,10 @@ Their missions should make survival feel concrete: evacuation routes, burn-clear
 - Mechanical transparency: weapons, vehicles, and infrastructure should feel repairable, improvised, and understandable
 - Local resilience: squads, convoys, and workshops should read as communities defending themselves rather than a formal empire expanding
 - Factory-forward tech tree: practical vehicle access comes early because survival depends on mobility, salvage, and hard tools
+- Pioneer-style construction: mobile workers can establish basic footholds before heavier infrastructure is formalized
+- Scrap economy: enemy vehicles and aircraft drop scrap that Remnants can collect for field upgrades
+- Fortified survival: bunkers, walls, gates, mines, and utility turrets turn temporary positions into stubborn footholds
+- Chemical denial weapons are acceptable for Remnants when framed as desperate, practical survival tools
 - Strong visual identity around mechanical, salvaged, non-organic wargear
 
 Design constraints to preserve:
@@ -73,6 +77,14 @@ The Remnants do not use a refinery return loop. They harvest by **burning** reso
 | Delivery loop | None |
 | Depletion | Depletes and destroys ResourceVines |
 
+### Scrap And Field Upgrades
+
+- Planned feature: destroyed enemy vehicles and air units drop scrap.
+- Planned feature: Salvage Vans gather dropped scrap from the battlefield.
+- Scrap is used to upgrade Remnant units directly in the field.
+- Units being upgraded are disabled until the retrofit completes.
+- The Salvage Yard repairs through drones and can dismantle friendly units sent into it, refunding part of their value as credits and scrap.
+
 ---
 
 ## Tech Tree — Tier 1 Build Order
@@ -100,8 +112,22 @@ HQ
 | Drone Tower | 2000 | 20 s | 50 | Produces air units |
 | Factory | 2000 | 20 s | 50 | Produces tanks |
 | Naval Yard | 1500 | 15 s | 50 | Produces ships |
+| Command Post | TBD | TBD | TBD | Planned forward structure required for complex construction |
+| Salvage Yard | TBD | TBD | TBD | Planned repair-drone, unit-dismantling, and scrap-upgrade structure |
+| Bunker | TBD | TBD | TBD | Planned garrison defense; requires shared garrison functionality |
+| Wall/Gate | TBD | TBD | TBD | Planned faction-flavored wall and gate set |
+| Chemical/Flame Turret | TBD | TBD | TBD | Planned anti-infantry and anti-swarm defense |
+| Gauss/Rocket Turret | TBD | TBD | TBD | Planned anti-vehicle defense |
+| Flak/Rocket Nest | TBD | TBD | TBD | Planned anti-air defense |
+| Repair Turret | TBD | TBD | TBD | Planned utility tower that sends repair drones to nearby mechanical units and structures |
+| Detection Turret | TBD | TBD | TBD | Planned utility tower that reveals stealth, mines, burrowed threats, and hidden growth |
 
 > Economy unit production: Casern produces Incinerator squads, Factory produces Flame Tanks.
+
+Construction rules:
+- planned feature: Remnant worker units can construct simple structures anywhere that terrain and collision rules allow
+- planned feature: complex structures require a local Command Post or equivalent forward base structure before placement becomes valid
+- planned feature: Remnant expansion should feel improvised and mobile at low tech, but staged and deliberate for heavier infrastructure
 
 ---
 
@@ -134,3 +160,51 @@ HQ
 
 **Abilities**
 - **Sprint** — gain +0.25 m/s for 10 seconds
+
+### Support Units
+
+#### Constructor
+
+- planned worker unit used for Remnant building and field setup
+- intended to construct simple structures without requiring normal shared build radius support
+- expected to work alongside Command Posts for advanced or complex structures
+- should also function as the Remnant engineer-type unit for capturing neutral or enemy structures unless a separate Engineer unit is added
+
+#### Mechanic
+
+- planned support infantry for repairs and field maintenance
+- can place mines as a low-tech area-control tool
+- should not replace the Constructor's building role
+
+#### Salvage Van
+
+- planned vehicle that gathers scrap dropped by destroyed enemy vehicles and air units
+- enables the Remnant scrap economy and field-upgrade loop
+- should be vulnerable enough that holding the battlefield after a fight matters
+
+#### Sniper
+
+- planned precision infantry for long-range target removal
+- fragile and sight-dependent, with weak performance into swarms
+
+#### Commander
+
+- planned infantry support leader
+- buffs nearby units with damage and speed
+- aura should be readable, capped, and non-stacking
+
+#### Chemical Team
+
+- planned infantry or support weapon team for area denial
+- effective against clustered infantry and growth-heavy positions
+- should not replace rockets, snipers, or conventional line infantry
+
+#### Firing-Port APC
+
+- planned transport vehicle for infantry
+- passengers can shoot from inside using shared garrison/firing-port logic
+
+#### Suicide Drone
+
+- planned air unit for telegraphed explosive attacks
+- should be fragile and countered by detection, spacing, and anti-air

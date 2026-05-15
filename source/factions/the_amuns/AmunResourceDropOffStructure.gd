@@ -1,6 +1,6 @@
 class_name AmunResourceDropOffStructure
 extends ResourceDropOffStructure
-## Base class for Amun resource drop-off structures (e.g. Bekhenet).
+## Base class for Amun resource drop-off structures (e.g. CommandAnchor).
 ## Displays a refraction-glass plane during construction and sell.
 
 const SELL_DURATION_SEC: float = SELL_DURATION_TICKS * 0.1

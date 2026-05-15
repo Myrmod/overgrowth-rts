@@ -1592,6 +1592,33 @@ func _init_ability_buttons() -> void:
 	_unit_specific_buttons.append(harvest_btn)
 	harvest_btn.set_meta("ability_key", "harvest")
 
+	var auto_harvest_btn := Button.new()
+	auto_harvest_btn.custom_minimum_size = Vector2(31, 31)
+	auto_harvest_btn.text = "A"
+	auto_harvest_btn.toggle_mode = true
+	auto_harvest_btn.visible = false
+	auto_harvest_btn.toggled.connect(_on_auto_harvest_toggled)
+	(
+		auto_harvest_btn
+		. mouse_entered
+		. connect(
+			(
+				_on_unit_specific_button_hover
+				. bind(
+					{
+						"name": "Auto-Harvest",
+						"desc":
+						"Toggle: when on and idle, harvester seeks nearby resources automatically.",
+					}
+				)
+			)
+		)
+	)
+	auto_harvest_btn.mouse_exited.connect(_on_production_button_exit)
+	unit_specific_ability_h_box_container.add_child(auto_harvest_btn)
+	_unit_specific_buttons.append(auto_harvest_btn)
+	auto_harvest_btn.set_meta("ability_key", "auto_harvest")
+
 	var spread_btn := Button.new()
 	spread_btn.custom_minimum_size = Vector2(31, 31)
 	spread_btn.text = "P"
@@ -1647,6 +1674,11 @@ func _update_ability_buttons(unit) -> void:
 		match key:
 			"harvest":
 				btn.visible = (unit is ResourceGatherer)
+			"auto_harvest":
+				btn.visible = (unit is ResourceGatherer)
+				if btn.visible:
+					# Reflect current state without firing toggled signal.
+					btn.set_pressed_no_signal(unit.auto_harvest_enabled)
 			"spread":
 				btn.visible = _unit_is_radix_seedling(unit)
 			_:
@@ -1721,6 +1753,36 @@ func _on_unit_specific_button_pressed(key: String) -> void:
 		"spread":
 			MatchSignals.active_command_mode = Enums.UnitCommandMode.SPREAD
 			MatchSignals.command_mode_changed.emit(Enums.UnitCommandMode.SPREAD)
+
+
+func _on_auto_harvest_toggled(_pressed: bool) -> void:
+	# Toggle auto-harvest on every selected, controlled ResourceGatherer.
+	# A single command is dispatched for determinism / multiplayer safety.
+	# We send a TOGGLE (flip) command so the engine state stays the source
+	# of truth — the button state will be re-synced on next selection refresh.
+	var targets: Array = []
+	for u in get_tree().get_nodes_in_group("selected_units"):
+		if not u.is_in_group("controlled_units"):
+			continue
+		if not (u is ResourceGatherer):
+			continue
+		targets.append({"unit": u.id})
+	if targets.is_empty():
+		return
+	var uac = _find_unit_actions_controller()
+	if uac == null or uac._player == null:
+		return
+	(
+		CommandBus
+		. push_command(
+			{
+				"tick": Match.tick + 1,
+				"type": Enums.CommandType.TOGGLE_AUTO_HARVEST,
+				"player_id": uac._player.id,
+				"data": {"targets": targets},
+			}
+		)
+	)
 
 
 func _update_unit_specific_ability_wrapper() -> void:

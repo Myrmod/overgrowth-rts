@@ -22,6 +22,15 @@ func _ready():
 	else:
 		text = unit_name[0]
 
+	# Hover tooltip with the entity's display name (and description if available).
+	var props: Dictionary = UnitConstants.get_default_properties(unit_type_path)
+	var display_name: String = props.get("unit_name", unit_name)
+	var description: String = props.get("description", "")
+	if description != "":
+		tooltip_text = "%s\n%s" % [display_name, description]
+	else:
+		tooltip_text = display_name
+
 	for el in queue_elements:
 		el.changed.connect(_update_display)
 	_update_display()
