@@ -143,8 +143,8 @@ const STRUCTURES = {
 	},
 	Enums.SceneId.REMNANTS_FIELD_GENERATOR:
 	{
-		"scene": "res://source/factions/the_remnants/structures/FieldGenerator.tscn",
-		"unit_name": "Field Generator",
+		"scene": "res://source/factions/the_remnants/structures/Reactor.tscn",
+		"unit_name": "Reactor",
 		"description": "Power supply for Remnants bases.",
 		"faction": Enums.Faction.REMNANTS,
 		"production_tab_type": Enums.ProductionTabType.STRUCTURE,
