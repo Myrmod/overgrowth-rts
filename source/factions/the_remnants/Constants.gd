@@ -430,10 +430,10 @@ const DEFENCES = {
 		],
 		"build_time": 12.0,
 	},
-	Enums.SceneId.REMNANTS_FLAK_NEST:
+	Enums.SceneId.REMNANTS_FLAK:
 	{
-		"scene": "res://source/factions/the_remnants/structures/FlakNest.tscn",
-		"unit_name": "Flak Nest",
+		"scene": "res://source/factions/the_remnants/structures/Flak.tscn",
+		"unit_name": "Flak",
 		"description": "Anti-air defence; protects convoys and denies aircraft.",
 		"faction": Enums.Faction.REMNANTS,
 		"production_tab_type": Enums.ProductionTabType.DEFENCES,

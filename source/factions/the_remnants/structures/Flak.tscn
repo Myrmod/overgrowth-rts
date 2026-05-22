@@ -1,6 +1,6 @@
-[gd_scene format=3]
+[gd_scene format=3 uid="uid://cmnscchwy0251"]
 
-[ext_resource type="Script" path="res://source/factions/the_remnants/structures/FlakNest.gd" id="1_script"]
+[ext_resource type="Script" uid="uid://boid4xf4tg0bw" path="res://source/factions/the_remnants/structures/Flak.gd" id="1_script"]
 [ext_resource type="PackedScene" uid="uid://cgsi062w5fjia" path="res://source/match/units/traits/Highlight.tscn" id="2_h"]
 [ext_resource type="PackedScene" uid="uid://3c1h14nqdumt" path="res://source/match/units/traits/Selection.tscn" id="3_s"]
 [ext_resource type="PackedScene" uid="uid://d4cwip5hpxlmo" path="res://source/match/units/traits/MovementObstacle.tscn" id="4_mo"]
@@ -13,40 +13,43 @@
 height = 1.4
 radius = 0.7
 
-[node name="FlakNest" type="Area3D"]
+[node name="Flak" type="Area3D" unique_id=1033530925]
 collision_layer = 2
 collision_mask = 0
 script = ExtResource("1_script")
 
-[node name="Geometry" type="Node3D" parent="."]
+[node name="Geometry" type="Node3D" parent="." unique_id=235672283]
 
-[node name="Model" type="Node3D" parent="Geometry"]
+[node name="Model" type="Node3D" parent="Geometry" unique_id=1757519162]
+transform = Transform3D(-4.371139e-09, 0, -0.1, 0, 0.1, 0, 0.1, 0, -4.371139e-09, 0, 0, 0)
 script = ExtResource("8_mh")
-model_path = "TODO"
+model_path = "/Remnants/Defences/Flak.glb"
 fallback_cube_size = Vector3(1.4, 1.4, 1.4)
 fallback_cube_color = Color(0.5, 0.5, 0.55, 1)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=369046290]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+visible = false
 shape = SubResource("1_shape")
 
-[node name="Highlight" parent="." instance=ExtResource("2_h")]
+[node name="Highlight" parent="." unique_id=96369076 instance=ExtResource("2_h")]
 radius = 0.7
 
-[node name="Selection" parent="." instance=ExtResource("3_s")]
+[node name="Selection" parent="." unique_id=1422758544 instance=ExtResource("3_s")]
 radius = 0.7
 
-[node name="MovementObstacle" parent="." instance=ExtResource("4_mo")]
+[node name="MovementObstacle" parent="." unique_id=1145556934 instance=ExtResource("4_mo")]
+visible = false
 radius = 0.7
 vertices = PackedVector3Array(0, 0, -0.7, 0.495, 0, -0.495, 0.7, 0, 0, 0.495, 0, 0.495, 0, 0, 0.7, -0.495, 0, 0.495, -0.7, 0, 0, -0.495, 0, -0.495)
 affect_navigation_mesh = true
 path_height_offset = 0.6
 
-[node name="HealthBar" parent="." instance=ExtResource("5_hp")]
+[node name="HealthBar" parent="." unique_id=1518207358 instance=ExtResource("5_hp")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.7, 0)
 size = Vector2(150, 10)
 
-[node name="Targetability" parent="." instance=ExtResource("6_t")]
+[node name="Targetability" parent="." unique_id=241273687 instance=ExtResource("6_t")]
 radius = 0.7
 
-[node name="NameTag" parent="." instance=ExtResource("7_n")]
+[node name="NameTag" parent="." unique_id=172011105 instance=ExtResource("7_n")]
